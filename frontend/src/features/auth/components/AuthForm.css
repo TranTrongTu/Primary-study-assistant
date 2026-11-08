@@ -1,0 +1,201 @@
+/* src/features/auth/components/AuthForm.css */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ─── FIELD WRAP ─── */
+.field-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.field-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.75;
+}
+
+/* ─── INPUT ─── */
+.auth-input {
+  width: 100%;
+  padding: 13px 16px 13px 42px;
+  border-radius: 14px;
+  border: 2px solid #e0e0e0;
+  background: #f7f7f8;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.97rem;
+  font-weight: 700;
+  color: #222;
+  outline: none;
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  box-sizing: border-box;
+}
+.auth-input::placeholder { color: #aaa; font-weight: 600; }
+.auth-input:focus {
+  border-color: #cc2b2b;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(204,43,43,0.12);
+}
+.auth-input.has-right-btn { padding-right: 48px; }
+
+/* Dark mode inputs */
+.dark .auth-input {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.15);
+  color: #f0f0f0;
+}
+.dark .auth-input::placeholder { color: rgba(255,255,255,0.35); }
+.dark .auth-input:focus {
+  border-color: #ff6b6b;
+  background: rgba(255,255,255,0.1);
+  box-shadow: 0 0 0 4px rgba(255,107,107,0.15);
+}
+
+/* ─── EYE BUTTON ─── */
+.eye-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  display: flex; align-items: center;
+  padding: 4px;
+  transition: color 0.2s;
+}
+.eye-btn:hover { color: #cc2b2b; }
+.dark .eye-btn { color: #888; }
+.dark .eye-btn:hover { color: #ff6b6b; }
+
+/* ─── OPTIONS ROW ─── */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+.remember-me {
+  display: flex; align-items: center; gap: 6px;
+  font-weight: 700;
+  color: #666;
+  cursor: pointer;
+}
+.dark .remember-me { color: #aaa; }
+.remember-me input { accent-color: #cc2b2b; cursor: pointer; }
+.forgot-link {
+  color: #cc2b2b;
+  font-weight: 800;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.forgot-link:hover { opacity: 0.7; }
+.dark .forgot-link { color: #ff7070; }
+
+/* ─── ERROR ─── */
+.form-error {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 71, 87, 0.1);
+  border: 1.5px solid rgba(255, 71, 87, 0.3);
+  color: #ff4757;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+/* ─── SUBMIT BUTTON ─── */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #cc2b2b, #e84545);
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 900;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  box-shadow: 0 6px 20px rgba(204,43,43,0.38);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  margin-top: 4px;
+}
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 10px 28px rgba(204,43,43,0.45);
+}
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+.submit-btn:disabled {
+  background: #ccc;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.submit-btn.register {
+  background: linear-gradient(135deg, #006d7d, #00acc1);
+  box-shadow: 0 6px 20px rgba(0,172,193,0.35);
+}
+.submit-btn.register:hover:not(:disabled) {
+  box-shadow: 0 10px 28px rgba(0,172,193,0.45);
+}
+
+/* ─── LOADING DOTS ─── */
+.loading-dots span {
+  animation: blink 1.2s infinite;
+  opacity: 0;
+}
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: 0; } 40% { opacity: 1; } }
+
+/* ─── DIVIDER ─── */
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.82rem; font-weight: 700;
+  color: #bbb;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+.dark .divider { color: rgba(255,255,255,0.3); }
+.dark .divider::before, .dark .divider::after { background: rgba(255,255,255,0.12); }
+
+/* ─── SOCIAL BUTTONS ─── */
+.social-btns {
+  display: flex; gap: 10px;
+}
+.social-btn {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 0;
+  border-radius: 12px;
+  border: 2px solid #e8e8e8;
+  background: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #444;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+.social-btn.google:hover  { border-color: #4285F4; }
+.social-btn.facebook:hover { border-color: #1877F2; }
+.dark .social-btn {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+  color: #ddd;
+}

@@ -1,0 +1,65 @@
+/* src/features/auth/components/animations/SchoolGate.css */
+
+.school-gate-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 10;
+  pointer-events: none; /* Tránh block click vào form */
+}
+
+.gate-svg {
+  width: min(1400px, 100%, calc((100dvh - 4rem) * 1.75));
+  max-width: 1400px;
+  height: auto;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
+  transition: filter 0.8s ease;
+}
+
+/* Khi sang đêm, đổ bóng cổng đậm hơn và lan rộng hơn */
+.school-gate-wrap.dark .gate-svg {
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.8));
+}
+
+/* ─── ANIMATION MỞ CỔNG 3D ─── */
+.gate-door-l,
+.gate-door-r {
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Tâm xoay đặt tại bản lề (Hinges) của SVG */
+.gate-door-l {
+  transform-origin: 512px center;
+}
+.gate-door-r {
+  transform-origin: 888px center;
+}
+
+/* Khi truyền prop isOpen = true */
+.school-gate-wrap.open .gate-door-l {
+  transform: perspective(1500px) rotateY(105deg);
+}
+.school-gate-wrap.open .gate-door-r {
+  transform: perspective(1500px) rotateY(-105deg);
+}
+
+/* Ánh sáng đèn lồng nhấp nháy nhẹ */
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+.lantern-glow {
+  animation: flicker 3s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<defs><filter id="s"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.18"/></filter></defs>
+<g filter="url(#s)">
+<circle cx="256" cy="120" r="26" fill="#ffd54f"/>
+<rect x="246" y="140" width="20" height="28" rx="10" fill="#fbcfe8"/>
+<rect x="140" y="150" width="232" height="210" rx="80" fill="#fb7185" stroke="#2b2b2b" stroke-width="10"/>
+<circle cx="210" cy="235" r="18" fill="white"/><circle cx="302" cy="235" r="18" fill="white"/>
+<circle cx="210" cy="235" r="8" fill="#111"/><circle cx="302" cy="235" r="8" fill="#111"/>
+<path d="M210 290 Q256 325 302 290" fill="none" stroke="#111" stroke-width="10" stroke-linecap="round"/>
+<rect x="120" y="220" width="35" height="90" rx="18" fill="#fb7185" stroke="#2b2b2b" stroke-width="8"/>
+<rect x="357" y="220" width="35" height="90" rx="18" fill="#fb7185" stroke="#2b2b2b" stroke-width="8"/>
+<rect x="190" y="355" width="35" height="90" rx="16" fill="#fb7185" stroke="#2b2b2b" stroke-width="8"/>
+<rect x="287" y="355" width="35" height="90" rx="16" fill="#fb7185" stroke="#2b2b2b" stroke-width="8"/>
+<circle cx="256" cy="185" r="16" fill="#fbcfe8"/>
+</g></svg>

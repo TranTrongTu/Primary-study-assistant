@@ -1,0 +1,243 @@
+/* src/features/auth/components/Mascot.css */
+.mascot-wrap {
+  position: absolute;
+  top: clamp(-60px, -4vw, -32px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 170px;
+  height: 170px;
+  z-index: 20;
+  /* Shadow đậm hơn giúp linh vật nổi bật 100% kể cả với nền đêm tối */
+  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.25));
+}
+
+.dog-body {
+  transform-origin: 100px 120px;
+  animation: breathe 3.8s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.02);
+  }
+}
+.dog-tail {
+  transform-origin: 150px 145px;
+  animation: wag 1s ease-in-out infinite;
+}
+@keyframes wag {
+  0%,
+  100% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+}
+
+.ear-l {
+  transform-origin: 62px 68px;
+  transition: transform 0.3s;
+}
+.ear-r {
+  transform-origin: 138px 68px;
+  transition: transform 0.3s;
+}
+.mascot-wrap:hover .ear-l {
+  transform: rotate(-12deg);
+}
+.mascot-wrap:hover .ear-r {
+  transform: rotate(12deg);
+}
+
+/* --- LOGIC SCALE Y CỬ ĐỘNG MẮT (Tâm dời xuống 84px do mắt to ra) --- */
+.eye-group-l {
+  transform-origin: 83px 84px;
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s;
+}
+.eye-group-r {
+  transform-origin: 117px 84px;
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s;
+}
+
+.sleeping-eye-curve {
+  opacity: 0;
+  transform: translateY(-2px);
+  transition:
+    opacity 0.2s,
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── TRẠNG THÁI CLOSING: NHẮM TỊT MẮT BẢO MẬT ── */
+.closing .eye-group-l,
+.closing .eye-group-r {
+  transform: scaleY(0);
+  opacity: 0;
+}
+.closing .sleeping-eye-curve {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── TRẠNG THÁI PEEKING: TI HÍ HÓNG CHUYỆN ── */
+.peeking .eye-group-l,
+.peeking .eye-group-r {
+  /* Mắt to nên để 0.45, khe nheo sẽ nhìn cực rõ tròng đen đang lén liếc bên trong */
+  transform: scaleY(0.45);
+  opacity: 1;
+}
+.peeking .sleeping-eye-curve {
+  opacity: 0;
+}
+
+/* --- LOGIC LÔNG MÀY BIỂU CẢM (Dời tâm lên cao theo mắt) --- */
+#browL {
+  transform-origin: 83px 56px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#browR {
+  transform-origin: 117px 56px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Tăng biên độ nhướn/nhíu để tạo vẻ lém lỉnh */
+.peeking #browL {
+  transform: translateY(-4px) rotate(-8deg);
+}
+.peeking #browR {
+  transform: translateY(4px) rotate(6deg);
+}
+
+/* ── TRẠNG THÁI KIỂM TRA (CHECKING): Nheo mắt tập trung ── */
+.checking .eye-group-l,
+.checking .eye-group-r {
+  transform: translateY(2px) scaleY(0.7);
+}
+.checking #browL {
+  transform: translateY(5px) rotate(10deg);
+}
+.checking #browR {
+  transform: translateY(5px) rotate(-10deg);
+}
+
+/* ── TRẠNG THÁI THÀNH CÔNG (HAPPY): Cười tít mắt ── */
+.happy .eye-group-l,
+.happy .eye-group-r {
+  opacity: 0;
+  transform: scaleY(0);
+}
+.happy .sleeping-eye-curve {
+  opacity: 1;
+  transform: translateY(-2px);
+  stroke-width: 3.5px;
+}
+.happy #browL {
+  transform: translateY(-4px);
+}
+.happy #browR {
+  transform: translateY(-4px);
+}
+.happy .ear-l {
+  transform: rotate(-15deg);
+}
+.happy .ear-r {
+  transform: rotate(15deg);
+}
+
+/* ── TRẠNG THÁI LỖI (SAD): Buồn bã, cụp tai, mếu máo ── */
+.sad .ear-l {
+  transform: rotate(-35deg);
+}
+.sad .ear-r {
+  transform: rotate(35deg);
+}
+.sad .eye-group-l,
+.sad .eye-group-r {
+  transform: translateY(4px) scaleY(0.8);
+  opacity: 0.8;
+}
+.sad #browL {
+  transform: translateY(5px) rotate(-20deg);
+}
+.sad #browR {
+  transform: translateY(5px) rotate(20deg);
+}
+
+/* =========================================================
+   HÀNH ĐỘNG CƠ THỂ - ẢO GIÁC 3D (PARALLAX EFFECT)
+========================================================= */
+
+/* 1. GẬT ĐẦU (NOD) - Cả đầu hơi nhích xuống, nhưng MẶT chúi xuống sâu hơn */
+.nod .dog-head {
+  animation: headNod 0.8s ease-in-out 2;
+}
+.nod .dog-face {
+  animation: faceNod 0.8s ease-in-out 2;
+}
+
+@keyframes headNod {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  } /* Hộp sọ nhích nhẹ */
+}
+@keyframes faceNod {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  } /* Mặt chúi sâu tạo cảm giác cúi */
+}
+
+/* 2. LẮC ĐẦU (SHAKE-SLOW) - Mặt trượt sang hai bên xa hơn hộp sọ, tạo ảo giác quay ngang */
+.shake-slow .dog-head {
+  animation: headShake 2s ease-in-out;
+}
+.shake-slow .dog-face {
+  animation: faceShake 2s ease-in-out;
+}
+
+@keyframes headShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  } /* Sọ nhích rất nhẹ */
+  75% {
+    transform: translateX(3px);
+  }
+}
+@keyframes faceShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-15px);
+  } /* Mặt trượt mạnh sang trái */
+  75% {
+    transform: translateX(15px);
+  } /* Mặt trượt mạnh sang phải */
+}
+
+@media (max-width: 768px) {
+  .mascot-wrap {
+    top: -22px;
+    width: 140px;
+    height: 140px;
+  }
+}

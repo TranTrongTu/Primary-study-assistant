@@ -1,0 +1,443 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#4ecdc4;--teal-dark:#2d8680;--coral:#ff6b6b;
+  --dog-base:#F0A832;--dog-dark:#D4850A;--dog-darker:#A0600A;
+  --dog-white:#FFF5E0;--stroke:#3D1F0A;
+}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:linear-gradient(135deg,#e8f8f7 0%,#fff3e8 50%,#fde8f0 100%);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;
+}
+.scene{position:relative;display:flex;flex-direction:column;align-items:center;width:100%;max-width:420px;}
+
+/* ── MASCOT ── */
+.mascot-wrap{
+  position:relative;width:170px;height:170px;
+  margin-bottom:-28px;z-index:10;
+  filter:drop-shadow(0 8px 24px rgba(61,31,10,.2));
+}
+
+/* breathing */
+.dog-body{transform-origin:100px 120px;animation:breathe 3.2s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.03)}}
+
+/* tail */
+.dog-tail{transform-origin:150px 145px;animation:wag 1s ease-in-out infinite;}
+@keyframes wag{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(20deg)}}
+
+/* ears hover */
+.ear-l{transform-origin:62px 68px;transition:transform .3s ease;}
+.ear-r{transform-origin:138px 68px;transition:transform .3s ease;}
+.mascot-wrap:hover .ear-l{transform:rotate(-14deg);}
+.mascot-wrap:hover .ear-r{transform:rotate(14deg);}
+
+/* tongue */
+.tongue{transform-origin:100px 112px;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;transform:scaleY(0);}
+.tongue.show{opacity:1;transform:scaleY(1);}
+
+/* ── ARMS: dùng GSAP-style absolute transform ── */
+/* Mỗi tay có transform-origin riêng tính theo tọa độ SVG thực */
+.arm-l{
+  transform-box:fill-box;
+  transform-origin:80% 15%;   /* khớp vai trái ~ (58+20)%, phần trên */
+  transition:transform .42s cubic-bezier(.25,1,.5,1), opacity .35s;
+  /* Mặc định: giấu xuống dưới + xoay ra ngoài */
+  transform:translateY(52px) rotate(95deg);
+  opacity:0;
+}
+.arm-r{
+  transform-box:fill-box;
+  transform-origin:20% 15%;   /* khớp vai phải */
+  transition:transform .42s cubic-bezier(.25,1,.5,1), opacity .35s;
+  transform:translateY(52px) rotate(-95deg);
+  opacity:0;
+}
+
+/* CHE MẮT: cả 2 tay trượt lên, xoay về 0 */
+.covering .arm-l{transform:translateY(-2px) rotate(0deg);opacity:1;}
+.covering .arm-r{transform:translateY(-2px) rotate(0deg);opacity:1;}
+
+/* TI HÍ: tay trái hé lên (ngón tách ra), tay phải vẫn che */
+.peeking .arm-l{transform:translateY(-2px) rotate(-22deg) translateX(6px);opacity:1;}
+.peeking .arm-r{transform:translateY(-2px) rotate(0deg);opacity:1;}
+
+/* ── CARD ── */
+.card{
+  background:#fff;border-radius:28px;
+  padding:2rem 2rem 1.6rem;padding-top:48px;
+  width:100%;
+  box-shadow:0 16px 48px rgba(61,31,10,.12),0 2px 8px rgba(61,31,10,.06);
+  position:relative;z-index:5;
+}
+.card-title{font-size:1.65rem;font-weight:900;color:#ff6b6b;text-align:center;margin-bottom:3px;}
+.card-sub{font-size:.88rem;font-weight:700;color:#999;text-align:center;margin-bottom:1.3rem;}
+.tabs{display:flex;gap:10px;margin-bottom:1.2rem;}
+.tab{
+  flex:1;padding:.52rem;border-radius:20px;
+  font-family:'Montserrat',sans-serif;font-size:.93rem;font-weight:800;
+  cursor:pointer;border:2.5px solid #ccc;background:#f5f5f5;color:#666;transition:all .2s;
+}
+.tab.active{background:var(--teal);border-color:var(--teal-dark);color:#fff;}
+.field{position:relative;margin-bottom:.9rem;}
+.field input{
+  width:100%;padding:12px 16px;border-radius:14px;border:2px solid #ddd;
+  background:#f4f4f4;font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;
+  color:#333;outline:none;transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.field input:focus{border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px rgba(78,205,196,.18);}
+.field input.has-eye{padding-right:46px;}
+.eye-btn{
+  position:absolute;right:11px;top:50%;translate:0 -50%;
+  background:none;border:none;cursor:pointer;font-size:1.25rem;line-height:1;
+  padding:4px;user-select:none;
+}
+.btn-go{
+  width:100%;padding:13px;margin-top:.3rem;border-radius:14px;border:none;
+  background:var(--teal);color:#fff;font-family:'Montserrat',sans-serif;
+  font-size:1.05rem;font-weight:900;cursor:pointer;letter-spacing:.3px;
+  box-shadow:0 4px 14px rgba(78,205,196,.38);transition:transform .15s,background .2s;
+}
+.btn-go:hover{background:var(--teal-dark);transform:scale(1.02);}
+.state-tag{text-align:center;margin-top:10px;font-size:.78rem;font-weight:700;color:#bbb;min-height:1.2em;}
+</style>
+
+<div class="scene">
+
+  <div class="mascot-wrap" id="mascotWrap">
+  <svg id="dogSvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="170" height="170" overflow="visible">
+
+    <!-- TAIL -->
+    <g class="dog-tail">
+      <ellipse cx="154" cy="138" rx="9" ry="21" fill="#F0A832" stroke="#3D1F0A" stroke-width="2.5" transform="rotate(-28 154 138)"/>
+      <ellipse cx="159" cy="124" rx="5.5" ry="9" fill="#FFF5E0" stroke="#3D1F0A" stroke-width="1.8" transform="rotate(-22 159 124)"/>
+    </g>
+
+    <g class="dog-body">
+      <!-- BODY -->
+      <ellipse cx="100" cy="155" rx="44" ry="36" fill="#F0A832" stroke="#3D1F0A" stroke-width="2.5"/>
+      <ellipse cx="100" cy="161" rx="25" ry="19" fill="#FFF5E0" stroke="#3D1F0A" stroke-width="1.5"/>
+      <!-- NECK -->
+      <rect x="83" y="112" width="34" height="28" rx="10" fill="#F0A832" stroke="#3D1F0A" stroke-width="2.5"/>
+
+      <!-- EAR L -->
+      <g class="ear-l">
+        <ellipse cx="63" cy="80" rx="17" ry="25" fill="#D4850A" stroke="#3D1F0A" stroke-width="2.5" transform="rotate(-14 63 80)"/>
+        <ellipse cx="63" cy="82" rx="9" ry="17" fill="#A0600A" transform="rotate(-14 63 82)"/>
+      </g>
+      <!-- EAR R -->
+      <g class="ear-r">
+        <ellipse cx="137" cy="80" rx="17" ry="25" fill="#D4850A" stroke="#3D1F0A" stroke-width="2.5" transform="rotate(14 137 80)"/>
+        <ellipse cx="137" cy="82" rx="9" ry="17" fill="#A0600A" transform="rotate(14 137 82)"/>
+      </g>
+
+      <!-- HEAD -->
+      <ellipse cx="100" cy="78" rx="41" ry="39" fill="#F0A832" stroke="#3D1F0A" stroke-width="2.5"/>
+      <!-- forehead patch -->
+      <ellipse cx="100" cy="60" rx="19" ry="13" fill="#FFF5E0"/>
+
+      <!-- MUZZLE -->
+      <ellipse cx="100" cy="97" rx="21" ry="15" fill="#FFF5E0" stroke="#3D1F0A" stroke-width="2"/>
+      <!-- NOSE -->
+      <ellipse cx="100" cy="91" rx="8" ry="5.5" fill="#2C1810"/>
+      <ellipse cx="97.5" cy="89.5" rx="2.5" ry="1.5" fill="#fff" opacity=".45"/>
+
+      <!-- MOUTH (animated via JS) -->
+      <path id="mouthPath" d="M91,101 Q100,107 109,101" fill="none" stroke="#3D1F0A" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- TONGUE -->
+      <g class="tongue" id="tongue">
+        <ellipse cx="100" cy="111" rx="7" ry="9" fill="#ff6b6b"/>
+        <ellipse cx="100" cy="111" rx="3" ry="7" fill="#c04040" opacity=".35"/>
+      </g>
+
+      <!-- EYE L -->
+      <circle cx="83" cy="74" r="10.5" fill="#fff" stroke="#3D1F0A" stroke-width="2"/>
+      <circle id="pupilL" cx="83" cy="74" r="5.5" fill="#2C1810"/>
+      <circle id="glintL" cx="80.5" cy="71.5" r="2" fill="#fff"/>
+
+      <!-- EYE R -->
+      <circle cx="117" cy="74" r="10.5" fill="#fff" stroke="#3D1F0A" stroke-width="2"/>
+      <circle id="pupilR" cx="117" cy="74" r="5.5" fill="#2C1810"/>
+      <circle id="glintR" cx="114.5" cy="71.5" r="2" fill="#fff"/>
+
+      <!-- EYEBROWS -->
+      <path id="browL" d="M74,63 Q83,59 92,62" fill="none" stroke="#3D1F0A" stroke-width="3" stroke-linecap="round"/>
+      <path id="browR" d="M108,62 Q117,59 126,63" fill="none" stroke="#3D1F0A" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- BLUSH -->
+      <ellipse cx="69" cy="89" rx="9" ry="5" fill="#ffb3b3" opacity=".4"/>
+      <ellipse cx="131" cy="89" rx="9" ry="5" fill="#ffb3b3" opacity=".4"/>
+
+      <!-- COLLAR -->
+      <rect x="80" y="124" width="40" height="11" rx="5.5" fill="#ff6b6b" stroke="#c04040" stroke-width="1.5"/>
+      <rect x="96" y="122" width="8" height="7" rx="2.5" fill="#ffd700" stroke="#b8860b" stroke-width="1.5"/>
+    </g>
+
+    <!--
+      ARMS — đặt NGOÀI dog-body để render trên đầu
+      Vị trí gốc: tay trái quanh (52,108), tay phải quanh (148,108)
+      Khi che mắt cần phủ vùng mắt ~y=64-84, x=72-128
+      → armL cần dịch lên ~44px và vào giữa ~+30px
+      → armR cần dịch lên ~44px và vào giữa ~-30px
+      transform-origin đặt tại khớp vai (điểm trên của ellipse tay)
+    -->
+
+    <!-- ARM LEFT: khớp vai tại ~(68, 108) -->
+    <g id="armL" class="arm-l">
+      <!-- bắp tay -->
+      <ellipse cx="56" cy="116" rx="13" ry="28" fill="#F0A832" stroke="#3D1F0A" stroke-width="2.5" transform="rotate(15 56 116)"/>
+      <!-- bàn chân -->
+      <ellipse cx="47" cy="132" rx="13" ry="8.5" fill="#F0A832" stroke="#3D1F0A" stroke-width="2.2"/>
+      <!-- ngón -->
+      <ellipse cx="42" cy="129" rx="4.5" ry="3.2" fill="#FFF5E0" stroke="#3D1F0A" stroke-width="1.3"/>
+      <ellipse cx="47" cy="127" rx="4.5" ry="3.2" fill="#FFF5E0" stroke="#3D1F0A" stroke-width="1.3"/>
+      <ellipse cx="52" cy="129" rx="4.5" ry="3.2" fill="#FFF5E0" stroke="#3D1F0A" stroke-width="1.3"/>
+    </g>
+
+    <!-- ARM RIGHT: khớp vai tại ~(132, 108) -->
+    <g id="armR" class="arm-r">
+      <ellipse cx="144" cy="116" rx="13" ry="28" fill="#F0A832" stroke="#3D1F0A" stroke-width="2.5" transform="rotate(-15 144 116)"/>
+      <ellipse cx="153" cy="132" rx="13" ry="8.5" fill="#F0A832" stroke="#3D1F0A" stroke-width="2.2"/>
+      <ellipse cx="148" cy="129" rx="4.5" ry="3.2" fill="#FFF5E0" stroke="#3D1F0A" stroke-width="1.3"/>
+      <ellipse cx="153" cy="127" rx="4.5" ry="3.2" fill="#FFF5E0" stroke="#3D1F0A" stroke-width="1.3"/>
+      <ellipse cx="158" cy="129" rx="4.5" ry="3.2" fill="#FFF5E0" stroke="#3D1F0A" stroke-width="1.3"/>
+    </g>
+
+  </svg>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Cổng Trường</div>
+    <div class="card-sub">Bé hãy nhập tài khoản để vào lớp nhé!</div>
+    <div class="tabs">
+      <button class="tab active" id="tabLogin" onclick="switchTab('login')">Đăng nhập</button>
+      <button class="tab" id="tabReg" onclick="switchTab('register')">Đăng ký</button>
+    </div>
+    <div class="field">
+      <input type="text" id="emailInput" placeholder="Email người dùng" autocomplete="off"/>
+    </div>
+    <div class="field">
+      <input type="password" id="passInput" class="has-eye" placeholder="Nhập mật khẩu" autocomplete="new-password"/>
+      <button class="eye-btn" id="eyeBtn" type="button">👁️</button>
+    </div>
+    <button class="btn-go">🐾 Vào lớp thôi!</button>
+    <div class="state-tag" id="stateTag">Gâu gâu! Điền thông tin vào nha 🐶</div>
+  </div>
+</div>
+
+<script>
+const wrap       = document.getElementById('mascotWrap');
+const armL       = document.getElementById('armL');
+const armR       = document.getElementById('armR');
+const tongue     = document.getElementById('tongue');
+const pupilL     = document.getElementById('pupilL');
+const pupilR     = document.getElementById('pupilR');
+const glintL     = document.getElementById('glintL');
+const glintR     = document.getElementById('glintR');
+const browL      = document.getElementById('browL');
+const browR      = document.getElementById('browR');
+const mouthEl    = document.getElementById('mouthPath');
+const emailInput = document.getElementById('emailInput');
+const passInput  = document.getElementById('passInput');
+const eyeBtn     = document.getElementById('eyeBtn');
+const stateTag   = document.getElementById('stateTag');
+
+/* ── BASE positions ── */
+const PL={x:83,y:74}, PR={x:117,y:74};
+const GL={x:80.5,y:71.5}, GR={x:114.5,y:71.5};
+const MAX=3.8;
+
+let state='idle', showPass=false;
+let curX=0, curY=0, tgtX=0, tgtY=0;
+
+/* ── LERP LOOP ── */
+(function loop(){
+  curX += (tgtX-curX)*.10;
+  curY += (tgtY-curY)*.10;
+  pupilL.setAttribute('cx', PL.x+curX); pupilL.setAttribute('cy', PL.y+curY);
+  pupilR.setAttribute('cx', PR.x+curX); pupilR.setAttribute('cy', PR.y+curY);
+  glintL.setAttribute('cx', GL.x+curX); glintL.setAttribute('cy', GL.y+curY);
+  glintR.setAttribute('cx', GR.x+curX); glintR.setAttribute('cy', GR.y+curY);
+  requestAnimationFrame(loop);
+})();
+
+function aim(nx,ny){ tgtX=nx*MAX; tgtY=ny*MAX; }
+function resetAim(){ tgtX=0; tgtY=0; }
+
+/* ── GHOST DIV CARET (như Yeti gốc) ── */
+function getCaretPixelPos(input){
+  const pos = input.selectionEnd ?? input.value.length;
+  const div = document.createElement('div');
+  const cs  = getComputedStyle(input);
+  // copy tất cả style của input
+  for(const p of cs) div.style[p] = cs[p];
+  div.style.position   = 'fixed';
+  div.style.visibility = 'hidden';
+  div.style.whiteSpace = 'pre-wrap';
+  div.style.width      = input.offsetWidth + 'px';
+  div.style.height     = 'auto';
+  div.style.top        = '-9999px';
+  div.style.left       = '-9999px';
+
+  // text trước caret
+  const before = document.createElement('span');
+  before.textContent = input.value.substring(0, pos);
+  // span tại caret
+  const caret = document.createElement('span');
+  caret.textContent = input.value.substring(pos) || '.';
+  div.appendChild(before);
+  div.appendChild(caret);
+  document.body.appendChild(div);
+
+  const inputRect = input.getBoundingClientRect();
+  const caretRect = caret.getBoundingClientRect();
+  document.body.removeChild(div);
+
+  // vị trí caret tuyệt đối trong viewport
+  return {
+    x: inputRect.left + (caretRect.left - div.getBoundingClientRect?.()?.left ?? 0),
+    // đơn giản hơn: dùng offset nội bộ
+    // thực ra div đã fixed ngoài màn hình, lấy caretRect trực tiếp
+    xAbs: caretRect.left,
+    yAbs: inputRect.top + inputRect.height * 0.4
+  };
+}
+
+/* ── CARET TRACKING (chỉ dùng khi email focused) ── */
+function trackCaret(){
+  if(state !== 'email') return;
+  const svgRect = document.getElementById('dogSvg').getBoundingClientRect();
+  const svgCX   = svgRect.left + svgRect.width  * (83/200);  // trung điểm 2 mắt trong SVG
+  const svgCY   = svgRect.top  + svgRect.height * (74/200);
+
+  // Ghost div để lấy vị trí caret thực
+  const pos = emailInput.selectionEnd ?? emailInput.value.length;
+  const div = document.createElement('div');
+  const cs  = getComputedStyle(emailInput);
+  for(const p of cs) div.style[p] = cs[p];
+  div.style.cssText += ';position:fixed;visibility:hidden;top:-9999px;left:-9999px;width:'+emailInput.offsetWidth+'px;overflow:hidden;white-space:pre;';
+  const before = document.createElement('span');
+  before.textContent = emailInput.value.substring(0, pos);
+  const caretSpan = document.createElement('span');
+  caretSpan.textContent = emailInput.value.substring(pos) || '|';
+  div.appendChild(before);
+  div.appendChild(caretSpan);
+  document.body.appendChild(div);
+  const cr = caretSpan.getBoundingClientRect();
+  const ir = emailInput.getBoundingClientRect();
+  document.body.removeChild(div);
+
+  // caretX: clamp dalam range input
+  const caretX = Math.max(ir.left, Math.min(ir.right,  cr.left));
+  const caretY = ir.top + ir.height * 0.45;
+
+  // vektor dari tengah mata ke caret
+  const dx = caretX - svgCX;
+  const dy = caretY - svgCY;
+  const dist = Math.hypot(dx,dy) || 1;
+  const f    = Math.min(dist/260, 1);
+  aim((dx/dist)*f, (dy/dist)*f);
+}
+
+/* ── MOUTH SHAPES ── */
+const MOUTHS = {
+  neutral: 'M91,101 Q100,106 109,101',
+  smile:   'M88,101 Q100,110 112,101',
+  open:    'M88,100 Q100,113 112,100',
+  big:     'M85,99  Q100,116 115,99'
+};
+function setMouth(k){ mouthEl.setAttribute('d', MOUTHS[k]); }
+
+/* ── BROWS ── */
+function setBrows(mood){
+  const b = {
+    normal:  ['M74,63 Q83,59 92,62',  'M108,62 Q117,59 126,63'],
+    happy:   ['M74,60 Q83,56 92,59',  'M108,59 Q117,56 126,60'],
+    worried: ['M74,62 Q83,67 92,63',  'M108,63 Q117,67 126,62']
+  }[mood] || ['M74,63 Q83,59 92,62','M108,62 Q117,59 126,63'];
+  browL.setAttribute('d', b[0]);
+  browR.setAttribute('d', b[1]);
+}
+
+/* ── STATE MACHINE ── */
+function setState(s){
+  state = s;
+  // xóa class cũ
+  wrap.classList.remove('covering','peeking');
+
+  if(s==='idle'){
+    setMouth('neutral'); setBrows('normal'); tongue.classList.remove('show');
+    resetAim();
+    stateTag.textContent='Gâu gâu! Điền thông tin vào nha 🐶';
+  }
+  else if(s==='email'){
+    setMouth('smile'); setBrows('happy'); tongue.classList.remove('show');
+    stateTag.textContent='👀 Mắt đang nhìn con trỏ kìa...';
+  }
+  else if(s==='password'){
+    wrap.classList.add('covering');
+    setMouth('neutral'); setBrows('worried'); tongue.classList.remove('show');
+    resetAim();
+    stateTag.textContent='🙈 Che mắt cho bạn nhập rồi nha!';
+  }
+  else if(s==='peeking'){
+    wrap.classList.add('peeking');
+    // nhìn xuống trái (hướng ti hí hợp lý)
+    aim(-.4, .5);
+    stateTag.textContent='👀 Ehe... ti hí xíu thôi hihi';
+  }
+}
+
+/* ── EMAIL ── */
+emailInput.addEventListener('focus', ()=> setState('email'));
+emailInput.addEventListener('blur',  ()=> setState('idle'));
+emailInput.addEventListener('input', e=>{
+  trackCaret();
+  const v = e.target.value;
+  if(!v.length){
+    setMouth('smile'); setBrows('happy'); tongue.classList.remove('show');
+  } else if(v.includes('@')){
+    setMouth('big'); setBrows('happy'); tongue.classList.add('show');
+  } else if(v.length>3){
+    setMouth('open'); setBrows('happy'); tongue.classList.remove('show');
+  } else {
+    setMouth('smile'); setBrows('happy'); tongue.classList.remove('show');
+  }
+});
+emailInput.addEventListener('keyup',  trackCaret);
+emailInput.addEventListener('click',  trackCaret);
+emailInput.addEventListener('select', trackCaret);
+
+/* ── PASSWORD ── */
+passInput.addEventListener('focus', ()=> setState('password'));
+passInput.addEventListener('blur',  ()=>{ if(!showPass) setState('idle'); });
+
+/* ── EYE BUTTON — giữ để ti hí, thả để che lại ── */
+function startPeek(e){
+  e.preventDefault();
+  showPass=true; passInput.type='text'; eyeBtn.textContent='🫣';
+  setState('peeking');
+}
+function endPeek(){
+  if(!showPass) return;
+  showPass=false; passInput.type='password'; eyeBtn.textContent='👁️';
+  // nếu pass vẫn focus → về covering, không thì về idle
+  if(document.activeElement===passInput) setState('password');
+  else setState('idle');
+}
+eyeBtn.addEventListener('mousedown',  startPeek);
+eyeBtn.addEventListener('mouseup',    endPeek);
+eyeBtn.addEventListener('mouseleave', endPeek);
+eyeBtn.addEventListener('touchstart', startPeek, {passive:false});
+eyeBtn.addEventListener('touchend',   endPeek);
+
+/* ── TABS ── */
+function switchTab(t){
+  document.getElementById('tabLogin').classList.toggle('active',t==='login');
+  document.getElementById('tabReg').classList.toggle('active',t==='register');
+  setState('idle');
+}
+</script>

@@ -1,0 +1,62 @@
+# Bài Học Ngữ Pháp Tiếng Việt: Cấu trúc câu cơ bản (Chủ ngữ - Động từ - Tân ngữ)
+
+Chào bạn! Bài học này sẽ giới thiệu về cấu trúc nền tảng và phổ biến nhất trong tiếng Việt: Chủ ngữ (S) - Động từ (V) - Tân ngữ (O). 
+
+---
+
+## 1. Cấu trúc cốt lõi: S - V - O
+
+Một câu tiếng Việt cơ bản thường tuân theo thứ tự logic sau:
+
+Chủ ngữ (S) + Động từ (V) + Tân ngữ (O)
+
+Tiếng Việt là một ngôn ngữ đơn lập (analytic language). Điều này có nghĩa là các mối quan hệ ngữ pháp được thể hiện chủ yếu thông qua trật tự từ thay vì biến đổi đuôi từ (như chia động từ hay biến cách trong các ngôn ngữ khác). Việc thay đổi vị trí của các từ thường sẽ làm thay đổi hoàn toàn ý nghĩa của câu.
+
+---
+
+## 2. Phân tích các thành phần và Ví dụ
+
+Hãy cùng phân tích từng thành phần qua các ví dụ cơ bản dưới đây.
+
+### A. Chủ ngữ (Subject - S)
+Người, sự vật, hoặc hiện tượng thực hiện hành động hoặc được miêu tả. Chủ ngữ có thể là đại từ (tôi, bạn, anh ấy), danh từ riêng (Hoa, Hà Nội), hoặc danh từ chung.
+
+* Tôi học bài. (Tôi = S)
+* Con mèo bắt chuột. (Con mèo = S)
+* Trời mưa. (Trời = S)
+
+### B. Động từ (Verb - V)
+Từ chỉ hành động hoặc trạng thái. Một điều tuyệt vời trong tiếng Việt là động từ giữ nguyên hình thức, không bao giờ bị biến đổi theo chủ ngữ (ngôi thứ nhất, số ít, số nhiều...) hay thì (quá khứ, hiện tại, tương lai).
+
+* Anh ấy đi làm. (đi = V)
+* Chúng tôi viết thư. (viết = V)
+* Con chó chạy. (chạy = V)
+
+### C. Tân ngữ (Object - O)
+Người hoặc sự vật trực tiếp chịu sự tác động của hành động do chủ ngữ gây ra.
+
+* Tôi đọc sách. (Tôi [S] + đọc [V] + sách [O])
+* Mẹ mua hoa. (Mẹ [S] + mua [V] + hoa [O])
+* Nam thích món này. (Nam [S] + thích [V] + món này [O])
+
+---
+
+## 3. Một số lưu ý quan trọng
+
+* Lược bỏ chủ ngữ hoặc tân ngữ: Trong giao tiếp hàng ngày, nếu ngữ cảnh đã hoàn toàn rõ ràng, chủ ngữ hoặc tân ngữ thường xuyên được người Việt lược bỏ để câu nói ngắn gọn hơn. 
+    * Ví dụ (Hỏi): Bạn ăn cơm chưa?
+    * Ví dụ (Đáp): Ăn rồi. (Lược bỏ chủ ngữ "Tôi" và tân ngữ "cơm")
+* Vị trí của Tính từ: Khác với tiếng Anh (Tính từ + Danh từ), trong tiếng Việt, tính từ bổ nghĩa cho danh từ luôn luôn đứng sau danh từ đó. 
+    * Ví dụ: "một cuốn sách mới" (Danh từ: sách + Tính từ: mới).
+
+---
+
+## 4. Bài tập thực hành
+
+Bài tập: Sắp xếp các từ sau thành một câu hoàn chỉnh (S-V-O).
+
+1. ăn / Tôi / phở
+2. mua / xe máy / Chị ấy
+3. uống / Bạn / cà phê / không?
+
+(Đáp án: 1. Tôi ăn phở. | 2. Chị ấy mua xe máy. | 3. Bạn uống cà phê không?)

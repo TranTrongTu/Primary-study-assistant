@@ -1,0 +1,49 @@
+/* Montserrat Font - Relative Paths for Production */
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/montserrat/files/montserrat-latin-400-normal.woff2') format('woff2');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 500;
+  font-style: normal;
+  src: url('/fonts/montserrat/files/montserrat-latin-500-normal.woff2') format('woff2');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 600;
+  font-style: normal;
+  src: url('/fonts/montserrat/files/montserrat-latin-600-normal.woff2') format('woff2');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/montserrat/files/montserrat-latin-700-normal.woff2') format('woff2');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 800;
+  font-style: normal;
+  src: url('/fonts/montserrat/files/montserrat-latin-800-normal.woff2') format('woff2');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 900;
+  font-style: normal;
+  src: url('/fonts/montserrat/files/montserrat-latin-900-normal.woff2') format('woff2');
+  font-display: block;
+}

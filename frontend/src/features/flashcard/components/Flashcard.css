@@ -1,0 +1,155 @@
+.flashcard-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    cursor: pointer;
+    --bg-front: url('./background/Vietnamese_Light.png');
+    --color-back: #eef2ff;
+    --text-front: #102a43;
+    --text-back: #1e1b4b;
+}
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 1.25s;
+    transform-style: preserve-3d;
+}
+.flashcard-container.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+.flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+.flashcard-front {
+    background-image: var(--bg-front);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid #e5e7eb;
+    color: var(--text-front);
+}
+.flashcard-back {
+    background: var(--color-back);
+    color: var(--text-back);
+    transform: rotateY(180deg);
+}
+
+.flashcard-front-text {
+    color: var(--text-front);
+    text-shadow: 0 1px 8px rgb(255 255 255 / 0.72);
+}
+
+.flashcard-container.night .flashcard-front-text {
+    text-shadow: 0 2px 10px rgb(0 0 0 / 0.55);
+}
+
+.flashcard-container.MATHS {
+    --bg-front: url('./background/Math_Light.png');
+    --color-back: #dbeafe;
+    --text-front: #172554;
+    --text-back: #172554;
+
+    --font-size-front: 2rem;   /* Cỡ chữ mặt trước (ví dụ: 24px) */
+    --font-size-back: 1.25rem;   /* Cỡ chữ mặt sau (ví dụ: 20px) */
+    --weight-front: 600;         /* In đậm nhiều (Bold) */
+    --weight-back: 500;          /* Chữ thường (Regular) */
+}
+.flashcard-container.MATHS.night {
+    --bg-front: url('./background/Math_Dark.png');
+    --color-back: #172554;
+    --text-front: #f8fafc;
+    --text-back: #f8fafc;
+}
+
+.flashcard-container.VIETNAMESE {
+    --bg-front: url('./background/Vietnamese_Light.png');
+    --color-back: #fee2e2;
+    --text-front: #3f1d1d;
+    --text-back: #7f1d1d;
+
+    --font-size-front: 2rem;   /* Cỡ chữ mặt trước (ví dụ: 24px) */
+    --font-size-back: 1.25rem;   /* Cỡ chữ mặt sau (ví dụ: 20px) */
+    --weight-front: 600;         /* In đậm nhiều (Bold) */
+    --weight-back: 500;          /* Chữ thường (Regular) */
+}
+.flashcard-container.VIETNAMESE.night {
+    --bg-front: url('./background/Vietnamese_Dark.png');
+    --color-back: #3f1d1d;
+    --text-front: #fff7ed;
+    --text-back: #fff7ed;
+}
+
+.flashcard-container.ENGLISH {
+    --bg-front: url('./background/English_Light.png');
+    --color-back: #dcfce7;
+    --text-front: #052e16;
+    --text-back: #14532d;
+
+    --font-size-front: 2rem;   /* Cỡ chữ mặt trước (ví dụ: 24px) */
+    --font-size-back: 1.25rem;   /* Cỡ chữ mặt sau (ví dụ: 20px) */
+    --weight-front: 600;         /* In đậm nhiều (Bold) */
+    --weight-back: 500;          /* Chữ thường (Regular) */
+}
+.flashcard-container.ENGLISH.night {
+    --bg-front: url('./background/English_Dark.png');
+    --color-back: #052e16;
+    --text-front: #f0fdf4;
+    --text-back: #f0fdf4;
+}
+
+/* Áp dụng cho tiêu đề mặt trước */
+.flashcard-front h3 {
+    font-size: var(--font-size-front) !important;
+    font-weight: var(--weight-front) !important;
+}
+
+/* Áp dụng cho đoạn văn mặt sau */
+.flashcard-back p {
+    font-size: var(--font-size-back) !important;
+    font-weight: var(--weight-back) !important;
+}
+/* 1. Định nghĩa độ rộng tổng thể của thanh cuộn */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 38px;              /* Tăng độ rộng tổng lên để chừa không gian làm lề */
+    height: 6px;
+}
+
+/* 2. Đường ray ẩn */
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;  
+}
+
+/* 3. Cục cuộn thông minh (Tự giới hạn độ cao) */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    /* Đổ màu nền cho cục cuộn */
+    background-color: rgba(156, 163, 175, 0.5); 
+    
+    /* MẸO CỐT LÕI: Tạo viền trong suốt xung quanh để ép cục cuộn co nhỏ lại */
+    border: 16px solid transparent; 
+    
+    /* Giữ màu nền chỉ nằm trong phạm vi text, không tràn ra phần viền transparent */
+    background-clip: padding-box;  
+    
+    border-radius: 9999px;    /* Bo tròn cục cuộn */
+    transition: background-color 0.2s ease;
+}
+
+/* 4. Hiệu ứng khi hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(107, 114, 128, 0.7); 
+}
+.flashcard-wind-canvas {
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    pointer-events: none;
+    z-index: 2; /* Nằm dưới thẻ để tạo độ sâu không gian */
+}

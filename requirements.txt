@@ -1,0 +1,25 @@
+fastapi[standard]>=0.135.0
+httpx
+
+
+# Database
+sqlmodel
+psycopg[binary]
+asyncpg
+
+# Security
+pyjwt
+pwdlib[argon2]
+python-dotenv
+
+
+# AI and RAG
+google-genai
+google-api-core>=2.15.0
+protobuf>=4.25.0
+ollama
+pypdf
+pgvector
+langchain-text-splitters
+
+debugpy

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<defs><filter id="s"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.18"/></filter></defs>
+<g filter="url(#s)">
+<rect x="90" y="120" width="220" height="270" rx="24" fill="#ffffff" stroke="#4f83ff" stroke-width="10"/>
+<line x1="145" y1="170" x2="145" y2="350" stroke="#dbeafe" stroke-width="8"/>
+<line x1="175" y1="200" x2="270" y2="200" stroke="#cbd5e1" stroke-width="8"/>
+<line x1="175" y1="245" x2="270" y2="245" stroke="#cbd5e1" stroke-width="8"/>
+<line x1="175" y1="290" x2="250" y2="290" stroke="#cbd5e1" stroke-width="8"/>
+<g transform="rotate(-25 360 250)">
+<rect x="325" y="130" width="36" height="190" rx="14" fill="#f59e0b"/>
+<rect x="325" y="110" width="36" height="35" rx="10" fill="#ef4444"/>
+<polygon points="325,320 361,320 343,365" fill="#d1d5db"/>
+</g></g></svg>

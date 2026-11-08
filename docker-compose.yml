@@ -1,0 +1,99 @@
+services:
+  # Database service
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Q6L0N2H0LQS5016SQL5888
+      POSTGRES_DB: group_project_sample
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d group_project_sample"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+  # Backend Service
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+      - "5678:5678"
+    env_file:
+      - ./backend/.env
+    environment:
+      POSTGRES_URL: postgresql+asyncpg://postgres:Q6L0N2H0LQS5016SQL5888@db:5432/group_project_sample
+      POSTGRES_URL_TEST: postgresql+asyncpg://postgres:Q6L0N2H0LQS5016SQL5888@db:5432/group_project_sample
+      # OLLAMA_HOST: http://ollama:11434
+    depends_on:
+      db:
+        condition: service_healthy
+      # ollama:
+      #   condition: service_started
+      # ollama-init:
+      #   condition: service_completed_successfully
+    volumes:
+      - ./backend:/code/backend
+    command:
+      [
+        "python",
+        "-m",
+        "debugpy",
+        "--listen",
+        "0.0.0.0:5678",
+        "-m",
+        "fastapi",
+        "run",
+        "backend/src/main.py",
+        "--port",
+        "8000",
+        "--host",
+        "0.0.0.0",
+      ]
+
+  # ollama:
+  #   image: ollama/ollama
+  #   ports:
+  #     - '11434:11434'
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+  #   # deploy:
+  #   #   resources:
+  #   #     reservations:
+  #   #       devices:
+  #   #         - driver: nvidia
+  #   #           count: 1
+  #   #           capabilities: [gpu]
+
+  # ollama-init:
+  #   image: ollama/ollama
+  #   depends_on:
+  #     - ollama
+  #   environment:
+  #     - OLLAMA_HOST=http://ollama:11434
+  #   entrypoint: ['/bin/sh']
+  #   command:
+  #     - '-c'
+  #     - |
+  #       echo "Waiting for Ollama server to be active..."
+  #       while ! ollama list > /dev/null 2>&1; do sleep 1; done
+
+  #       echo "Server active. Starting model pulls..."
+
+  #       echo "Pulling nomic-embed-text..."
+  #       until ollama pull nomic-embed-text; do echo "Network drop. Retrying nomic..."; sleep 2; done
+
+  #       echo "Pulling llama3.1..."
+  #       until ollama pull llama3.1; do echo "Network drop. Retrying llama3.1..."; sleep 2; done
+
+  #       echo "Pulling llama3.2-vision..."
+  #       until ollama pull llama3.2-vision; do echo "Network drop. Retrying vision..."; sleep 2; done
+
+  #       echo "All models pulled successfully! Exiting init container."
+
+volumes:
+  postgres_data:
+  # ollama_data:
