@@ -15,6 +15,7 @@ from backend.src.core.database import get_async_session
 from backend.src.exceptions.core import (
     ExceptionAuthentication_401,
     ExceptionNotFound_404,
+    ExceptionRequestValidation_400,
 )
 from backend.src.models_schema.auth.auth import TokenData
 from backend.src.models_schema.interaction.interaction import Interaction
@@ -31,11 +32,21 @@ SessionDep = Annotated[AsyncSession, Depends(get_async_session)]
 
 
 def get_current_datetime(
-    overwritten_day: Annotated[date | None, Query()] = None,
+    overwritten_day: Annotated[
+        date | None,
+        Query(description="DEV_MODE only: pretend today is this date (for testing streaks)."),
+    ] = None,
 ) -> datetime:
     now = datetime.now(timezone.utc)
 
     if overwritten_day:
+        # Letting clients pick "now" in production would let them forge token
+        # expiry (iat/exp) and login streaks, so it is a dev-only tool.
+        if not settings.DEV_MODE:
+            raise ExceptionRequestValidation_400(
+                "The overwritten_day parameter is only available in development mode."
+            )
+
         now = now.replace(
             year=overwritten_day.year,
             month=overwritten_day.month,

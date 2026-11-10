@@ -10,6 +10,13 @@ from backend.src.main import FastAPI, app
 
 # ----- TEST CONFIGURATIONS ----- #
 
+# Safety net: the fixtures below drop every table, so refuse to run against the app DB.
+if str(settings.POSTGRES_URL_TEST) == str(settings.POSTGRES_URL):
+    raise pytest.UsageError(
+        "POSTGRES_URL_TEST points to the same database as POSTGRES_URL. "
+        "Tests drop all tables; use a separate test database."
+    )
+
 engine = create_async_engine(
     str(settings.POSTGRES_URL_TEST),
     poolclass=NullPool,

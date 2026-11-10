@@ -1,14 +1,19 @@
+import logging
+
 from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from backend.src.core.config import settings
 from backend.src.core.origins import origins
 from backend.src.exceptions.core import (
     ExceptionCustom,
     ExceptionResponse,
     ExceptionType,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def get_cors_headers(request: Request) -> dict:
@@ -75,9 +80,19 @@ async def validation_exceptions_handler(request: Request, exc: RequestValidation
 
 
 async def generic_exceptions_handler(request: Request, exc: Exception):
+    # Full details (with traceback) go to the server log only. Clients get a
+    # generic message so SQL, table names or secrets never leak in responses.
+    logger.exception(
+        "Unhandled exception on %s %s", request.method, request.url.path, exc_info=exc
+    )
+
+    message = "Internal server error."
+    if settings.DEV_MODE:
+        message += f" Details: {exc!r}"
+
     exception_response = ExceptionResponse(
         exception_type=ExceptionType.INTERNAL_ERROR,
-        message=f"Internal server error. Details: {str(exc)}",
+        message=message,
     )
 
     return JSONResponse(

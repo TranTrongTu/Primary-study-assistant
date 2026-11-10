@@ -669,6 +669,41 @@ async def answer_exercise_item(
     return exercise_item
 
 
+async def grade_with_retries(
+    final_prompt: str,
+    graded_schema: type[GradedSchema],
+    cross_validation_schema: type[GradedSchema],
+    grading_input: dict,
+) -> GradedSchema:
+    """
+    Calls the grading LLM and validates its output, retrying on any malformed
+    response (invalid JSON, wrong JSON shape, or failed schema validation).
+    Raises a 502 once DEFAULT_N_GENERATION_RETRIES attempts have failed.
+    """
+    last_error: Exception | None = None
+
+    for _ in range(max(1, settings.DEFAULT_N_GENERATION_RETRIES)):
+        try:
+            grading_results = await GlobalAPI.grade_answers(final_prompt, graded_schema)
+
+            # json.JSONDecodeError is a ValueError, not a pydantic ValidationError,
+            # so it must be caught explicitly or it escapes as a 500.
+            grading_results_python = json.loads(grading_results)
+            if not isinstance(grading_results_python, dict):
+                raise ExceptionLLMError_502("Grading result is not a JSON object.")
+
+            grading_results_python["grading_input"] = grading_input
+
+            return cross_validation_schema.model_validate(grading_results_python)
+
+        except (ExceptionLLMError_502, ValidationError, json.JSONDecodeError) as e:
+            last_error = e
+
+    if isinstance(last_error, ExceptionLLMError_502):
+        raise last_error
+    raise ExceptionLLMError_502(f"Incorrect content format. Details: {last_error}")
+
+
 async def submit_exercise_activity(
     user: User,
     session: AsyncSession,
@@ -785,33 +820,12 @@ async def submit_exercise_activity(
 
     # ++ Grading ++ #
 
-    i_retry = 0
-
-    while True:
-        # API call
-        try:
-            grading_results = await GlobalAPI.grade_answers(final_prompt, graded_schema)
-            grading_results_python: dict = json.loads(grading_results)
-            grading_results_python.update(
-                {"grading_input": exercise_works.model_dump()}
-            )
-
-            validated_grading_results = cross_validation_schema.model_validate(
-                grading_results_python
-            )
-            break
-
-        # Catches errors, if retry limit exceeded, throws a 502
-        except (ExceptionLLMError_502, ValidationError) as e:
-            i_retry += 1
-            if i_retry >= settings.DEFAULT_N_GENERATION_RETRIES:
-                if isinstance(e, ExceptionLLMError_502):
-                    raise
-                else:
-                    raise ExceptionLLMError_502(
-                        f"Incorrect content format. Details: {e}"
-                    )
-            continue
+    validated_grading_results = await grade_with_retries(
+        final_prompt=final_prompt,
+        graded_schema=graded_schema,
+        cross_validation_schema=cross_validation_schema,
+        grading_input=exercise_works.model_dump(),
+    )
 
     # ++ Saving grading results ++ #
 

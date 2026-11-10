@@ -3,26 +3,18 @@ from sqlmodel import SQLModel, text
 
 from backend.src.core.config import settings
 
-if settings.DEV_MODE:
-    engine = create_async_engine(
-        str(settings.POSTGRES_URL_TEST),
-        echo=True,
-        pool_size=5,
-        max_overflow=10,
-        pool_timeout=30.0,
-        pool_pre_ping=True,
-        pool_recycle=300,
-    )
-else:
-    engine = create_async_engine(
-        str(settings.POSTGRES_URL),
-        echo=True,
-        pool_size=20,
-        max_overflow=60,
-        pool_timeout=30.0,
-        pool_pre_ping=True,
-        pool_recycle=300,
-    )
+# The app always uses POSTGRES_URL. POSTGRES_URL_TEST is reserved for pytest,
+# which drops every table after each test, so the two must never be the same DB.
+engine = create_async_engine(
+    str(settings.POSTGRES_URL),
+    # SQL logging only in dev: in production it floods logs and writes user data to them
+    echo=settings.DEV_MODE,
+    pool_size=5 if settings.DEV_MODE else 20,
+    max_overflow=10 if settings.DEV_MODE else 60,
+    pool_timeout=30.0,
+    pool_pre_ping=True,
+    pool_recycle=300,
+)
 
 
 async def create_database_and_tables():

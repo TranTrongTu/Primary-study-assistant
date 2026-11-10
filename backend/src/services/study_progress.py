@@ -138,7 +138,12 @@ async def create_study_assessment(
         select(CheckIn)
         .outerjoin(
             StudyAssessment,
-            col(CheckIn.time) == col(StudyAssessment.assessment_of),
+            # Match on user too: otherwise another user's assessment for the same
+            # day makes this user's check-in look "already assessed".
+            and_(
+                col(CheckIn.time) == col(StudyAssessment.assessment_of),
+                col(CheckIn.user_id) == col(StudyAssessment.user_id),
+            ),
         )
         .where(
             CheckIn.user_id == user.id,
