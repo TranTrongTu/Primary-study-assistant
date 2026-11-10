@@ -167,7 +167,7 @@ const useCrackCanvas = (canvasRef, active) => {
 // ====================================================================
 export const TTRCard = ({ 
   isLoading, error, onRetry, onExit,
-  isCompleted, mode, timeLeft, maxTime, isTimeFrozen, freezeTimeLeft, shields, isFogActive, isGameOver, gameOverReason,
+  isCompleted, mode, timeLeft, maxTime, isTimeFrozen, freezeTimeLeft, isFogActive, isGameOver, gameOverReason,
   currentIndex, totalQuestions, currentQuestion, activeBlankId, filledBlanks, wrongBlanks, confirmedBlanks, checkStatus, 
   streak, onSelectWord, onBlankClick, onDropWord, onCheckAnswer, onNextQuestion,
   power5050, powerMagic, shieldActive, eliminatedOptions, handleUse5050, handleUseMagic 
@@ -349,8 +349,6 @@ export const TTRCard = ({
     );
   }
 
-  const progressPercent = ((currentIndex + 1) / totalQuestions) * 100;
-
   let glowEffect = '';
   if (isTimeFrozen) glowEffect = isNight ? 'shadow-[0_0_50px_rgba(56,189,248,0.4)] ring-2 ring-sky-400/80' : 'shadow-[0_0_50px_rgba(56,189,248,0.6)] ring-2 ring-sky-400';
   else if (mode === 'survival' && !isFogActive && streak > 0) glowEffect = isNight ? 'shadow-[inset_0_0_80px_rgba(249,115,22,0.15),0_0_50px_rgba(249,115,22,0.4)] ring-2 ring-orange-500/80' : 'shadow-[inset_0_0_80px_rgba(249,115,22,0.2),0_0_50px_rgba(249,115,22,0.5)] ring-2 ring-orange-400';
@@ -358,17 +356,6 @@ export const TTRCard = ({
   else if (streak >= stepGlowSmall) glowEffect = isNight ? 'shadow-[0_0_20px_rgba(168,85,247,0.3)] ring-1 ring-purple-500/50' : 'shadow-[0_0_20px_rgba(250,204,21,0.3)] ring-1 ring-yellow-400/50';
 
   const dayCardGlow = dayQuakeActive ? { boxShadow: `0 0 ${40 * glowIntensity}px rgba(251,191,36,0.9), 0 0 ${80 * glowIntensity}px rgba(251,191,36,0.4)`, transition: 'box-shadow 0.1s' } : {};
-
-  let streakContainerClass = `relative flex items-center gap-1.5 px-4 py-2 rounded-full font-bold text-sm transition-all duration-300 z-10 ${isNight ? 'bg-[#1e293b] text-gray-300' : 'bg-gray-800 text-gray-100'} ${(shieldActive || shields > 0) ? 'shadow-[0_0_15px_rgba(56,189,248,0.6)] ring-2 ring-sky-400' : ''}`;
-  let streakColorClass = "text-orange-500 drop-shadow-[0_0_5px_rgba(249,115,22,0.8)]";
-
-  if (streak >= stepGlowBig) {
-    streakContainerClass = `relative flex items-center gap-1.5 px-5 py-2 rounded-full font-black text-lg transition-all duration-300 z-10 ${isNight ? 'bg-[#2a0a0a] border border-red-500/50' : 'bg-orange-50 border border-orange-400'} shadow-[0_0_30px_rgba(239,68,68,0.8)]`;
-    streakColorClass = "streak-fire-text text-xl";
-  } else if (streak >= stepGlowSmall) {
-    streakContainerClass = `relative flex items-center gap-1.5 px-4 py-2 rounded-full font-bold text-sm transition-all duration-300 z-10 ${isNight ? 'bg-[#170f2e] text-gray-300' : 'bg-cyan-50 text-gray-800'} static-electricity`;
-    streakColorClass = "text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]";
-  }
 
   return (
     <main

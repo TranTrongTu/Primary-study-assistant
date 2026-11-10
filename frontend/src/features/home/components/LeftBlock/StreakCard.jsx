@@ -10,7 +10,6 @@ export const StreakCard = ({
   const { isNight } = useTheme();
   const currentValue = isLoading ? "--" : currentStreak;
   const longestValue = isLoading ? "--" : longestStreak;
-  const flameCount = isLoading ? 0 : Math.min(currentStreak, 5);
 
   // Outer card background: Changed to a solid dark color in night mode to match the notebook card
   const cardCls = isNight

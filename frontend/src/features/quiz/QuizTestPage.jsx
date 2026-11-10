@@ -7,7 +7,7 @@ import QuizPanel from "./components/QuizPanel.jsx";
  */
 const QuizTestPage = () => {
   const interactionId = 1; // Hardcode cho test, sau sẽ lấy từ URL
-  const { quizzes, isLoading, error, createNewQuiz, removeQuiz } =
+  const { quizzes, isLoading, error, createNewQuiz } =
     useQuizManagement(interactionId);
 
   const [isOpen, setIsOpen] = useState(true);

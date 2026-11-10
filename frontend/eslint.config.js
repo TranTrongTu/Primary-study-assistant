@@ -5,13 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  // The two files below are not imported anywhere (dead code) and reference undefined names.
-  // TODO: delete them or wire them up, then remove these ignores.
-  globalIgnores([
-    'dist',
-    'src/features/ttr/TTRContainer.jsx',
-    'src/features/auth/components/MascotExpression.jsx',
-  ]),
+  globalIgnores(['dist']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [
@@ -29,8 +23,8 @@ export default defineConfig([
       },
     },
     rules: {
-      // Baseline cleanup pending (about 46 unused variables): warn for now so real errors still fail CI.
-      'no-unused-vars': ['warn', { varsIgnorePattern: '^[A-Z_]' }],
+      // ignoreRestSiblings: allows the react-markdown idiom ({ node, ...props }) => ...
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]', ignoreRestSiblings: true }],
       // Only affects dev hot reload (shadcn components export variants next to components).
       'react-refresh/only-export-components': 'warn',
     },

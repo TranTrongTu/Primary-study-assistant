@@ -1,22 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ThemeWrapper, useTheme } from "../../../components/theme/ThemeWrapper";
+import { ThemeWrapper } from "../../../components/theme/ThemeWrapper";
 
-// Tách phần nội dung ra riêng để có thể sử dụng hook useTheme() từ Context
+// Content is split out of the layout so it can sit inside ThemeWrapper.
 const InteractionContent = ({
   children,
-  onNewChat,
   headerTitle = "Dolphin",
   modals,
 }) => {
-  const { isNight } = useTheme(); // Lấy trạng thái từ ThemeWrapper
-
-  // Adaptive colors
-  const logoColor = isNight ? "#a8c4ff" : "#f97316";
-  const btnBg = isNight ? "rgba(30,50,100,0.55)" : "rgba(255,255,255,0.60)";
-  const btnText = isNight ? "#c8d8ff" : "#374151";
-  const btnHover = isNight ? "rgba(50,80,160,0.75)" : "rgba(255,255,255,1)";
-
   return (
     // Đưa các class căn lề (padding) đặc thù của trang Interaction vào đây
     <div className="relative flex h-full w-full flex-col px-10 pb-10 pt-28">

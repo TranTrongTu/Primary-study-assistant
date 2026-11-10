@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import videoIcon from "../../../assets/icon/video.svg";
-import slideIcon from "../../../assets/icon/slide.svg";
 import quizIcon from "../../../assets/icon/Quiz.svg";
 import { Trash, WarningCircle, X } from "@phosphor-icons/react";
 import { useTheme } from "../../../components/theme/ThemeWrapper";

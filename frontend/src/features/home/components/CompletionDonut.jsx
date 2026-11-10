@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { PieChart, Pie, Legend, Sector } from 'recharts';
 import { useTheme } from "@/components/theme/ThemeWrapper";
 import { 

@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Power } from "@phosphor-icons/react";
 import { useTheme } from "../../../../components/theme/ThemeWrapper";
 
-export const UserProfileCard = ({ name = "Minh" }) => {
+export const UserProfileCard = () => {
   const { isNight } = useTheme();
   const navigate = useNavigate();
   const queryClient = useQueryClient();

@@ -44,7 +44,7 @@ export const useLogin = () => {
       // Ensure current-user query refetches with the new token
       try {
         queryClient.invalidateQueries(["current-user"]);
-      } catch (e) {
+      } catch {
         // ignore
       }
 

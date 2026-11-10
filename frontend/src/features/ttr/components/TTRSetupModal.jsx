@@ -53,8 +53,6 @@ const handleSubmit = (e) => {
     if (difficulty === 'medium') { minBlank = 2; maxBlank = 3; }
     if (difficulty === 'hard') { minBlank = 3; maxBlank = 4; }
 
-    const isEnglish = subject === 'ENGLISH';
-
     // Số distractor tăng theo độ khó
     const distractorCount = difficulty === 'easy' ? 2 : difficulty === 'medium' ? 3 : 4;
 

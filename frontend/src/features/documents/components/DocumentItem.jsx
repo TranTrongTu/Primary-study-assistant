@@ -6,8 +6,8 @@ import { useLearningPath } from "../hooks/useLearningPath";
 import { TrashIcon } from "@phosphor-icons/react"; 
 
 export const DocumentItem = ({ 
-  document, onRename, onDelete, onCheck,
-  isSelected, isEditing, tempName, setTempName, setEditingId, isNight,
+  document, onRename, onDelete,
+  isEditing, tempName, setTempName, setEditingId, isNight,
   onAutoChat, onAutoGenerate // 🎯 1. NHẬN 2 HÀM Ở ĐÂY
 }) => {
   const [showModal, setShowModal] = useState(false);
