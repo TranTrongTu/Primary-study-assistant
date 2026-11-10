@@ -1,8 +1,8 @@
-// src/features/auth/components/EduSparkMascot.jsx
+// src/features/auth/components/DolphinMascot.jsx
 import React from 'react';
 import './animations/Mascot.css';
 
-export const EduSparkMascot = ({ focusField, isPasswordVisible, customAnim }) => {
+export const DolphinMascot = ({ focusField, isPasswordVisible, customAnim }) => {
   let modeClass = 'idle';
   
   if (focusField === 'email' || focusField === 'username') modeClass = 'typing';

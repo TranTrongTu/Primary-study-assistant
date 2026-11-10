@@ -5,7 +5,7 @@ import { updateProfile } from "../api/profileApi";
 import { descriptionSuggestions } from "../utils/descriptionSuggestions";
 
 const getPromptStorageKey = (userId) =>
-  `eduspark_description_prompt_dismissed_${userId}`;
+  `dolphin_description_prompt_dismissed_${userId}`;
 
 export const useFirstLoginDescriptionPrompt = () => {
   const queryClient = useQueryClient();

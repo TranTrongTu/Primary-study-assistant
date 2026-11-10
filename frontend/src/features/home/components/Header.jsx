@@ -7,7 +7,7 @@ export const Header = () => {
     return (
         <header className="flex items-center justify-between">
           <h1 className="text-meteor text-[2rem] font-black tracking-tight md:text-[2.4rem]">
-            EduSpark.AI
+            Dolphin
           </h1>
 
           <div className="flex items-center gap-3 md:gap-4">

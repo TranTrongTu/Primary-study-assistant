@@ -23,7 +23,7 @@ export const GateMascot = ({ focusField, isPasswordVisible }) => {
         <motion.img
           key={currentImage}
           src={currentImage}
-          alt="Linh vật EduSpark"
+          alt="Linh vật Dolphin"
           className="mt-4 h-full w-full object-cover"
           initial={{ opacity: 0, y: 15, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1.1 }}

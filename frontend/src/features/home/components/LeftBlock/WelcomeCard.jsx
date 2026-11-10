@@ -34,13 +34,13 @@ const ENCOURAGEMENTS = [
   "Cùng khám phá và chinh phục kiến thức thật vui nhé!",
   "Mỗi ngày một niềm vui, mỗi ngày một bài học hay!",
   "Phép thuật thực sự chính là sự chăm chỉ của bạn!",
-  "Đừng ngại khó, có EduSpark đồng hành rồi đây!",
+  "Đừng ngại khó, có Dolphin đồng hành rồi đây!",
   "Học tập giống như một chuyến phiêu lưu kỳ thú vậy!",
   "Bạn giỏi hơn bạn nghĩ rất nhiều đó nha!",
   "Từng bước nhỏ nỗ lực sẽ tạo nên thành công lớn!",
   "Trí tò mò là chìa khóa mở ra kho báu tri thức!",
   "Cố gắng lên, vinh quang đang chờ đón bạn phía trước!",
-  "Học hết sức, chơi hết mình cùng EduSpark nhé!"
+  "Học hết sức, chơi hết mình cùng Dolphin nhé!"
 ];
 
 // Hàm tiện ích để random lấy 1 phần tử trong mảng

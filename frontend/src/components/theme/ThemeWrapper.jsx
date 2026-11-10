@@ -38,13 +38,13 @@ export const ThemeWrapper = ({
 }) => {
   // ĐỌC THEME TỪ BỘ NHỚ LÚC MỚI VÀO TRANG (Chống nhấp nháy chuyển màu)
   const [isNight, setIsNight] = useState(() => {
-    const savedTheme = localStorage.getItem("eduspark_theme");
+    const savedTheme = localStorage.getItem("dolphin_theme");
     return savedTheme === "dark"; // Nếu đã lưu dark thì trả về true, chưa có mặc định là false (Sáng)
   });
 
   // LƯU LẠI THEME MỖI KHI NGƯỜI DÙNG BẤM NÚT ĐỔI
   useEffect(() => {
-    localStorage.setItem("eduspark_theme", isNight ? "dark" : "light");
+    localStorage.setItem("dolphin_theme", isNight ? "dark" : "light");
   }, [isNight]);
 
   const toggleMode = () => setIsNight((p) => !p);

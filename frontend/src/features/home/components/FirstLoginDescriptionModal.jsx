@@ -40,7 +40,7 @@ export const FirstLoginDescriptionModal = ({
               <h2
                 className={`mt-1 text-[1.55rem] font-black leading-tight ${isNight ? "text-white" : "text-slate-900"}`}
               >
-                Thêm mô tả để EduSpark cá nhân hóa tốt hơn
+                Thêm mô tả để Dolphin cá nhân hóa tốt hơn
               </h2>
             </div>
           </div>

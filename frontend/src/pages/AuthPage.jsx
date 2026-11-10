@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { LoginForm } from '../features/auth/components/LoginForm';
 import { RegisterForm } from '../features/auth/components/RegisterForm';
-import { EduSparkMascot } from '../features/auth/components/EduSparkMascot';
+import { DolphinMascot } from '../features/auth/components/DolphinMascot';
 import { useMascotAnimation } from '../features/auth/hooks/useMascotAnimation';
 import { SchoolGate } from '../features/auth/components/SchoolGate';
 import { ThemeWrapper, useTheme } from '../components/theme/ThemeWrapper';
@@ -103,7 +103,7 @@ const AuthPageContent = () => {
           <SchoolGate isOpen={gateOpen} isDark={isNight} />
 
           <div className={`mascot-on-gate ${mascotMotion}`}>
-            <EduSparkMascot
+            <DolphinMascot
               focusField={focusField}
               isPasswordVisible={showPassword}
               customAnim={mascotFace}
@@ -117,15 +117,15 @@ const AuthPageContent = () => {
               <div className="form-panel-content">
                 
                 <div className="form-header">
-                  <div className="eduspark-logo">
+                  <div className="dolphin-logo">
                     <span className="logo-spark">✦</span>
-                    <span className="logo-text">EduSpark</span>
+                    <span className="logo-text">Dolphin</span>
                     <span className="logo-spark">✦</span>
                   </div>
                   <p className="form-tagline">
                     {mode === 'login'
                       ? 'Chào mừng bé trở lại! Vào lớp thôi nào 🐾'
-                      : 'Gia nhập hành trình học tập cùng EduSpark!'}
+                      : 'Gia nhập hành trình học tập cùng Dolphin!'}
                   </p>
                 </div>
 

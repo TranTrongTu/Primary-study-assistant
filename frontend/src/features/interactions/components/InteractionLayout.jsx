@@ -6,7 +6,7 @@ import { ThemeWrapper, useTheme } from "../../../components/theme/ThemeWrapper";
 const InteractionContent = ({
   children,
   onNewChat,
-  headerTitle = "EduSpark",
+  headerTitle = "Dolphin",
   modals,
 }) => {
   const { isNight } = useTheme(); // Lấy trạng thái từ ThemeWrapper

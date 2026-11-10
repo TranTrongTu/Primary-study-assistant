@@ -56,7 +56,7 @@ export const NotebookHeader = () => {
           }
         `}
       >
-        <span className="text-meteor">EduSpark.AI</span>
+        <span className="text-meteor">Dolphin</span>
       </Link>
 
       {/* ROW 1: Chuỗi học tập + Tạo sổ */}

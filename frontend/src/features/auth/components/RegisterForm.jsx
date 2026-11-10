@@ -69,7 +69,7 @@ export const RegisterForm = ({ setFocusField, showPassword, setShowPassword, onS
             id="register-email" type="email" value={email}
             onChange={(e) => setEmail(e.target.value)}
             onFocus={() => setFocusField("email")} onBlur={() => setFocusField("default")}
-            placeholder="Email (be@eduspark.vn)"
+            placeholder="Email (be@example.com)"
             className="w-full rounded-[14px] border-[2px] border-[#e0e0e0] bg-[#f9f9f9] dark:bg-[#1a2238] dark:border-[#2d3748] dark:text-white pl-10 pr-3 py-3.5 text-[1rem] font-bold text-[#333] placeholder-[#aaa] outline-none transition focus:border-[#4ecdc4] focus:bg-white dark:focus:bg-[#1f2937]"
           />
         </div>

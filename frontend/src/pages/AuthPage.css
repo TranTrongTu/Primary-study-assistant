@@ -288,7 +288,7 @@
   text-align: center;
   margin-bottom: 18px;
 }
-.eduspark-logo {
+.dolphin-logo {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -297,7 +297,7 @@
   color: #c02a2a;
   text-shadow: 2px 3px 0 rgba(180, 0, 0, 0.15);
 }
-.dark .eduspark-logo {
+.dark .dolphin-logo {
   color: #ff5555;
 }
 .logo-spark {

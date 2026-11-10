@@ -187,12 +187,12 @@ const OrnateArch = () => (
       strokeLinecap="round"
     />
 
-    {/* 3. Đường quỹ đạo vô hình cho chữ EduSpark cong */}
+    {/* 3. Đường quỹ đạo vô hình cho chữ Dolphin cong */}
     <defs>
       <path id="textCurve" d="M 520, 130 C 610, 30 790, 30 880, 130" fill="none" />
     </defs>
 
-    {/* 4. Chữ EduSpark uốn cong Parabol hoàn hảo */}
+    {/* 4. Chữ Dolphin uốn cong Parabol hoàn hảo */}
     <defs>
     <path
         id="textCurve"
@@ -239,7 +239,7 @@ const OrnateArch = () => (
     fill="rgba(20,20,60,0.45)"
     >
     <textPath href="#textCurve" startOffset="50%" textAnchor="middle" dy="5">
-        EDUSPARK
+        DOLPHIN
     </textPath>
     </text>
 
@@ -256,7 +256,7 @@ const OrnateArch = () => (
     filter="url(#magicGlow)"
     >
     <textPath href="#textCurve" startOffset="50%" textAnchor="middle">
-        EDUSPARK
+        DOLPHIN
     </textPath>
     </text>
 
