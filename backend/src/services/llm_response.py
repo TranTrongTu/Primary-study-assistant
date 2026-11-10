@@ -34,8 +34,8 @@ async def create_llm_response(
     llm_response_input: LLMResponseInput,
     interaction: Interaction,
 ) -> LLMResponse:
-    # Gets past conversations
-    past_conversations = await read_llm_responses(
+    # Gets past conversations (oldest first, as the prompt needs them)
+    past_conversations = await read_conversation_history(
         session, interaction, settings.DEFAULT_N_PAST_CONVERSATIONS
     )
 
@@ -108,6 +108,21 @@ async def read_llm_responses(
     llm_responses = (await session.execute(query)).scalars().all()
 
     return list(llm_responses)
+
+
+async def read_conversation_history(
+    session: AsyncSession, interaction: Interaction, limit: int | None
+) -> list[LLMResponse]:
+    """
+    The `limit` most recent conversations of an interaction, oldest first.
+
+    This is the order an LLM prompt needs. `read_llm_responses` is newest-first
+    (so LIMIT keeps the latest ones, and the API lists the latest on top); the
+    reversal lives here so every prompt builder gets the same, correct order.
+    """
+    newest_first = await read_llm_responses(session, interaction, limit)
+
+    return newest_first[::-1]
 
 
 # ----- UPDATE ----- #
