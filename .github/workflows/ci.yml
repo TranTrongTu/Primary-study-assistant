@@ -4,10 +4,11 @@ on:
   push:
   pull_request:
 
-# Cancel a run when a newer commit lands on the same ref.
+# One run per branch: a push and its pull request share a group, so they do not run twice.
+# Runs on main are never cancelled, so a deploy-relevant result is always completed.
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 permissions:
   contents: read
@@ -53,7 +54,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt -r requirements-dev.txt
-          pip install ruff
+          pip install ruff==0.17.4
 
       - name: Lint (ruff)
         run: ruff check .

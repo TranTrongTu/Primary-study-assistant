@@ -36,8 +36,8 @@ export default defineConfig([
     },
   },
   {
-    // Node-side config files (Vite runs them in Node).
-    files: ['vite.config.js', 'orval.config.ts'],
+    // Node-side config file (Vite runs it in Node).
+    files: ['vite.config.js'],
     languageOptions: { globals: globals.node },
   },
 ])

@@ -1,6 +1,6 @@
 # Keep the first lint gate small: real errors only (syntax, undefined names, unused imports/variables).
 # Style rules can be added gradually once the code base is clean.
-target-version = "py312"
+target-version = "py314"
 extend-exclude = ["frontend", "notes", "docker"]
 
 [lint]
