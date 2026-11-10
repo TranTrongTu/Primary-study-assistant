@@ -408,7 +408,9 @@ async def add_flashcards(
             Interaction.user_id == user.id,
         )
         .options(
-            selectinload(StudyActivity.review_items).selectinload(ReviewItem.contents)  # type: ignore
+            selectinload(
+                StudyActivity.review_items.and_(ReviewItem.is_deleted == False)  # type: ignore
+            ).selectinload(ReviewItem.contents)  # type: ignore
         )
     )
     flashcards_activity = (await session.execute(query)).scalars().first()
