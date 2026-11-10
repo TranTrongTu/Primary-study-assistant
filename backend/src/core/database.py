@@ -9,8 +9,10 @@ engine = create_async_engine(
     str(settings.POSTGRES_URL),
     # SQL logging only in dev: in production it floods logs and writes user data to them
     echo=settings.DEV_MODE,
-    pool_size=5 if settings.DEV_MODE else 20,
-    max_overflow=10 if settings.DEV_MODE else 60,
+    # Small on purpose: managed Postgres (Neon free) allows few connections, and a request
+    # waiting on an LLM holds its connection. Tune with DB_POOL_SIZE / DB_MAX_OVERFLOW.
+    pool_size=settings.DB_POOL_SIZE,
+    max_overflow=settings.DB_MAX_OVERFLOW,
     pool_timeout=30.0,
     pool_pre_ping=True,
     pool_recycle=300,

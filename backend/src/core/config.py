@@ -1,9 +1,13 @@
 from pathlib import Path
+from typing import Literal
 
-from pydantic import PostgresDsn
+from pydantic import PostgresDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env"
+
+# Keys of GlobalAPI.models. A typo here used to surface only on the first AI request.
+ModelProvider = Literal["GOOGLE", "OLLAMA", "CLOUDFLARE"]
 
 
 class Settings(BaseSettings):
@@ -19,6 +23,10 @@ class Settings(BaseSettings):
     # === Database === #
     POSTGRES_URL: PostgresDsn
     POSTGRES_URL_TEST: PostgresDsn | None = None
+    # Connections kept per backend instance = DB_POOL_SIZE, plus DB_MAX_OVERFLOW during bursts.
+    # Keep the total well below the database limit (Neon free tier is small).
+    DB_POOL_SIZE: int = 5
+    DB_MAX_OVERFLOW: int = 5
 
     # === Auth === #
     PRIVATE_KEY: str
@@ -46,14 +54,14 @@ class Settings(BaseSettings):
     TOKEN_EXPIRY_HOURS: int = 72
 
     # === Models === #
-    MODEL_IN_USE_EMBED: str = "CLOUDFLARE"
-    MODEL_IN_USE_CAPTION_IMAGE: str = "CLOUDFLARE"
-    MODEL_IN_USE_GENERATE_CHAT: str = "GOOGLE"
-    MODEL_IN_USE_REWRITE_PROMPT: str = "GOOGLE"
-    MODEL_IN_USE_GENERATE_MATERIAL: str = "GOOGLE"
-    MODEL_IN_USE_GRADE_ANSWERS: str = "GOOGLE"
-    MODEL_IN_USE_GENERATE_DOCUMENT_ANALYSIS: str = "GOOGLE"
-    MODEL_IN_USE_GENERATE_STUDY_ASSESSMENT: str = "GOOGLE"
+    MODEL_IN_USE_EMBED: ModelProvider = "CLOUDFLARE"
+    MODEL_IN_USE_CAPTION_IMAGE: ModelProvider = "CLOUDFLARE"
+    MODEL_IN_USE_GENERATE_CHAT: ModelProvider = "GOOGLE"
+    MODEL_IN_USE_REWRITE_PROMPT: ModelProvider = "GOOGLE"
+    MODEL_IN_USE_GENERATE_MATERIAL: ModelProvider = "GOOGLE"
+    MODEL_IN_USE_GRADE_ANSWERS: ModelProvider = "GOOGLE"
+    MODEL_IN_USE_GENERATE_DOCUMENT_ANALYSIS: ModelProvider = "GOOGLE"
+    MODEL_IN_USE_GENERATE_STUDY_ASSESSMENT: ModelProvider = "GOOGLE"
 
     # ** Google ** #
     EMBED_MODEL_GOOGLE: str = "gemini-embedding-2"
@@ -93,6 +101,22 @@ class Settings(BaseSettings):
 
     # ----- CONFIG ----- #
 
+    @field_validator(
+        "MODEL_IN_USE_EMBED",
+        "MODEL_IN_USE_CAPTION_IMAGE",
+        "MODEL_IN_USE_GENERATE_CHAT",
+        "MODEL_IN_USE_REWRITE_PROMPT",
+        "MODEL_IN_USE_GENERATE_MATERIAL",
+        "MODEL_IN_USE_GRADE_ANSWERS",
+        "MODEL_IN_USE_GENERATE_DOCUMENT_ANALYSIS",
+        "MODEL_IN_USE_GENERATE_STUDY_ASSESSMENT",
+        mode="before",
+    )
+    @classmethod
+    def normalize_provider(cls, value):
+        # Tolerate stray spaces and lower case from hosting dashboards; reject unknown names.
+        return value.strip().upper() if isinstance(value, str) else value
+
     @property
     def gemini_keys_list(self) -> list[str]:
         return [key.strip() for key in self.API_KEYS_GEMINI.split(",") if key.strip()]
@@ -104,6 +128,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=ENV_PATH,
         env_file_encoding="utf-8",
+        str_strip_whitespace=True,
     )
 
 

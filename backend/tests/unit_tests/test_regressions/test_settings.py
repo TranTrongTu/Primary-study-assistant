@@ -45,3 +45,23 @@ def test_each_secret_is_still_required(missing):
 
     with pytest.raises(ValidationError):
         Settings(_env_file=None, **values)  # type: ignore[arg-type]
+
+
+def test_unknown_model_provider_fails_at_startup():
+    # A typo must fail when the app starts, not on the first AI request.
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, MODEL_IN_USE_EMBED="CLOUDFLAR", **REQUIRED)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("raw", ["CLOUDFLARE ", " cloudflare", "Cloudflare"])
+def test_model_provider_tolerates_whitespace_and_case(raw):
+    settings = Settings(_env_file=None, MODEL_IN_USE_EMBED=raw, **REQUIRED)  # type: ignore[arg-type]
+
+    assert settings.MODEL_IN_USE_EMBED == "CLOUDFLARE"
+
+
+def test_database_pool_is_small_by_default():
+    settings = Settings(_env_file=None, **REQUIRED)  # type: ignore[arg-type]
+
+    # Must stay well below the connection limit of a small managed database.
+    assert settings.DB_POOL_SIZE + settings.DB_MAX_OVERFLOW <= 20
