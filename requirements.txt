@@ -5,6 +5,7 @@ httpx
 # Database
 sqlmodel
 asyncpg
+alembic
 greenlet # required by SQLAlchemy asyncio (do not rely on dev deps pulling it in)
 
 # Security

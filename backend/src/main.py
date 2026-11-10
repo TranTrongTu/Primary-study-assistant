@@ -11,7 +11,7 @@ from sqlalchemy import text
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from backend.src.core.config import settings
-from backend.src.core.database import create_database_and_tables, dispose
+from backend.src.core.database import migrate_database, dispose
 from backend.src.core.dependencies import SessionDep
 from backend.src.core.origins import origins
 from backend.src.exceptions.core import ExceptionCustom, Responses
@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await create_database_and_tables()
+    await migrate_database()
 
     yield
 
