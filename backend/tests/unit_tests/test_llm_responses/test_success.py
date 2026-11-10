@@ -2,7 +2,6 @@ from types import CoroutineType
 from typing import Any, Callable
 from unittest.mock import AsyncMock, patch
 
-import pytest
 from httpx import AsyncClient
 
 from backend.src.core.ai_api import GlobalAPI
