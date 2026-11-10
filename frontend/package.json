@@ -11,6 +11,7 @@
     "generate:api": "orval"
   },
   "dependencies": {
+    "@fontsource-variable/nunito": "^5.3.0",
     "@phosphor-icons/react": "^2.1.10",
     "@tanstack/react-query": "^5.100.14",
     "@uiw/react-tooltip": "^4.22.3",

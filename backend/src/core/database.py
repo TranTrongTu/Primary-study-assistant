@@ -4,6 +4,7 @@ from pathlib import Path
 
 from alembic import command
 from alembic.config import Config
+from alembic.script import ScriptDirectory
 from sqlalchemy import inspect
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
@@ -60,6 +61,10 @@ async def migrate_database() -> None:
         )
         await asyncio.to_thread(command.stamp, config, BASELINE_REVISION)
     await asyncio.to_thread(command.upgrade, config, "head")
+    logger.info(
+        "Database schema is at revision %s",
+        ScriptDirectory.from_config(config).get_current_head(),
+    )
 
 
 async def dispose():

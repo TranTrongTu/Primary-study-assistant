@@ -6,7 +6,7 @@
   min-height: 100dvh;
   overflow-x: hidden;
   overflow-y: auto;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif;
+  font-family: "Nunito Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif;
 }
 
 /* ─── SCENE ZOOM ─── */
@@ -84,7 +84,11 @@
 .mascot-on-gate {
   position: absolute;
   left: 50%;
-  top: 13.5%;
+  /* Anchored to the form panel (top: 22%) instead of a separate percentage: the mascot has a
+     fixed pixel size while the scene scales, so two percentages drifted apart and the mascot
+     covered the "Dolphin" title on some screens. The mascot now always overlaps the panel
+     by the same 48px (170px tall mascot). */
+  top: calc(22% - 122px);
   transform: translateX(-50%);
   z-index: 60;
   filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.38));
@@ -248,7 +252,8 @@
 
 /* 3. KHỐI CHỨA NỘI DUNG (Giữ nguyên form không méo) */
 .form-panel-content {
-  padding: 20px 28px 2px;
+  /* Top padding leaves room for the 48px the mascot overlaps the panel */
+  padding: 38px 28px 2px;
   width: 100%;
 }
 
@@ -292,7 +297,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif;
+  font-family: "Nunito Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif;
   font-size: 2.2rem;
   color: #c02a2a;
   text-shadow: 2px 3px 0 rgba(180, 0, 0, 0.15);
@@ -348,7 +353,7 @@
   padding: 10px 0;
   border: none;
   background: transparent;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif;
+  font-family: "Nunito Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif;
   font-size: 1rem;
   font-weight: 800;
   color: #888;
@@ -386,7 +391,7 @@
   flex-direction: column;
 }
 .auth-root input {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif !important;
+  font-family: "Nunito Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif !important;
 }
 
 /* ─── RESPONSIVE ─── */
