@@ -78,6 +78,13 @@ cd <repo root>
 python -m pytest backend/tests
 ```
 
+## Dependencies and the Docker image
+
+- `requirements.txt` and `requirements-dev.txt` list the direct dependencies. The pinned versions live in `requirements.lock` and `requirements-dev.lock`, which is what the Docker image and CI install.
+- After changing either `.txt` file, regenerate the locks with `sh scripts/compile-locks.sh` (needs `uv`). CI fails if the lock files are stale.
+- The `Dockerfile` has two targets: `runtime` (default; unprivileged user, runtime dependencies only) is what gets deployed, and `dev` (adds debugpy, pytest, locust) is what `docker compose` uses.
+- `GET /health` runs a database query and returns 503 when the database is unreachable. The container `HEALTHCHECK` uses it; on Render, set the service's Health Check Path to `/health`.
+
 ## What changed since the group project
 
 - Moved credentials, database URLs, CORS origins and API URLs into environment configuration.

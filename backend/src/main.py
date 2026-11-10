@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -5,10 +6,13 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import (
     CORSMiddleware,
 )
+from fastapi.responses import JSONResponse
+from sqlalchemy import text
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from backend.src.core.config import settings
 from backend.src.core.database import create_database_and_tables, dispose
+from backend.src.core.dependencies import SessionDep
 from backend.src.core.origins import origins
 from backend.src.exceptions.core import ExceptionCustom, Responses
 from backend.src.exceptions.handlers import (
@@ -28,6 +32,8 @@ from backend.src.routes import (
     study_progress,
     user,
 )
+
+logger = logging.getLogger(__name__)
 
 # ----- Setting up app ----- #
 
@@ -66,6 +72,24 @@ app.add_exception_handler(RequestValidationError, validation_exceptions_handler)
 app.add_exception_handler(StarletteHTTPException, starlette_exceptions_handlers)  # type: ignore
 app.add_exception_handler(ExceptionCustom, custom_exceptions_handler)  # type: ignore
 app.add_exception_handler(Exception, generic_exceptions_handler)
+
+# ----- Health check ----- #
+
+
+@app.get("/health", include_in_schema=False)
+async def health(session: SessionDep):
+    """
+    Liveness + database check for the container HEALTHCHECK and the hosting
+    platform. Returns 503 (not 500) when the database cannot be reached.
+    """
+    try:
+        await session.execute(text("SELECT 1"))
+    except Exception:
+        logger.warning("Health check failed: database unreachable", exc_info=True)
+        return JSONResponse(status_code=503, content={"status": "unavailable"})
+
+    return {"status": "ok"}
+
 
 # ----- Mounting routers ----- #
 

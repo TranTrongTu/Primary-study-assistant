@@ -1,11 +1,11 @@
-fastapi[standard]>=0.135.0
+fastapi[standard-no-fastapi-cloud-cli]>=0.135.0
 httpx
 
 
 # Database
 sqlmodel
-psycopg[binary]
 asyncpg
+greenlet # required by SQLAlchemy asyncio (do not rely on dev deps pulling it in)
 
 # Security
 pyjwt
@@ -22,4 +22,3 @@ pypdf
 pgvector
 langchain-text-splitters
 
-debugpy

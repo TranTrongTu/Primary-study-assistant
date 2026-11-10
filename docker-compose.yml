@@ -22,7 +22,9 @@ services:
 
   # Backend Service
   api:
-    build: .
+    build:
+      context: .
+      target: dev # debugpy + test tools; Render/CI build the default `runtime` target
     ports:
       - "8000:8000"
       - "127.0.0.1:5678:5678" # debugpy, localhost only
