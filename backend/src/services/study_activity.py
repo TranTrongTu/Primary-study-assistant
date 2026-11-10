@@ -79,7 +79,7 @@ from backend.src.RAG.augmentation.prompts_formatting.study_activity_format_promp
 )
 from backend.src.RAG.retrieval.core import retrieval
 from backend.src.RAG.retrieval.prompt_rewrite import rewrite_prompt
-from backend.src.services.llm_response import read_llm_responses
+from backend.src.services.llm_response import read_conversation_history
 
 # ----- CREATE ----- #
 
@@ -252,8 +252,8 @@ async def create_study_activity(
 
     # === Generates content from model using RAG === #
 
-    # Gets past conversations
-    past_conversations = await read_llm_responses(
+    # Gets past conversations (oldest first, as the prompt needs them)
+    past_conversations = await read_conversation_history(
         session, interaction, settings.DEFAULT_N_PAST_CONVERSATIONS
     )
     formatted_past_conversations = conversations_formatter(past_conversations)
