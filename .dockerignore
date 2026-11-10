@@ -12,6 +12,9 @@ venv
 # secrets and local config must never end up in an image layer
 .env
 **/.env
+.env.*
+**/.env.*
+!**/.env.example
 
 # not needed at runtime
 frontend

@@ -1,7 +1,25 @@
 # syntax=docker/dockerfile:1
 
-# ---- build stage: resolve and install the pinned runtime dependencies ----
-FROM python:3.14-slim AS builder
+# Pinned patch release so a rebuild of the same commit gives the same interpreter.
+# Bump deliberately (and regenerate the lock files if the minor version changes).
+ARG PYTHON_VERSION=3.14.10
+
+# ---- base: everything the dev and runtime images share ----
+FROM python:${PYTHON_VERSION}-slim AS base
+
+ENV PATH="/opt/venv/bin:$PATH" \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+# Unprivileged user that owns the working directory
+RUN useradd --system --create-home --uid 10001 app \
+    && mkdir /code \
+    && chown app:app /code
+
+WORKDIR /code
+
+# ---- builder: install the pinned runtime dependencies into a virtualenv ----
+FROM python:${PYTHON_VERSION}-slim AS builder
 
 ENV PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
@@ -12,42 +30,33 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements.lock /tmp/requirements.lock
 RUN pip install -r /tmp/requirements.lock
 
-# ---- dev target (docker compose only): runtime deps + debugpy, pytest, locust ----
-# The last stage in this file is the default build target, so `runtime` below is
-# what Render and CI build. Compose selects this one with `target: dev`.
+# ---- dev-venv: runtime deps + pinned dev tools (debugpy, pytest, locust) ----
 FROM builder AS dev-venv
-COPY requirements-dev.txt /tmp/requirements-dev.txt
-RUN pip install -r /tmp/requirements-dev.txt
+COPY requirements-dev.lock /tmp/requirements-dev.lock
+RUN pip install -r /tmp/requirements-dev.lock
 
-FROM python:3.14-slim AS dev
-ENV PATH="/opt/venv/bin:$PATH" \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
-RUN useradd --system --create-home --uid 10001 app
+# ---- runtime-venv: the runtime image does not need pip ----
+FROM builder AS runtime-venv
+RUN python -m pip uninstall -y pip
+
+# ---- dev target (docker compose only); the code is bind-mounted by compose ----
+# The LAST stage in this file is the default build target, so `runtime` below is
+# what Render and CI build. Compose selects this one with `target: dev`.
+FROM base AS dev
 COPY --from=dev-venv /opt/venv /opt/venv
-WORKDIR /code
 USER app
 EXPOSE 8000 5678
 
-# ---- runtime stage: only the virtualenv and the application code ----
-FROM python:3.14-slim AS runtime
-
-ENV PATH="/opt/venv/bin:$PATH" \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
-
-# Run as an unprivileged user
-RUN useradd --system --create-home --uid 10001 app
-
-COPY --from=builder /opt/venv /opt/venv
-
-WORKDIR /code
+# ---- runtime (default target): virtualenv + application code only ----
+FROM base AS runtime
+COPY --from=runtime-venv /opt/venv /opt/venv
 COPY --chown=app:app ./backend /code/backend
 
 USER app
 EXPOSE 8000
 
+# /health runs a query, so "healthy" means the app can reach its database
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
-    CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/openapi.json', timeout=4).status == 200 else 1)"
+    CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=4).status == 200 else 1)"
 
 CMD ["fastapi", "run", "backend/src/main.py", "--port", "8000", "--host", "0.0.0.0"]
