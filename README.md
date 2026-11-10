@@ -2,6 +2,10 @@
 
 An AI study assistant for Vietnamese primary school students (grades 1–5). Students upload their own study material (PDFs, images), then chat with it, generate flashcards, take graded exercises and get daily progress assessments. Answers are grounded in the uploaded material using Retrieval-Augmented Generation (RAG).
 
+**Live demo:** https://dolphin-edu-ebon.vercel.app
+
+The frontend runs on Vercel, the API on Render (free tier) and the database on Neon (PostgreSQL, Singapore). The free API instance sleeps when idle, so the first request after a pause can take up to about 30 seconds.
+
 > **Origin.** Dolphin started as a group coursework project (*Computational Thinking*, Group N9, Class 24TNT1) under the name EduSpark.AI. I am continuing it as a personal project: hardening security, adding tests and CI, and operating it as a real deployment. See [Credits](#credits) and [What changed since the group project](#what-changed-since-the-group-project).
 
 ## Features
@@ -47,7 +51,7 @@ Backend code lives in `backend/src` (`routes/`, `services/`, `RAG/`, `models_sch
    CLOUDFLARE_API_TOKEN=...
    PRIVATE_KEY=...                # python -c "import secrets; print(secrets.token_hex(32))"
    ```
-4. **Frontend config.** In `frontend/`, copy `.env.example` to `.env` (`VITE_API_URL=http://localhost:8000/api`).
+4. **Frontend config.** In `frontend/`, copy `.env.example` to `.env` (`VITE_API_URL=http://localhost:8000/api`). The value must end with `/api`, and it is baked into the bundle at build time, so redeploy after changing it.
 5. **Start the backend and database**
    ```sh
    docker compose up --build
