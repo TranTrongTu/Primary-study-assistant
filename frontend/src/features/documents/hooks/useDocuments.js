@@ -25,7 +25,7 @@ export const useDocuments = (interactionId) => {
         if (updates && typeof updates === 'object') {
             if (updates.name && updates.name !== doc.name) payload.name = updates.name;
             
-            if (updates.hasOwnProperty('subject_type') && updates.subject_type !== doc.subject_type) {
+            if (Object.prototype.hasOwnProperty.call(updates, 'subject_type') && updates.subject_type !== doc.subject_type) {
                  payload.subject_type = updates.subject_type;
             }
         } else {
@@ -42,7 +42,7 @@ export const useDocuments = (interactionId) => {
         // 🎯 THÊM ĐOẠN NÀY: Ép luôn luôn có subject_type gửi lên Backend
         // Tránh việc Backend báo lỗi 400 do thiếu trường dữ liệu
         const apiPayload = { ...payload };
-        if (!apiPayload.hasOwnProperty('subject_type')) {
+        if (!Object.prototype.hasOwnProperty.call(apiPayload, 'subject_type')) {
             apiPayload.subject_type = ['MATHS', 'VIETNAMESE', 'ENGLISH'].includes(doc.subject_type) ? doc.subject_type : null;
         }
 

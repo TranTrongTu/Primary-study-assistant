@@ -6,7 +6,7 @@ export const formatAIContent = (content) => {
     .replace(/\\\\/g, "\\")
     // 2. Wrap các ký tự tiếng Việt trong Math Mode bằng \text{} 
     
-    .replace(/\$([^\$]+)\$/g, (match, p1) => {
+    .replace(/\$([^$]+)\$/g, (match, p1) => {
       const containsVietnamese = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(p1);
       return containsVietnamese ? `$ \text{${p1}} $` : match;
     })

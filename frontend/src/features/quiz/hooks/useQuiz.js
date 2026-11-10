@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { quizService } from "../services/quiz.service";
 
-const createMutation = (fn) => {
+const useMutationState = (fn) => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
@@ -26,10 +26,10 @@ const createMutation = (fn) => {
   return { mutate, isPending, error, data };
 };
 
-export const useReadQuizzes = () => createMutation(quizService.readQuizzes);
-export const useCreateQuiz = () => createMutation(quizService.createQuiz);
-export const useGetQuiz = () => createMutation(quizService.readQuiz);
-export const useUpdateQuiz = () => createMutation(quizService.updateQuiz);
-export const useDeleteQuiz = () => createMutation(quizService.deleteQuiz);
-export const useSubmitAnswer = () => createMutation(quizService.submitAnswer);
-export const useSubmitQuiz = () => createMutation(quizService.submitQuiz);
+export const useReadQuizzes = () => useMutationState(quizService.readQuizzes);
+export const useCreateQuiz = () => useMutationState(quizService.createQuiz);
+export const useGetQuiz = () => useMutationState(quizService.readQuiz);
+export const useUpdateQuiz = () => useMutationState(quizService.updateQuiz);
+export const useDeleteQuiz = () => useMutationState(quizService.deleteQuiz);
+export const useSubmitAnswer = () => useMutationState(quizService.submitAnswer);
+export const useSubmitQuiz = () => useMutationState(quizService.submitQuiz);

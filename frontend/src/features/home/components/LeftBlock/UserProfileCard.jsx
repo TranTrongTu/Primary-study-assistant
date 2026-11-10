@@ -14,7 +14,9 @@ export const UserProfileCard = ({ name = "Minh" }) => {
     try {
       localStorage.removeItem("token");
       queryClient.invalidateQueries(["current-user"]);
-    } catch (e) {}
+    } catch {
+      // localStorage can be unavailable (private mode); logging out must still continue
+    }
     // Điều hướng về trang gốc hoặc trang login
     navigate("/");
   };

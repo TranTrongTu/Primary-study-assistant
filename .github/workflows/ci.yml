@@ -69,7 +69,7 @@ jobs:
         run: python -m pytest backend/tests -q
 
   frontend:
-    name: Frontend (build)
+    name: Frontend (lint + build)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -85,7 +85,8 @@ jobs:
 
       - run: npm ci
 
-      # TODO: add `npm run lint` once eslint.config.js is fixed (react-hooks plugin version mismatch).
+      - run: npm run lint
+
       - run: npm run build
 
   docker:
