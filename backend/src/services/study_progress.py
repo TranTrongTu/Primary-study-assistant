@@ -1,4 +1,3 @@
-import asyncio
 from datetime import date, datetime
 from typing import Any
 
@@ -9,6 +8,7 @@ from sqlmodel import Date, and_, cast, col, delete, func, or_, select
 from sqlmodel.sql.expression import Select
 
 from backend.src.core.ai_api import GlobalAPI
+from backend.src.core.concurrency import gather_limited
 from backend.src.core.config import settings
 from backend.src.core.dependencies import Interaction, User
 from backend.src.exceptions.core import ExceptionNotFound_404
@@ -197,7 +197,9 @@ async def create_study_assessment(
 
     # Creates assessments, rollbacks (deletes the preservations) if error encountered
     try:
-        study_assessment_texts = await asyncio.gather(*assessment_tasks)
+        study_assessment_texts = await gather_limited(
+            settings.MAX_CONCURRENT_LLM_CALLS, *assessment_tasks
+        )
     except Exception as e:
         ids = [assessment.id for assessment in study_assessments_preserved]
         query = delete(StudyAssessment).where(col(StudyAssessment.id).in_(ids))
