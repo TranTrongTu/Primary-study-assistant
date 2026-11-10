@@ -85,6 +85,19 @@ python -m pytest backend/tests
 - The `Dockerfile` has two targets: `runtime` (default; unprivileged user, runtime dependencies only) is what gets deployed, and `dev` (adds debugpy, pytest, locust) is what `docker compose` uses.
 - `GET /health` runs a database query and returns 503 when the database is unreachable. The container `HEALTHCHECK` uses it; on Render, set the service's Health Check Path to `/health`.
 
+## Database migrations
+
+The schema is versioned with Alembic (`backend/migrations/`). The app applies pending migrations on startup, so a deploy needs no manual step. A database that was created before migrations existed is detected and marked as the baseline revision (`0001`) without touching its data.
+
+```sh
+# After changing a model: generate, then read the file before committing it
+alembic revision --autogenerate -m "describe the change"
+alembic upgrade head      # apply locally
+alembic downgrade -1      # undo the last migration
+```
+
+A test builds a fresh database from the migrations and fails if it differs from the models, so a model change without a migration cannot reach `main`.
+
 ## What changed since the group project
 
 - Moved credentials, database URLs, CORS origins and API URLs into environment configuration.
@@ -94,6 +107,7 @@ python -m pytest backend/tests
 - Made grading retry on malformed LLM JSON instead of failing with a 500.
 - Separated the test database from the development database.
 - Added regression tests for each fix above.
+- Replaced `create_all()` at startup with Alembic migrations, including a drift check in CI.
 
 ## Credits
 
