@@ -1,6 +1,5 @@
 from enum import Enum
 
-from fastapi import status
 from pydantic import BaseModel
 
 # ----- SCHEMAS ----- #

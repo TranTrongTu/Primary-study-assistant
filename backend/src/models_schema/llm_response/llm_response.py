@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import TYPE_CHECKING, Annotated
 
 from sqlmodel import Column, DateTime, Field, Relationship, SQLModel

@@ -4,7 +4,6 @@ from pydantic import BaseModel
 
 from backend.src.models_schema.RAG.augmentation import (
     AnswerGenerationParams,
-    AugmentationParams,
     DocumentAnalysisParams,
     GradingParams,
     PromptRewriteParams,

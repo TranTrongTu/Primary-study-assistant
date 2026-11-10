@@ -1,13 +1,10 @@
 import asyncio
 
 from fastapi import UploadFile
-from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.src.core.ai_api import GlobalAPI
-from backend.src.core.config import settings
 from backend.src.exceptions.core import (
-    ExceptionLLMError_502,
     ExceptionRequestValidation_400,
 )
 from backend.src.models_schema.document.document import Document

@@ -1,6 +1,5 @@
 import asyncio
-from datetime import date, datetime, timezone
-from tabnanny import check
+from datetime import date, datetime
 from typing import Any
 
 from sqlalchemy.dialects.postgresql import insert

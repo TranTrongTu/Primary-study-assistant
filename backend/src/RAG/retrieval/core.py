@@ -1,4 +1,3 @@
-import asyncio
 from typing import Iterable
 
 from sqlalchemy.ext.asyncio import AsyncSession

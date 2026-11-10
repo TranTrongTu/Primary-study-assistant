@@ -1,11 +1,10 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import TYPE_CHECKING, Annotated, Optional
 
 from pydantic import BeforeValidator, model_validator
 from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
 
 from backend.src.exceptions.core import (
-    ExceptionRequest_400,
     ExceptionRequestValidation_400,
 )
 from backend.src.models_schema.miscellaneous.enums import DocumentType, SubjectType

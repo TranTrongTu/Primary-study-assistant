@@ -1,4 +1,4 @@
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 from typing import Annotated
 
 from sqlmodel import Column, DateTime, Field, Index, Relationship, SQLModel

@@ -1,0 +1,13 @@
+# Keep the first lint gate small: real errors only (syntax, undefined names, unused imports/variables).
+# Style rules can be added gradually once the code base is clean.
+target-version = "py312"
+extend-exclude = ["frontend", "notes", "docker"]
+
+[lint]
+select = ["E4", "E7", "E9", "F"]
+# E712: SQLAlchemy/SQLModel needs `Model.col == False` to build SQL; `not Model.col` would be wrong.
+ignore = ["E712"]
+
+[lint.per-file-ignores]
+# Models import each other at the bottom of the file on purpose (circular relationship imports).
+"backend/src/models_schema/**" = ["E402"]
