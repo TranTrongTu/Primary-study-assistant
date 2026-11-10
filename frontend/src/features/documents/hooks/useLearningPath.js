@@ -8,7 +8,7 @@ export const useLearningPath = () => {
   const [isGeneratingPath, setIsGeneratingPath] = useState(false);
   const [pathData, setPathData] = useState(null);
 
-  const generateLearningPath = async (documentId, documentName) => {
+  const generateLearningPath = async (documentId) => {
     // Đảm bảo bắt được Interaction ID dù cho React Router có bị ảnh hưởng bởi lớp Portal
     const interactionId = params.interactionId || window.location.pathname.split('/')[2];
     

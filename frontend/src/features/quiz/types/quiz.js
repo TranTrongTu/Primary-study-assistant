@@ -1,5 +1,0 @@
-export const QUIZ_TYPES = {
-  ENGLISH: "ENGLISH",
-  MATHS: "MATHS",
-  VIETNAMESE: "VIETNAMESE",
-};

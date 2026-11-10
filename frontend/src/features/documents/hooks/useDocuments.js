@@ -6,7 +6,7 @@ export const useDocuments = (interactionId) => {
     const [selectedDocIds, setSelectedDocIds] = useState([]);
     const [editingID, setEditingID] = useState(null);
     const [documentName, setDocumentName] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [, setIsLoading] = useState(false);
 
     const handleStartEdit = (doc) => {
         setEditingID(doc.id);

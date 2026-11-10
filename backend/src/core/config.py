@@ -87,6 +87,9 @@ class Settings(BaseSettings):
     DEFAULT_N_PAST_CONVERSATIONS: int = 3
     DEFAULT_N_CHUNKS_WINDOW: int = 1
     DEFAULT_N_API_CALL_RETRIES: int = 3
+    # Upper bound on LLM calls a single request may run at the same time
+    # (protects provider rate limits when many days need an assessment at once).
+    MAX_CONCURRENT_LLM_CALLS: int = 3
 
     # === Application Related === #
 

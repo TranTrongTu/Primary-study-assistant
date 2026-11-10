@@ -754,6 +754,46 @@ async def submit_exercise_activity(
     if study_activity.is_submitted:
         raise ExceptionSubmittedExercise_409()
 
+    # Claims the submission atomically. The grading below takes seconds (LLM calls) and
+    # commits in between, so a row lock would not survive it. Without a claim, two
+    # concurrent submits would both pass the check above, both pay for grading and
+    # overwrite each other. The claim also blocks answer edits while grading runs.
+    claimed = await session.execute(
+        update(StudyActivity)
+        .where(
+            col(StudyActivity.id) == study_activity_id,
+            col(StudyActivity.is_submitted).is_(False),
+        )
+        .values(is_submitted=True)
+        .returning(col(StudyActivity.id))
+    )
+    if claimed.scalar_one_or_none() is None:
+        raise ExceptionSubmittedExercise_409()
+    await session.commit()
+
+    try:
+        return await _grade_and_save_submission(
+            session, current_datetime, study_activity, interaction
+        )
+    except BaseException:
+        # Grading failed (or the request was cancelled): gives the claim back so the
+        # user can retry instead of being stuck with an ungraded "submitted" exercise.
+        await session.rollback()
+        await session.execute(
+            update(StudyActivity)
+            .where(col(StudyActivity.id) == study_activity_id)
+            .values(is_submitted=False, submitted_at=None)
+        )
+        await session.commit()
+        raise
+
+
+async def _grade_and_save_submission(
+    session: AsyncSession,
+    current_datetime: datetime,
+    study_activity: StudyActivity,
+    interaction: Interaction,
+) -> StudyActivity:
     # === Grading / explaining the questions and answers === #
 
     # Different configurations for different exercise format type (instead of built-in categorization in the configurations).

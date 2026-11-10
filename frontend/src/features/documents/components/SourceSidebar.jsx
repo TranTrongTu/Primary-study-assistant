@@ -12,8 +12,7 @@ const FILTER_TABS = [
 
 export const SourceSidebar = ({ 
   documents, selectedDocIds, onAddClick, editingId, setEditingId, 
-  tempName, setTempName, onRename, onPreview, onDocCheck, onDelete, isLoading,
-  onOpenPathModal,
+  tempName, setTempName, onRename, onDocCheck, onDelete, isLoading,
   onAutoChat, onAutoGenerate // 🎯 1. NHẬN 2 HÀM TỪ TRANG CHỦ
 }) => {
   const { isNight } = useTheme(); 
