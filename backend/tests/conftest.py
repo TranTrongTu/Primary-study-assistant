@@ -14,6 +14,11 @@ from backend.src.main import FastAPI, app
 # ----- TEST CONFIGURATIONS ----- #
 
 # Safety net: the fixtures below drop every table, so refuse to run against the app DB.
+if settings.POSTGRES_URL_TEST is None:
+    raise pytest.UsageError(
+        "POSTGRES_URL_TEST is not set. Point it at a separate, disposable database."
+    )
+
 if str(settings.POSTGRES_URL_TEST) == str(settings.POSTGRES_URL):
     raise pytest.UsageError(
         "POSTGRES_URL_TEST points to the same database as POSTGRES_URL. "
