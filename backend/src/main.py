@@ -33,6 +33,18 @@ from backend.src.routes import (
     user,
 )
 
+# Uvicorn only configures its own loggers, so without this every logger.info() of the app
+# is dropped. Limited to the "backend" loggers: turning on INFO for the root logger would
+# also print the HTTP clients' request URLs.
+_app_logger = logging.getLogger("backend")
+_app_logger.setLevel(logging.INFO)
+if not _app_logger.handlers:
+    _handler = logging.StreamHandler()
+    _handler.setFormatter(
+        logging.Formatter("%(levelname)s:     %(name)s - %(message)s")
+    )
+    _app_logger.addHandler(_handler)
+
 logger = logging.getLogger(__name__)
 
 # ----- Setting up app ----- #
