@@ -9,6 +9,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from backend.src.core.config import settings
 from backend.src.core.database import create_database_and_tables, dispose
+from backend.src.core.origins import origins
 from backend.src.exceptions.core import ExceptionCustom, Responses
 from backend.src.exceptions.handlers import (
     custom_exceptions_handler,
@@ -49,15 +50,6 @@ app = FastAPI(
 )
 
 # ----- CORS ----- #
-
-origins = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:5174",
-    "https://edusparkai-theta.vercel.app",
-    "https://edusparkai-nhuy165s-projects.vercel.app",
-]
 
 app.add_middleware(
     CORSMiddleware,

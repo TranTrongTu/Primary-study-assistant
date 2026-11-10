@@ -3,6 +3,9 @@ import type { StudyActivityInput } from "../../../api/api.schemas.ts";
 
 const api = getFastAPI();
 
+// Generated client paths already start with /api, so strip it from VITE_API_URL
+const API_ORIGIN = (import.meta.env.VITE_API_URL ?? "").replace(/\/api\/?$/, "");
+
 export const quizService = {
   createQuiz: async (interactionId: number, data: StudyActivityInput) => {
     const res =
@@ -10,7 +13,7 @@ export const quizService = {
         interactionId,
         data,
         {
-          baseURL: "http://localhost:8000",
+          baseURL: API_ORIGIN,
         },
       );
 
@@ -22,7 +25,7 @@ export const quizService = {
       await api.readStudyActivityCompleteStudyActivityStudyActivityIdGet(
         quizId,
         {
-          baseURL: "http://localhost:8000",
+          baseURL: API_ORIGIN,
         },
       );
 
@@ -33,7 +36,7 @@ export const quizService = {
     const res = await api.readAllStudyActivityStudyActivityInteractionIdGet(
       interactionId,
       {
-        baseURL: "http://localhost:8000",
+        baseURL: API_ORIGIN,
       },
     );
 
@@ -46,7 +49,7 @@ export const quizService = {
         exerciseItemId,
         { attempt },
         {
-          baseURL: "http://localhost:8000",
+          baseURL: API_ORIGIN,
         },
       );
 
@@ -58,7 +61,7 @@ export const quizService = {
       await api.submitExerciseActivityStudyActivityStudyActivityIdSubmitPatch(
         quizId,
         {
-          baseURL: "http://localhost:8000",
+          baseURL: API_ORIGIN,
         },
       );
 
@@ -69,7 +72,7 @@ export const quizService = {
     const res = await api.deleteStudyActivityStudyActivityStudyActivityIdDelete(
       quizId,
       {
-        baseURL: "http://localhost:8000",
+        baseURL: API_ORIGIN,
       },
     );
 

@@ -1,4 +1,4 @@
-# Frontend - Study Assistant App
+# Frontend - Dolphin
 
 Ứng dụng React+Vite cho nền tảng hỗ trợ học tập với AI.
 
@@ -72,19 +72,20 @@ frontend/
 
 ## 🔗 Kết nối Backend
 
-### Hiện tại (Mock API)
+Frontend đọc URL của backend từ biến môi trường `VITE_API_URL` (xem `src/api/axiosClient.js`).
 
-- API URL: `http://localhost:3000` (tùy config)
-- File API: `src/features/*/api/*.js`
-
-### Khi backend sẵn sàng
-
-1. Backend chạy ở: `http://localhost:8000` (FastAPI)
-2. Cập nhật file `.env` nếu có:
+1. Sao chép file mẫu: `cp .env.example .env`
+2. Đặt giá trị trong `.env`:
    ```
-   VITE_API_BASE_URL=http://localhost:8000
+   VITE_API_URL=http://localhost:8000/api
    ```
-3. Hoặc cập nhật trực tiếp trong `src/features/*/api/*.js`
+3. Khi deploy (ví dụ Vercel), đặt cùng biến này trong phần Environment Variables
+   với URL backend của bạn, kết thúc bằng `/api`.
+4. Client API cho quiz được sinh bằng orval từ backend đang chạy:
+   ```
+   npm run generate:api
+   ```
+   (đọc `ORVAL_INPUT`, mặc định `http://localhost:8000/openapi.json`)
 
 ## 📦 Linting & Formatting
 
@@ -100,10 +101,10 @@ npm run lint -- --fix
 
 ```bash
 # Build frontend trong Docker (nếu có Dockerfile riêng)
-docker build -t study-assistant-frontend .
+docker build -t dolphin-frontend .
 
 # Chạy container
-docker run -p 5173:80 study-assistant-frontend
+docker run -p 5173:80 dolphin-frontend
 ```
 
 ## ⚠️ Vấn đề thường gặp

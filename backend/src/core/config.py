@@ -19,6 +19,13 @@ class Settings(BaseSettings):
     # === Auth === #
     PRIVATE_KEY: str
 
+    # === CORS === #
+    # Comma-separated frontend origins allowed to call the API
+    CORS_ORIGINS: str = (
+        "http://localhost:5173,http://localhost:5174,"
+        "http://127.0.0.1:5173,http://127.0.0.1:5174"
+    )
+
     # === API === #
 
     # Gemini
@@ -85,6 +92,10 @@ class Settings(BaseSettings):
     @property
     def gemini_keys_list(self) -> list[str]:
         return [key.strip() for key in self.API_KEYS_GEMINI.split(",") if key.strip()]
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.CORS_ORIGINS.split(",") if o.strip()]
 
     model_config = SettingsConfigDict(
         env_file=ENV_PATH,
