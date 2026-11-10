@@ -1,5 +1,7 @@
 # Dolphin
 
+[![CI](https://github.com/TranTrongTu/Primary-study-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/TranTrongTu/Primary-study-assistant/actions/workflows/ci.yml)
+
 An AI study assistant for Vietnamese primary school students (grades 1–5). Students upload their own study material (PDFs, images), then chat with it, generate flashcards, take graded exercises and get daily progress assessments. Answers are grounded in the uploaded material using Retrieval-Augmented Generation (RAG).
 
 **Live demo:** https://dolphin-edu-ebon.vercel.app

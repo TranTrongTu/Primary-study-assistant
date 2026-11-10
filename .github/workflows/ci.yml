@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# Cancel a run when a newer commit lands on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (lint + tests)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # Tests never call real AI providers (see block_external_ai_calls in conftest.py),
+      # so every key below is a placeholder.
+      POSTGRES_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/postgres
+      POSTGRES_URL_TEST: postgresql+asyncpg://postgres:postgres@localhost:5432/study_assistant_test
+      API_KEYS_GEMINI: ci-placeholder
+      CLOUDFLARE_ACCOUNT_ID: ci-placeholder
+      CLOUDFLARE_API_TOKEN: ci-placeholder
+      PRIVATE_KEY: ci-placeholder-not-a-secret
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt -r requirements-dev.txt
+          pip install ruff
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Create the test database
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE study_assistant_test;"
+
+      - name: Use the example settings for everything not set above
+        run: cp backend/.env.example backend/.env
+
+      - name: Tests (pytest)
+        run: python -m pytest backend/tests -q
+
+  frontend:
+    name: Frontend (build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - run: npm ci
+
+      # TODO: add `npm run lint` once eslint.config.js is fixed (react-hooks plugin version mismatch).
+      - run: npm run build
+
+  docker:
+    name: Docker image (build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build the backend image (not pushed)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
