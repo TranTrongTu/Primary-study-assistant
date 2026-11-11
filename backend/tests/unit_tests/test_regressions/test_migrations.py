@@ -12,6 +12,7 @@ import pytest
 from alembic import command
 from alembic.autogenerate import compare_metadata
 from alembic.migration import MigrationContext
+from alembic.script import ScriptDirectory
 from sqlalchemy import inspect, text
 from sqlalchemy.engine import make_url
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -120,5 +121,39 @@ async def test_database_created_before_migrations_is_stamped_not_recreated(
     finally:
         await engine.dispose()
 
-    assert version == "0001"
+    # Stamped as the baseline, then every newer migration was applied on top
+    assert (
+        version
+        == ScriptDirectory.from_config(database._alembic_config()).get_current_head()
+    )
     assert kept == 1
+
+
+_COLUMN_TYPE = text(
+    "SELECT format_type(atttypid, atttypmod) FROM pg_attribute "
+    "WHERE attrelid = 'document_chunk'::regclass AND attname = 'content_embedded'"
+)
+
+
+async def test_embedding_column_has_a_fixed_size_and_the_change_is_reversible(
+    scratch_database_url,
+):
+    """Comparing metadata cannot see the vector size, so check the real column type."""
+    config = database._alembic_config()
+    engine = create_async_engine(scratch_database_url)
+
+    async def column_type() -> str:
+        async with engine.connect() as conn:
+            return (await conn.execute(_COLUMN_TYPE)).scalar_one()
+
+    try:
+        await asyncio.to_thread(command.upgrade, config, "0001")
+        assert await column_type() == "vector"
+
+        await asyncio.to_thread(command.upgrade, config, "head")
+        assert await column_type() == "vector(1024)"
+
+        await asyncio.to_thread(command.downgrade, config, "0001")
+        assert await column_type() == "vector"
+    finally:
+        await engine.dispose()
