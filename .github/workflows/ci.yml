@@ -105,6 +105,8 @@ jobs:
 
       - run: npm run lint
 
+      - run: npm test
+
       - run: npm run build
 
   # The job name is a required status check on main: do not rename it.
