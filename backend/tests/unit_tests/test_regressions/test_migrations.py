@@ -98,6 +98,7 @@ async def test_database_created_before_migrations_is_stamped_not_recreated(
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS pg_trgm"))
         await conn.run_sync(SQLModel.metadata.create_all)
+        # unaccent is left out on purpose: such a database predates migration 0003
         await conn.execute(
             text(
                 'INSERT INTO "user" (username, email, description, hashed_password, '

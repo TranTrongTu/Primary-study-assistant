@@ -1,5 +1,6 @@
 from typing import Sequence
 
+from sqlalchemy import func, literal
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import col, select
 
@@ -15,11 +16,22 @@ async def keyword_search(
     raw_prompt: str,
     document_id: int | None,
 ) -> Sequence[DocumentChunk]:
+    # Two choices here were measured with scripts/rag_eval.py (see evals/retrieval):
+    #
+    # - `<<<->` (strict word similarity) scores the part of the chunk that best matches
+    #   the question. Plain `<->` compares the question with the whole 500-character
+    #   chunk, so a short question scores low against every chunk and ranks poorly.
+    # - unaccent() on both sides, because pupils often type without tone marks
+    #   ("phan so la gi"), which shares almost no trigram with "phân số là gì".
+    distance = func.unaccent(literal(raw_prompt)).op("<<<->")(
+        func.unaccent(col(DocumentChunk.content_original))
+    )
+
     query_keyword = (
         select(DocumentChunk)
         .join(Document)
         .where(Document.interaction_id == interaction.id)
-        .order_by(col(DocumentChunk.content_original).op("<->")(raw_prompt))
+        .order_by(distance)
         .limit(settings.DEFAULT_N_CHUNKS_RETRIEVED * 2)
     )
 
