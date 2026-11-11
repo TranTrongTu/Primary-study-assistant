@@ -78,6 +78,16 @@ cd <repo root>
 python -m pytest backend/tests
 ```
 
+### Smoke test (deployed API)
+
+The unit tests mock the AI providers, so they cannot show that the keys on the deployed service work. `scripts/smoke_test.py` runs the real flow against any running backend: login, create a conversation, upload a small document, chat about it, generate a quiz, then delete the conversation. It fails if a step returns an error or an empty result (for example a quiz with no questions).
+
+```sh
+SMOKE_TEST_EMAIL=... SMOKE_TEST_PASSWORD=... python scripts/smoke_test.py --url https://<backend> --timeout 120
+```
+
+Use a dedicated test account: the API has no endpoint to delete a user, so the script refuses to register a new account unless you pass `--allow-auto-register`. The same check can be started from GitHub (Actions, "Smoke test (deployed API)", Run workflow) once the `SMOKE_TEST_EMAIL` and `SMOKE_TEST_PASSWORD` repository secrets are set. It calls the real LLM APIs, so it is manual on purpose and is not a required check. The script's own logic is covered by `backend/tests/unit_tests/test_regressions/test_smoke_test.py` against a mock transport.
+
 ## Dependencies and the Docker image
 
 - `requirements.txt` and `requirements-dev.txt` list the direct dependencies. The pinned versions live in `requirements.lock` and `requirements-dev.lock`, which is what the Docker image and CI install.
