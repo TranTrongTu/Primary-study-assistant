@@ -1,0 +1,326 @@
+{
+  "embedding_model": "@cf/baai/bge-m3",
+  "chunk_size": 500,
+  "chunk_overlap": 50,
+  "documents": 10,
+  "chunks": 40,
+  "cutoff": 5,
+  "methods": {
+    "vector": {
+      "all": {
+        "hit@1": 0.625,
+        "hit@3": 0.8125,
+        "hit@5": 0.84375,
+        "mrr": 0.7265625,
+        "questions": 32
+      },
+      "paraphrase": {
+        "hit@1": 0.75,
+        "hit@3": 1.0,
+        "hit@5": 1.0,
+        "mrr": 0.875,
+        "questions": 12
+      },
+      "keyword": {
+        "hit@1": 0.9090909090909091,
+        "hit@3": 1.0,
+        "hit@5": 1.0,
+        "mrr": 0.9545454545454546,
+        "questions": 11
+      },
+      "no_diacritics": {
+        "hit@1": 0.1111111111111111,
+        "hit@3": 0.3333333333333333,
+        "hit@5": 0.4444444444444444,
+        "mrr": 0.25,
+        "questions": 9
+      }
+    },
+    "keyword": {
+      "all": {
+        "hit@1": 0.40625,
+        "hit@3": 0.625,
+        "hit@5": 0.78125,
+        "mrr": 0.5479166666666667,
+        "questions": 32
+      },
+      "paraphrase": {
+        "hit@1": 0.3333333333333333,
+        "hit@3": 0.75,
+        "hit@5": 0.8333333333333334,
+        "mrr": 0.548611111111111,
+        "questions": 12
+      },
+      "keyword": {
+        "hit@1": 0.7272727272727273,
+        "hit@3": 0.9090909090909091,
+        "hit@5": 1.0,
+        "mrr": 0.8409090909090909,
+        "questions": 11
+      },
+      "no_diacritics": {
+        "hit@1": 0.1111111111111111,
+        "hit@3": 0.1111111111111111,
+        "hit@5": 0.4444444444444444,
+        "mrr": 0.18888888888888888,
+        "questions": 9
+      }
+    },
+    "hybrid": {
+      "all": {
+        "hit@1": 0.65625,
+        "hit@3": 0.8125,
+        "hit@5": 0.84375,
+        "mrr": 0.7369791666666666,
+        "questions": 32
+      },
+      "paraphrase": {
+        "hit@1": 0.9166666666666666,
+        "hit@3": 0.9166666666666666,
+        "hit@5": 0.9166666666666666,
+        "mrr": 0.9166666666666666,
+        "questions": 12
+      },
+      "keyword": {
+        "hit@1": 0.9090909090909091,
+        "hit@3": 1.0,
+        "hit@5": 1.0,
+        "mrr": 0.9545454545454546,
+        "questions": 11
+      },
+      "no_diacritics": {
+        "hit@1": 0.0,
+        "hit@3": 0.4444444444444444,
+        "hit@5": 0.5555555555555556,
+        "mrr": 0.2314814814814815,
+        "questions": 9
+      }
+    }
+  },
+  "per_question": [
+    {
+      "category": "paraphrase",
+      "question": "Làm sao để biết phân số nào lớn hơn khi hai phân số có mẫu khác nhau?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Cách tính phần đất bên trong một mảnh vườn hình chữ nhật?",
+      "vector": 2,
+      "keyword": 2,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Vì sao phơi đồ ngoài trời thì đồ lại hết ướt?",
+      "vector": 2,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Mây trên trời được hình thành như thế nào?",
+      "vector": 1,
+      "keyword": null,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Tại sao lá cây lại có màu xanh?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Cây tự làm ra thức ăn cho mình bằng cách nào?",
+      "vector": 1,
+      "keyword": 4,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Bộ phận nào bơm máu đi nuôi cả người mình?",
+      "vector": 1,
+      "keyword": 2,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Vì sao không nên bỏ bữa ăn đầu tiên trong ngày?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Ngô Quyền đã dùng mưu kế gì để phá thuyền của địch?",
+      "vector": 1,
+      "keyword": null,
+      "hybrid": null
+    },
+    {
+      "category": "paraphrase",
+      "question": "Vì sao nhà vua không muốn đặt kinh đô ở chỗ cũ nữa?",
+      "vector": 2,
+      "keyword": 3,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Ngọn núi nào cao nhất nước mình?",
+      "vector": 1,
+      "keyword": 2,
+      "hybrid": 1
+    },
+    {
+      "category": "paraphrase",
+      "question": "Loại từ nào dùng để tả một đồ vật trông ra sao?",
+      "vector": 1,
+      "keyword": 2,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Lưu Hoằng Tháo là ai?",
+      "vector": 2,
+      "keyword": 4,
+      "hybrid": 2
+    },
+    {
+      "category": "keyword",
+      "question": "Quốc Tử Giám được lập năm nào?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Chiếu dời đô do ai viết?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Phân số tối giản là gì?",
+      "vector": 1,
+      "keyword": 2,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Một héc-ta bằng bao nhiêu mét vuông?",
+      "vector": 1,
+      "keyword": 2,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Thiếu i-ốt thì bị bệnh gì?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Bộ xương người có bao nhiêu chiếc xương?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Vì sao sông Cửu Long có tên như vậy?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Câu khiến dùng để làm gì?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Nước sôi ở bao nhiêu độ C?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "keyword",
+      "question": "Cây khoai lang mọc từ đâu?",
+      "vector": 1,
+      "keyword": 1,
+      "hybrid": 1
+    },
+    {
+      "category": "no_diacritics",
+      "question": "ngo quyen xung vuong nam nao",
+      "vector": 2,
+      "keyword": 4,
+      "hybrid": 2
+    },
+    {
+      "category": "no_diacritics",
+      "question": "chu vi hinh vuong tinh nhu the nao",
+      "vector": 4,
+      "keyword": 4,
+      "hybrid": 2
+    },
+    {
+      "category": "no_diacritics",
+      "question": "viet nam co bao nhieu dan toc",
+      "vector": 1,
+      "keyword": null,
+      "hybrid": null
+    },
+    {
+      "category": "no_diacritics",
+      "question": "chat dam co trong thuc an nao",
+      "vector": null,
+      "keyword": 5,
+      "hybrid": 4
+    },
+    {
+      "category": "no_diacritics",
+      "question": "he tieu hoa gom nhung co quan nao",
+      "vector": null,
+      "keyword": null,
+      "hybrid": null
+    },
+    {
+      "category": "no_diacritics",
+      "question": "dong tu la gi",
+      "vector": 2,
+      "keyword": null,
+      "hybrid": 3
+    },
+    {
+      "category": "no_diacritics",
+      "question": "muon chia hai phan so thi lam sao",
+      "vector": null,
+      "keyword": 1,
+      "hybrid": 2
+    },
+    {
+      "category": "no_diacritics",
+      "question": "re cay co nhiem vu gi",
+      "vector": null,
+      "keyword": null,
+      "hybrid": null
+    },
+    {
+      "category": "no_diacritics",
+      "question": "nuoc co may the",
+      "vector": null,
+      "keyword": null,
+      "hybrid": null
+    }
+  ]
+}

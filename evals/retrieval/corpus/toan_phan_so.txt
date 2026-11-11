@@ -1,0 +1,13 @@
+Bài học: Phân số
+
+Phân số gồm hai phần là tử số và mẫu số, được viết cách nhau bằng một gạch ngang. Mẫu số cho biết một đơn vị được chia thành bao nhiêu phần bằng nhau. Tử số cho biết ta lấy bao nhiêu phần trong số đó. Ví dụ, một cái bánh được cắt thành 4 phần bằng nhau, bạn An ăn 3 phần thì bạn An đã ăn ba phần tư cái bánh.
+
+Mẫu số của một phân số luôn phải khác 0, vì ta không thể chia một vật thành 0 phần. Mọi số tự nhiên đều có thể viết thành phân số có mẫu số là 1, chẳng hạn số 5 viết thành 5 phần 1.
+
+Rút gọn phân số là chia cả tử số và mẫu số cho cùng một số tự nhiên lớn hơn 1. Phân số không thể rút gọn được nữa gọi là phân số tối giản. Ví dụ, phân số 6 phần 8 rút gọn thành 3 phần 4 bằng cách chia cả tử số và mẫu số cho 2.
+
+Muốn so sánh hai phân số khác mẫu số, ta quy đồng mẫu số của chúng rồi so sánh hai tử số. Quy đồng mẫu số là biến đổi hai phân số thành hai phân số mới có cùng mẫu số mà giá trị không thay đổi. Trong hai phân số cùng mẫu số, phân số nào có tử số lớn hơn thì lớn hơn.
+
+Muốn cộng hai phân số cùng mẫu số, ta cộng hai tử số với nhau và giữ nguyên mẫu số. Muốn cộng hai phân số khác mẫu số, ta phải quy đồng mẫu số trước rồi mới cộng. Phép trừ phân số cũng làm tương tự như phép cộng.
+
+Muốn nhân hai phân số, ta lấy tử số nhân với tử số, mẫu số nhân với mẫu số. Muốn chia một phân số cho một phân số khác, ta lấy phân số thứ nhất nhân với phân số thứ hai đảo ngược.
