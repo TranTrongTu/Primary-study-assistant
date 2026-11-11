@@ -1,0 +1,21 @@
+# Runs the same checks as CI before a commit is created, so a formatting or
+# lint failure is caught in seconds instead of after a push.
+#
+#   pip install pre-commit
+#   pre-commit install          # once per clone
+#   pre-commit run --all-files  # check everything now
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.4 # same version as the CI lint step
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: check-added-large-files
+        args: [--maxkb=1024]
