@@ -23,7 +23,6 @@ export const useStudyActivities = (interactionId) => {
         try {
             await deleteStudyActivity(activityId);
             // Sau khi xóa thành công ở Server, cập nhật lại danh sách ở Local ngay lập tức
-            console.log("Xóa bài tập thành công, ID:", activityId);
             setActivities(prev => prev.filter(act => act.id !== activityId));
         } catch (error) {
             console.error("Lỗi khi xóa bài tập:", error);

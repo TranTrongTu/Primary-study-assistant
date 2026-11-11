@@ -14,7 +14,12 @@ REQUIRED = {
 }
 
 # Variables that have defaults; make sure the machine running the tests cannot override them.
-HAS_DEFAULTS = ["DEV_MODE", "POSTGRES_URL_TEST", "DEFAULT_CHUNK_SIZE", "MODEL_IN_USE_EMBED"]
+HAS_DEFAULTS = [
+    "DEV_MODE",
+    "POSTGRES_URL_TEST",
+    "DEFAULT_CHUNK_SIZE",
+    "MODEL_IN_USE_EMBED",
+]
 
 
 @pytest.fixture(autouse=True)

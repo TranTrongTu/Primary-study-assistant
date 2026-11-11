@@ -33,7 +33,6 @@ engine = create_async_engine(
 SessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 
 
-
 # ----- NO REAL AI CALLS IN TESTS ----- #
 
 _DIM = settings.DEFAULT_EMBED_DIMENSIONALITY_CLOUDFLARE
@@ -64,7 +63,9 @@ def block_external_ai_calls():
     with (
         patch.object(GlobalAPI, "embed", AsyncMock(return_value=[0.1] * _DIM)),
         patch.object(GlobalAPI, "mass_embed", AsyncMock(side_effect=fake_mass_embed)),
-        patch.object(GlobalAPI, "caption_image", AsyncMock(return_value="Mock caption")),
+        patch.object(
+            GlobalAPI, "caption_image", AsyncMock(return_value="Mock caption")
+        ),
         patch.object(GlobalAPI, "rewrite_prompt", AsyncMock(side_effect=lambda p: p)),
         patch.object(GlobalAPI, "generate_chat", _unmocked("generate_chat")),
         patch.object(GlobalAPI, "generate_material", _unmocked("generate_material")),
@@ -81,6 +82,7 @@ def block_external_ai_calls():
         ),
     ):
         yield
+
 
 @pytest.fixture(name="session")
 async def session_fixture():

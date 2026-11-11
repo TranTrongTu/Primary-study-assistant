@@ -16,7 +16,9 @@ async def test_health_ok_when_database_answers(client: AsyncClient):
     assert response.json() == {"status": "ok"}
 
 
-async def test_health_503_when_database_is_unreachable(app: FastAPI, client: AsyncClient):
+async def test_health_503_when_database_is_unreachable(
+    app: FastAPI, client: AsyncClient
+):
     class BrokenSession:
         async def execute(self, *args, **kwargs):
             raise ConnectionError("database is down")

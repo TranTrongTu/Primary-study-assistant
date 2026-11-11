@@ -387,7 +387,6 @@ async def create_flashcards_activity(
 
     session.add(flashcards_activity)
     await session.commit()
-    # await session.refresh(flashcards_activity)
 
     return flashcards_activity
 
@@ -546,7 +545,6 @@ async def update_study_activity(
 
     session.add(study_activity)
     await session.commit()
-    # await session.refresh(study_activity)
 
     return study_activity
 
@@ -590,7 +588,6 @@ async def update_flashcard(
             face.content = flashcard_update.front
 
     await session.commit()
-    # await session.refresh(flashcard, attribute_names=["contents"])
 
     return flashcard
 

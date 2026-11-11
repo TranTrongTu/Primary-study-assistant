@@ -27,7 +27,6 @@ async def create_note(
 
     session.add(note)
     await session.commit()
-    # await session.refresh(note)
 
     return note
 
@@ -76,7 +75,6 @@ async def update_note(
     note.sqlmodel_update(update_data)
 
     await session.commit()
-    # await session.refresh(note)
 
     return note
 

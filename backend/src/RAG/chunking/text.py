@@ -30,8 +30,6 @@ class TextExtractor(DocumentExtractor):
         if file.content_type is None:
             return False
 
-        print(file.content_type)
-
         is_text = (
             file.content_type.startswith("text/")
             or file.content_type == "application/json"
@@ -44,8 +42,6 @@ class TextExtractor(DocumentExtractor):
         # === Header === #
         header = file.file.read(512)
         file.file.seek(0)
-
-        print(header)
 
         if not header:
             return False

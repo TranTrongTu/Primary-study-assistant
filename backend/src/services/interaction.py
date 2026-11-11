@@ -35,7 +35,6 @@ async def create_interaction(
 
     session.add(interaction)
     await session.commit()
-    # await session.refresh(interaction)
 
     return interaction
 
@@ -66,7 +65,6 @@ async def update_interaction(
     interaction.sqlmodel_update(update_data)
 
     await session.commit()
-    # await session.refresh(interaction)
 
     return interaction
 

@@ -44,7 +44,9 @@ async def test_assessment_not_blocked_by_other_users_assessment(
     )
     await session.commit()
 
-    result = await create_study_assessment(user=bob, session=session, current_datetime=now)
+    result = await create_study_assessment(
+        user=bob, session=session, current_datetime=now
+    )
 
     # Before the fix the join matched Alice's row, so Bob got None
     assert result is not None
@@ -52,6 +54,12 @@ async def test_assessment_not_blocked_by_other_users_assessment(
     assert result.assessment_of == yesterday
 
     bob_rows = (
-        await session.execute(select(StudyAssessment).where(StudyAssessment.user_id == bob.id))
-    ).scalars().all()
+        (
+            await session.execute(
+                select(StudyAssessment).where(StudyAssessment.user_id == bob.id)
+            )
+        )
+        .scalars()
+        .all()
+    )
     assert len(bob_rows) == 1

@@ -18,8 +18,7 @@ export const useCreateEssay = (interactionId, onSuccess) => {
                 subject_type: setupData?.subject
             };
             
-            const newActivity = await createStudyActivity(interactionId, payload);
-            console.log("Tạo bài tập thành công, ID:", newActivity.id);
+            await createStudyActivity(interactionId, payload);
             if (onSuccess) onSuccess(); // Báo cho cha biết để gọi fetchActivities()
         } catch (error) {
             console.error("Lỗi khi tạo bài tập:", error);

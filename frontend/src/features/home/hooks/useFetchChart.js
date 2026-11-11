@@ -22,23 +22,6 @@ export const useFetchChart = (apiFunction, payload, transformFunction) => {
             setError(null);
             
             try {
-                // // ========================================================
-                // // TODO: XÓA ĐOẠN CODE TEST NÀY SAU KHI TEST GIAO DIỆN XONG
-                // // ========================================================
-                // const isTesting = true; 
-                // if (isTesting) {
-                //     throw {
-                //         response: {
-                //             // Đổi số 500 thành 400 để xem các giao diện khác nhau
-                //             status: 500, 
-                //             data: {
-                //                 exception_type: "INTERNAL_ERROR",
-                //                 message: "Đội kỹ thuật đang xử lý sự cố. Test UI lỗi 500!"
-                //             }
-                //         }
-                //     };
-                // }
-
                 const rawData = await apiFunction(payload);
                 
                 if (isMounted) {
