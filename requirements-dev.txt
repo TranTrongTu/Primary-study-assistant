@@ -1,6 +1,7 @@
 # Testing
 pytest
 pytest_asyncio
+pytest-cov
 time-machine
 
 # Debugging

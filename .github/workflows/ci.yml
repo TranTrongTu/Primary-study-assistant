@@ -75,8 +75,16 @@ jobs:
       - name: Use the example settings for everything not set above
         run: cp backend/.env.example backend/.env
 
-      - name: Tests (pytest)
-        run: python -m pytest backend/tests -q
+      # The floor sits just under the current figure (72%): it stops coverage from
+      # sliding back without forcing tests to be written only to move a number.
+      - name: Tests (pytest) with coverage
+        run: python -m pytest backend/tests -q --cov=backend/src --cov-report=term --cov-fail-under=70
+
+      - name: Coverage table in the run summary
+        if: always()
+        run: |
+          echo "## Backend test coverage" >> "$GITHUB_STEP_SUMMARY"
+          python -m coverage report --format=markdown >> "$GITHUB_STEP_SUMMARY" || true
 
   frontend:
     name: Frontend (lint + build)

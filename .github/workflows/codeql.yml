@@ -1,0 +1,43 @@
+name: CodeQL
+
+# Static analysis of the application code itself (injection, unsafe
+# deserialisation, leaked secrets in logs, ...). Findings appear under
+# Security -> Code scanning. Not a required status check.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 2 * * 1" # Mondays 09:00 Vietnam time
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write # upload the results
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript-typescript]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          # Both languages are interpreted: nothing has to be compiled first
+          build-mode: none
+
+      - uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:${{ matrix.language }}

@@ -1,0 +1,33 @@
+# Weekly update pull requests, one per ecosystem so they stay easy to review.
+#
+# Python is not listed on purpose: requirements.txt holds unpinned direct
+# dependencies and the pins live in requirements.lock, produced by
+# scripts/compile-locks.sh (uv). Dependabot cannot regenerate that file, so
+# Python advisories are caught by the pip-audit job in security.yml instead.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      frontend-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Major upgrades change behaviour and are done by hand
+      - dependency-name: "*"
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly

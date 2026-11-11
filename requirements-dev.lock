@@ -30,6 +30,8 @@ colorama==0.4.6 ; sys_platform == 'win32'
     #   pytest
 configargparse==1.9.0
     # via locust
+coverage==7.17.2
+    # via pytest-cov
 debugpy==1.8.22
     # via -r requirements-dev.txt
 flask==3.1.3
@@ -82,7 +84,9 @@ packaging==26.3
     #   -c requirements.lock
     #   pytest
 pluggy==1.7.0
-    # via pytest
+    # via
+    #   pytest
+    #   pytest-cov
 psutil==7.2.2
     # via locust
 pycparser==3.12 ; implementation_name == 'pypy' or (implementation_name != 'PyPy' and implementation_name != 'pypy' and platform_python_implementation == 'CPython' and sys_platform == 'win32')
@@ -98,7 +102,10 @@ pytest==9.2.0
     #   -r requirements-dev.txt
     #   locust
     #   pytest-asyncio
+    #   pytest-cov
 pytest-asyncio==1.4.1.post1
+    # via -r requirements-dev.txt
+pytest-cov==7.1.0
     # via -r requirements-dev.txt
 python-engineio==4.15.1
     # via
