@@ -1,0 +1,57 @@
+name: Smoke test (deployed API)
+
+# Run by hand after a deploy: Actions -> "Smoke test (deployed API)" -> Run workflow.
+# It exercises the deployed backend end to end (login, upload, chat, quiz), so it calls the
+# real Gemini and Cloudflare APIs and uses a little quota each time.
+#
+# Needs two repository secrets, for a dedicated test account created once on the live site:
+#   SMOKE_TEST_EMAIL, SMOKE_TEST_PASSWORD
+# This is not a required status check: it must never block a merge.
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Backend base URL
+        default: https://primary-study-assistant.onrender.com
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smoke-test
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    name: Smoke test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      # httpx is the script's only dependency; same pin as requirements.lock
+      - name: Install httpx
+        run: pip install httpx==0.28.1
+
+      - name: Check the secrets exist
+        env:
+          SMOKE_TEST_EMAIL: ${{ secrets.SMOKE_TEST_EMAIL }}
+          SMOKE_TEST_PASSWORD: ${{ secrets.SMOKE_TEST_PASSWORD }}
+        run: |
+          if [ -z "$SMOKE_TEST_EMAIL" ] || [ -z "$SMOKE_TEST_PASSWORD" ]; then
+            echo "::error::Add the SMOKE_TEST_EMAIL and SMOKE_TEST_PASSWORD repository secrets first."
+            exit 1
+          fi
+
+      # Render's free tier sleeps: a long timeout covers the cold start and the LLM calls
+      - name: Run the smoke test
+        env:
+          SMOKE_TEST_EMAIL: ${{ secrets.SMOKE_TEST_EMAIL }}
+          SMOKE_TEST_PASSWORD: ${{ secrets.SMOKE_TEST_PASSWORD }}
+          BASE_URL: ${{ inputs.url }}
+        run: python scripts/smoke_test.py --timeout 120
