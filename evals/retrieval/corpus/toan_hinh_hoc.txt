@@ -1,0 +1,13 @@
+Bài học: Chu vi và diện tích
+
+Chu vi của một hình là tổng độ dài các cạnh bao quanh hình đó. Diện tích là độ lớn của phần mặt phẳng nằm bên trong hình. Chu vi được đo bằng các đơn vị đo độ dài như xăng-ti-mét hoặc mét, còn diện tích được đo bằng xăng-ti-mét vuông hoặc mét vuông.
+
+Hình chữ nhật có hai chiều dài bằng nhau và hai chiều rộng bằng nhau. Muốn tính chu vi hình chữ nhật, ta lấy chiều dài cộng với chiều rộng rồi nhân với 2. Muốn tính diện tích hình chữ nhật, ta lấy chiều dài nhân với chiều rộng, với điều kiện hai số đo cùng một đơn vị.
+
+Hình vuông có bốn cạnh bằng nhau và bốn góc vuông. Chu vi hình vuông bằng độ dài một cạnh nhân với 4. Diện tích hình vuông bằng độ dài một cạnh nhân với chính nó. Ví dụ, mảnh vườn hình vuông có cạnh dài 5 mét thì chu vi là 20 mét và diện tích là 25 mét vuông.
+
+Hình tam giác có ba cạnh, ba đỉnh và ba góc. Diện tích hình tam giác bằng độ dài đáy nhân với chiều cao rồi chia cho 2. Chiều cao là đoạn thẳng kẻ từ một đỉnh và vuông góc với cạnh đáy đối diện.
+
+Hình tròn có tâm, bán kính và đường kính. Đường kính dài gấp hai lần bán kính. Chu vi hình tròn bằng đường kính nhân với 3,14. Diện tích hình tròn bằng bán kính nhân bán kính rồi nhân với 3,14.
+
+Khi đổi đơn vị, em cần nhớ 1 mét bằng 100 xăng-ti-mét, 1 ki-lô-mét bằng 1000 mét, còn 1 mét vuông bằng 10 000 xăng-ti-mét vuông. Một héc-ta bằng 10 000 mét vuông và thường được dùng để đo diện tích ruộng đất.
