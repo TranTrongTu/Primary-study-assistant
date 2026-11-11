@@ -35,7 +35,7 @@ class CheckIn(CheckInBase, table=True):
     user_id: Annotated[int | None, Field(foreign_key="user.id", nullable=False)] = None
 
     user: "User" = Relationship(back_populates="check_ins")
-    
+
     __table_args__ = (
         Index(
             "UQ_USER_DATE",

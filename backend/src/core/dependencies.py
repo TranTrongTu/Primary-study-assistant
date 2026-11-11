@@ -33,7 +33,9 @@ SessionDep = Annotated[AsyncSession, Depends(get_async_session)]
 def get_current_datetime(
     overwritten_day: Annotated[
         date | None,
-        Query(description="DEV_MODE only: pretend today is this date (for testing streaks)."),
+        Query(
+            description="DEV_MODE only: pretend today is this date (for testing streaks)."
+        ),
     ] = None,
 ) -> datetime:
     now = datetime.now(timezone.utc)

@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter
 
 from backend.src.core.dependencies import (

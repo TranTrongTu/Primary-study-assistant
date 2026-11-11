@@ -143,7 +143,6 @@ export const InteractionPage = () => {
               getActivityType(item) === "REVIEW" &&
               getActivityFormat(item) === "GAP_FILL",
           );
-          console.log("[InteractionPage] TTR activities:", filteredData);
           const sortedData = filteredData.sort((a, b) => b.id - a.id);
           const formatted = sortedData.map((item) => ({
             id: item.id,
@@ -319,7 +318,6 @@ export const InteractionPage = () => {
       
       // 4. Nếu BE xóa thành công, cập nhật lại giao diện
       setTtrTasks(prev => prev.filter(t => t.id !== activityId));
-      console.log("Đã xóa TTR thành công:", activityId);
     } catch (error) {
       console.error("Lỗi khi xóa TTR:", error);
       alert("Không thể xóa bài tập lúc này, vui lòng thử lại sau.");
@@ -344,7 +342,6 @@ export const InteractionPage = () => {
             isOpen={isSetupOpen} 
             onClose={() => setIsSetupOpen(false)} 
             onSubmit={(data) => {
-              console.log("Dữ liệu bẫy được tại Component cha:", data);
               handleCreateTTRBackground({
                 prompt: data.prompt,
                 gameMode: data.gameMode,

@@ -32,9 +32,7 @@ export const useInteractionTools = (interactionId, onActivityCreated) => {
         subjectType: setupData?.subject,
         prompt: setupData?.prompt,
       };
-      console.log("[useInteractionTools] Create quiz payload:", payload);
       const newQuiz = await createQuizMutate(interactionId, payload);
-      console.log("[useInteractionTools] Created quiz:", newQuiz);
       if (newQuiz && newQuiz.id) {
         if (onActivityCreated) onActivityCreated();
       } else {

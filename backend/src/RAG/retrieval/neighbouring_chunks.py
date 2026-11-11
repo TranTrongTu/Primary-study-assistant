@@ -26,9 +26,11 @@ async def neighbouring_chunks(
                     and_(
                         DocumentChunk.document_id == chunk.document_id,
                         DocumentChunk.document_chunk_index  # type: ignore
-                        >= chunk.document_chunk_index - settings.DEFAULT_N_CHUNKS_WINDOW,
+                        >= chunk.document_chunk_index
+                        - settings.DEFAULT_N_CHUNKS_WINDOW,
                         DocumentChunk.document_chunk_index  # type: ignore
-                        <= chunk.document_chunk_index + settings.DEFAULT_N_CHUNKS_WINDOW,
+                        <= chunk.document_chunk_index
+                        + settings.DEFAULT_N_CHUNKS_WINDOW,
                     )
                 )
             else:

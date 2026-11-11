@@ -64,7 +64,9 @@ jobs:
           pip install ruff==0.17.4
 
       - name: Lint (ruff)
-        run: ruff check .
+        run: |
+          ruff check .
+          ruff format --check .
 
       - name: Create the test database
         run: |

@@ -14,17 +14,23 @@ from backend.src.RAG.augmentation.formatters.study_activities.core import (
 )
 
 
-def singular_progress_formatter(index: int, single_progress: LLMResponse | Document | StudyActivity) -> str:
+def singular_progress_formatter(
+    index: int, single_progress: LLMResponse | Document | StudyActivity
+) -> str:
     if isinstance(single_progress, LLMResponse):
         return singular_conversation_formatter(index, single_progress)
     elif isinstance(single_progress, Document):
         return singular_document_formatter(index, single_progress)
     else:
         return singular_study_activity_formatter(index, single_progress)
-        
-def progress_formatter(progress: Iterable[LLMResponse | Document | StudyActivity]) -> str:
+
+
+def progress_formatter(
+    progress: Iterable[LLMResponse | Document | StudyActivity],
+) -> str:
     formatted_progress = "\n\n".join(
-        singular_progress_formatter(i, single_progress) for i, single_progress in enumerate(progress, start=1)
+        singular_progress_formatter(i, single_progress)
+        for i, single_progress in enumerate(progress, start=1)
     )
-    
+
     return formatted_progress

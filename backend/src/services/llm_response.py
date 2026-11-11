@@ -86,7 +86,6 @@ async def create_llm_response(
 
     session.add(llm_response)
     await session.commit()
-    # await session.refresh(llm_response)
 
     return llm_response
 

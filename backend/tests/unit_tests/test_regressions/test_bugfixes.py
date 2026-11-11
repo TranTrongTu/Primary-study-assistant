@@ -53,7 +53,13 @@ def test_no_overwritten_day_works_in_production(monkeypatch):
 
 def _fake_request() -> Request:
     return Request(
-        {"type": "http", "method": "GET", "path": "/api/x", "headers": [], "query_string": b""}
+        {
+            "type": "http",
+            "method": "GET",
+            "path": "/api/x",
+            "headers": [],
+            "query_string": b"",
+        }
     )
 
 
@@ -84,9 +90,13 @@ async def test_generic_handler_shows_details_in_dev(monkeypatch):
 # ----- Bug 4: invalid JSON from the grading LLM must be retried ----- #
 
 
-@pytest.mark.parametrize("bad_output", ["not json at all", '{"truncated": ', "[1, 2, 3]"])
+@pytest.mark.parametrize(
+    "bad_output", ["not json at all", '{"truncated": ', "[1, 2, 3]"]
+)
 @patch.object(GlobalAPI, "grade_answers", new_callable=AsyncMock)
-async def test_grading_retries_on_malformed_json(mock_grade_answers, bad_output, monkeypatch):
+async def test_grading_retries_on_malformed_json(
+    mock_grade_answers, bad_output, monkeypatch
+):
     monkeypatch.setattr(study_activity.settings, "DEFAULT_N_GENERATION_RETRIES", 3)
     mock_grade_answers.return_value = bad_output
 

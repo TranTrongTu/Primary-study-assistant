@@ -61,7 +61,7 @@ class Criterion(BaseModel):
             try:
                 parsed_date = datetime.strptime(self.value, "%d%m%Y").date()  # type: ignore
                 self.value = parsed_date  # type: ignore
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 raise ExceptionRequestValidation_400(
                     custom_message=f"value không hợp lệ cho đặc trưng {self.attribute}."
                 )

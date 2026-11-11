@@ -90,7 +90,6 @@ async def save_document(
     )
 
     await session.commit()
-    # await session.refresh(document)
 
     return document, document_analysis
 
@@ -179,7 +178,6 @@ async def update_document(
     document.sqlmodel_update(update_data)
 
     await session.commit()
-    # await session.refresh(document)
 
     return document
 

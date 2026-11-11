@@ -81,7 +81,6 @@ STRICT RULES:
 6. ${subject === 'ENGLISH' ? 'Write ALL content in English.' : subject === 'VIETNAMESE' ? 'Viết toàn bộ nội dung bằng tiếng Việt.' : 'Viết toàn bộ nội dung bằng tiếng Việt, dùng thuật ngữ toán học chuẩn.'}
     `;
 
-    console.log("Subject đang gửi đi:", subject);
     onSubmit({ prompt: finalPrompt.trim(), gameMode: mode, subjectType: subject });
   };
 
