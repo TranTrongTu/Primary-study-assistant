@@ -1,0 +1,15 @@
+Bài học: Phép nhân và phép chia
+
+Trong phép nhân, các số được nhân với nhau gọi là thừa số, kết quả gọi là tích. Ví dụ 6 × 8 = 48, trong đó 6 và 8 là thừa số, 48 là tích. Khi đổi chỗ các thừa số thì tích không thay đổi, nên 6 × 8 = 8 × 6. Số nào nhân với 1 cũng bằng chính số đó. Số nào nhân với 0 cũng bằng 0.
+
+Trong phép chia, số bị chia chia cho số chia được thương. Ví dụ 45 : 9 = 5, trong đó 45 là số bị chia, 9 là số chia, 5 là thương. Phép chia là phép tính ngược của phép nhân: vì 5 × 9 = 45 nên 45 : 9 = 5. Số 0 chia cho một số khác 0 thì bằng 0. Không thể chia cho 0.
+
+Phép chia có dư: khi số bị chia không chia hết cho số chia thì còn lại một phần gọi là số dư. Số dư luôn nhỏ hơn số chia. Ví dụ 37 : 5 = 7 dư 2, vì 7 × 5 = 35 và 37 trừ 35 còn 2. Muốn kiểm tra, em lấy thương nhân với số chia rồi cộng số dư: 7 × 5 + 2 = 37.
+
+Nhân số có hai chữ số với số có một chữ số: em nhân từng chữ số từ phải sang trái và nhớ khi cần. Ví dụ 23 × 4: lấy 3 × 4 = 12, viết 2 nhớ 1; lấy 2 × 4 = 8, thêm 1 là 9. Vậy 23 × 4 = 92.
+
+Bài toán 1. Cô Hạnh có 6 hộp bút, mỗi hộp có 8 chiếc bút. Hỏi cô Hạnh có tất cả bao nhiêu chiếc bút? Lời giải: Số chiếc bút là 6 × 8 = 48 (chiếc). Đáp số: 48 chiếc bút.
+
+Bài toán 2. Cửa hàng bác Tâm có 23 túi gạo, mỗi túi nặng 4 ki-lô-gam. Buổi sáng bác bán được 35 ki-lô-gam gạo. Hỏi cửa hàng còn lại bao nhiêu ki-lô-gam gạo? Lời giải: Số gạo lúc đầu là 23 × 4 = 92 (kg). Số gạo còn lại là 92 − 35 = 57 (kg). Đáp số: 57 ki-lô-gam.
+
+Bài toán 3. Có 84 quả cam xếp đều vào 4 rổ. Hỏi mỗi rổ có bao nhiêu quả cam? Lời giải: Mỗi rổ có 84 : 4 = 21 (quả). Đáp số: 21 quả cam.
