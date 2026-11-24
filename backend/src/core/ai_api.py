@@ -1,8 +1,10 @@
 import asyncio
 import base64
+import logging
+import time
 from abc import ABC, abstractmethod
 from types import FunctionType
-from typing import Any
+from typing import Any, Awaitable, Callable
 
 import httpx
 import ollama
@@ -12,12 +14,21 @@ from google.genai import Client, errors
 from pydantic import BaseModel
 
 from backend.src.core.config import settings
+from backend.src.core.llm_failures import (
+    Failure,
+    FailureKind,
+    backoff_delay,
+    classify,
+)
 from backend.src.exceptions.core import (
+    ExceptionAIQuota_503,
     ExceptionExternalService_503,
     ExceptionInternalError_500,
     ExceptionLLMError_502,
     ExceptionRequest_400,
 )
+
+logger = logging.getLogger(__name__)
 
 # ----- MODEL CONFIGURATIONS ----- #
 
@@ -39,6 +50,14 @@ class GeminiKeysManager:
             self.current_key_index = 0
         self.client: Client = genai.Client(api_key=self.keys[self.current_key_index])
 
+    def rotate_from(self, failed_key_index: int) -> None:
+        """
+        Moves on from a key that failed. Does nothing when a concurrent request already
+        did: rotating twice would skip a key (or, with two keys, return to the bad one).
+        """
+        if failed_key_index == self.current_key_index:
+            self.rotate()
+
 
 keys_manager = GeminiKeysManager(settings.gemini_keys_list)
 
@@ -58,6 +77,50 @@ CLOUDFLARE_HEADERS = {
 
 
 # ----- MODEL CALLS ----- #
+
+_FAILURE_EXCEPTIONS: dict[FailureKind, Callable[[], Exception]] = {
+    FailureKind.DAILY_QUOTA: lambda: ExceptionAIQuota_503(
+        "The AI service has reached its usage limit for today. Please come back later."
+    ),
+    FailureKind.RATE_LIMIT: lambda: ExceptionExternalService_503(
+        "The AI service is receiving too many requests. Please try again in a minute."
+    ),
+    FailureKind.OVERLOADED: lambda: ExceptionExternalService_503(
+        "The AI service is overloaded. Please try again in a few minutes."
+    ),
+    FailureKind.NETWORK: lambda: ExceptionExternalService_503(
+        "The AI service could not be reached. Please try again in a few minutes."
+    ),
+}
+
+
+def _log_call(
+    operation: str,
+    model: str,
+    attempt: int,
+    started: float,
+    outcome: str,
+    code: int | None = None,
+    response: Any = None,
+) -> None:
+    """
+    One line per request. Never the prompt, the answer or the provider's error text:
+    they hold what students wrote.
+    """
+    usage = getattr(response, "usage_metadata", None)
+    logger.log(
+        logging.INFO if outcome == "ok" else logging.WARNING,
+        "llm_call operation=%s model=%s attempt=%d outcome=%s code=%s "
+        "elapsed_ms=%d input_tokens=%s output_tokens=%s",
+        operation,
+        model,
+        attempt,
+        outcome,
+        code,
+        (time.monotonic() - started) * 1000,
+        getattr(usage, "prompt_token_count", None),
+        getattr(usage, "candidates_token_count", None),
+    )
 
 
 class API(ABC):
@@ -106,62 +169,99 @@ class API(ABC):
 
 
 class GoogleAPI(API):
+    # Called before every request to Gemini. The evaluation uses it to count requests
+    # and to stop before a limit; whatever it raises reaches the caller unchanged.
+    before_request: Callable[[], None] | None = None
+
     @classmethod
-    async def wrapper(cls, func: FunctionType) -> Any:
-        attempt_traffic = 0
-        attempt_exhausted_tokens = 0
+    async def wrapper(  # type: ignore[override]
+        cls,
+        func: Callable[[str], Awaitable[Any]],
+        models: list[str],
+        operation: str,
+    ) -> Any:
+        """
+        Calls `func(model)` and handles the failures of the provider:
+        - rate limit or spent quota: try the other keys first;
+        - rate limit, overload, network error: wait (the time the provider asks for,
+          otherwise exponential backoff) and retry, within LLM_MAX_RETRY_WAIT_SECONDS;
+        - still failing: move on to the next model in `models`.
+        """
+        started = time.monotonic()
+        wait_left = settings.LLM_MAX_RETRY_WAIT_SECONDS
+        attempts = 0
+        failure: Failure | None = None
 
-        while True:
-            try:
-                return await func()
+        for model in models:
+            retries = 0
+            keys_tried = 1
 
-            except errors.APIError as e:
-                if e.code == 429:
-                    # 429: out of tokens
-                    keys_manager.rotate()
-                    attempt_exhausted_tokens += 1
+            while True:
+                if cls.before_request is not None:
+                    cls.before_request()
 
-                    if attempt_exhausted_tokens >= len(keys_manager.keys):
-                        break
+                key_index = keys_manager.current_key_index
+                attempts += 1
 
-                    continue
-                elif e.code in (503, 504):
-                    # 503 or 504: server is busy
-                    wait_time = (attempt_traffic + 1) * 2
-                    await asyncio.sleep(wait_time)
-                    attempt_traffic += 1
-
-                    if attempt_traffic >= settings.DEFAULT_N_API_CALL_RETRIES:
-                        break
-
-                    continue
-                else:
-                    raise ExceptionInternalError_500(
-                        e.message if e.message else "Google API error"
+                try:
+                    response = await func(model)
+                except Exception as e:
+                    failure = classify(e)
+                    _log_call(
+                        operation,
+                        model,
+                        attempts,
+                        started,
+                        outcome=failure.kind.value if failure else type(e).__name__,
+                        code=getattr(e, "code", None),
                     )
+                    if failure is None:
+                        if isinstance(e, errors.APIError):
+                            raise ExceptionInternalError_500(
+                                e.message if e.message else "Google API error"
+                            ) from e
+                        raise
+                else:
+                    _log_call(
+                        operation, model, attempts, started, "ok", response=response
+                    )
+                    return response
 
-            except httpx.RequestError:
-                # Network, connection issues
-                wait_time = (attempt_traffic + 1) * 2
-                await asyncio.sleep(wait_time)
-                attempt_traffic += 1
+                quota_related = failure.kind in (
+                    FailureKind.DAILY_QUOTA,
+                    FailureKind.RATE_LIMIT,
+                )
+                if quota_related and keys_tried < len(keys_manager.keys):
+                    keys_manager.rotate_from(key_index)
+                    keys_tried += 1
+                    continue
 
-                if attempt_traffic >= settings.DEFAULT_N_API_CALL_RETRIES:
+                retries += 1
+                if (
+                    failure.kind is FailureKind.DAILY_QUOTA
+                    or retries >= settings.DEFAULT_N_API_CALL_RETRIES
+                ):
                     break
 
-                continue
+                delay = failure.retry_after or backoff_delay(retries)
+                if delay > wait_left:
+                    break
+                wait_left -= delay
+                await asyncio.sleep(delay)
+                keys_tried = 1
 
-        raise ExceptionExternalService_503(
-            "Gemini failed after multiple retries and key rotations. Please come back again later."
-        )
+            # Every model is behind the same host
+            if failure.kind is FailureKind.NETWORK:
+                break
+
+        assert failure is not None
+        raise _FAILURE_EXCEPTIONS[failure.kind]()
 
     @classmethod
     async def embed(cls, content: str) -> list[float]:
-        async def call_api() -> list[float]:
-
-            # API call
-            response = await keys_manager.client.aio.models.embed_content(
-                model=settings.EMBED_MODEL_GOOGLE,
+        async def call_api(model: str) -> Any:
+            return await keys_manager.client.aio.models.embed_content(
+                model=model,
                 contents=content,
                 # Content is truncated from 3072-D to 768-D
                 config=genai.types.EmbedContentConfig(
@@ -169,21 +269,19 @@ class GoogleAPI(API):
                 ),
             )
 
-            # Valiation
-            assert response.embeddings is not None
-            assert isinstance(response.embeddings[0].values, list)
+        response = await cls.wrapper(call_api, [settings.EMBED_MODEL_GOOGLE], "embed")
 
-            return response.embeddings[0].values
+        # Validation
+        assert response.embeddings is not None
+        assert isinstance(response.embeddings[0].values, list)
 
-        return await cls.wrapper(call_api)
+        return response.embeddings[0].values
 
     @classmethod
     async def mass_embed(cls, contents: list[str]) -> list[list[float]]:
-        async def call_api() -> list[list[float]]:
-
-            # API call
-            response = await keys_manager.client.aio.models.embed_content(
-                model=settings.EMBED_MODEL_GOOGLE,
+        async def call_api(model: str) -> Any:
+            return await keys_manager.client.aio.models.embed_content(
+                model=model,
                 contents=contents,
                 # Content is truncated from 3072-D to 768-D
                 config=genai.types.EmbedContentConfig(
@@ -191,16 +289,18 @@ class GoogleAPI(API):
                 ),
             )
 
-            # Validation
-            assert response.embeddings is not None
+        response = await cls.wrapper(
+            call_api, [settings.EMBED_MODEL_GOOGLE], "mass_embed"
+        )
 
-            embeddings = [e.values for e in response.embeddings if e.values]
-            if len(embeddings) != len(contents):
-                raise ExceptionLLMError_502("Embedding failed.")
+        # Validation
+        assert response.embeddings is not None
 
-            return embeddings
+        embeddings = [e.values for e in response.embeddings if e.values]
+        if len(embeddings) != len(contents):
+            raise ExceptionLLMError_502("Embedding failed.")
 
-        return await cls.wrapper(call_api)
+        return embeddings
 
     @classmethod
     async def caption_image(cls, file: UploadFile) -> str:
@@ -208,7 +308,7 @@ class GoogleAPI(API):
         image_bytes = await file.read()
         content_type = file.content_type
 
-        async def call_api() -> str:
+        async def call_api(model: str) -> Any:
             prompt_text = "Extract all readable text from this image exactly as written.\nThen, describe the layout, charts, figures, subjects, and any data points in exhaustive detail."
 
             image_part = genai.types.Part.from_bytes(
@@ -216,18 +316,20 @@ class GoogleAPI(API):
                 mime_type=content_type,  # type: ignore
             )
 
-            response = await keys_manager.client.aio.models.generate_content(
-                model=settings.VISION_MODEL_GOOGLE,
+            return await keys_manager.client.aio.models.generate_content(
+                model=model,
                 contents=[prompt_text, image_part],
             )
 
-            # Validation
-            if response.text is None:
-                raise ExceptionRequest_400("Image could not be saved properly.")
+        response = await cls.wrapper(
+            call_api, [settings.VISION_MODEL_GOOGLE], "caption_image"
+        )
 
-            return response.text
+        # Validation
+        if response.text is None:
+            raise ExceptionRequest_400("Image could not be saved properly.")
 
-        return await cls.wrapper(call_api)
+        return response.text
 
     @classmethod
     async def generate_content(
@@ -235,28 +337,32 @@ class GoogleAPI(API):
         prompt: str,
         response_schema: type[BaseModel] | None = None,
     ) -> str:
-        async def call_api() -> str:
+        async def call_api(model: str) -> Any:
             config = genai.types.GenerateContentConfig()
 
             if response_schema:
                 config.response_mime_type = "application/json"
                 config.response_schema = response_schema
 
-            response = await keys_manager.client.aio.models.generate_content(
-                model=settings.ANSWER_MODEL_GOOGLE,
+            return await keys_manager.client.aio.models.generate_content(
+                model=model,
                 contents=prompt,
                 config=config,
             )
 
-            # Validation
-            if response.text is None:
-                raise ExceptionRequest_400(
-                    "A response could not be generated. Please recheck your question."
-                )
+        models = [settings.ANSWER_MODEL_GOOGLE]
+        if settings.ANSWER_MODEL_GOOGLE_FALLBACK:
+            models.append(settings.ANSWER_MODEL_GOOGLE_FALLBACK)
 
-            return response.text
+        response = await cls.wrapper(call_api, models, "generate_content")
 
-        return await cls.wrapper(call_api)
+        # Validation
+        if response.text is None:
+            raise ExceptionRequest_400(
+                "A response could not be generated. Please recheck your question."
+            )
+
+        return response.text
 
 
 class OllamaAPI(API):
@@ -419,7 +525,7 @@ class CloudFlareAPI(API):
 
             except httpx.HTTPStatusError as e:
                 # Potentially dangerous error
-                if e.response.status_code in (429, 502, 503, 504):
+                if e.response.status_code in (429, 500, 502, 503, 504):
                     wait_time = (attempt_traffic + 1) * 2
                     await asyncio.sleep(wait_time)
                     attempt_traffic += 1

@@ -31,6 +31,7 @@ class ExceptionType(str, Enum):
 
     # 503
     EXTERNAL_SERVICE = "EXTERNAL_SERVICE"
+    AI_QUOTA = "AI_QUOTA"
 
 
 class ExceptionCustom(Exception):
@@ -212,3 +213,11 @@ class ExceptionExternalService_503(ExceptionCustom):
             exception_type=ExceptionType.EXTERNAL_SERVICE,
             message=custom_message,
         )
+
+
+class ExceptionAIQuota_503(ExceptionExternalService_503):
+    """The AI provider's daily quota is spent: retrying in a moment will not help."""
+
+    def __init__(self, custom_message: str):
+        super().__init__(custom_message)
+        self.exception_type = ExceptionType.AI_QUOTA

@@ -8,6 +8,10 @@ check the committed data set is well formed.
 
 import pytest
 
+from backend.src.exceptions.core import (
+    ExceptionAIQuota_503,
+    ExceptionExternalService_503,
+)
 from scripts import generation_eval as ge
 
 
@@ -141,6 +145,31 @@ def test_hallucination_rate_counts_every_category():
 
     assert summary["hallucination_rate"] == {"value": 0.5, "n": 2}
     assert summary["refusal_accuracy"] == {"value": 0.0, "n": 1}
+
+
+# ----- STOPPING EARLY ----- #
+
+
+def test_the_call_budget_refuses_the_request_over_the_limit():
+    budget = ge.CallBudget(2)
+    budget.spend()
+    budget.spend()
+
+    with pytest.raises(ge.CallBudgetExceeded):
+        budget.spend()
+    assert budget.used == 2
+
+
+def test_the_run_stops_on_a_spent_quota_a_used_budget_or_repeated_failures():
+    quota = ExceptionAIQuota_503("limit")
+    busy = ExceptionExternalService_503("busy")
+
+    assert "quota" in ge.stop_reason(quota, 1)
+    assert "--max-calls" in ge.stop_reason(
+        ge.CallBudgetExceeded("--max-calls 2 reached"), 1
+    )
+    assert ge.stop_reason(busy, 1) is None
+    assert "in a row" in ge.stop_reason(busy, ge.MAX_CONSECUTIVE_FAILURES)
 
 
 # ----- JUDGE CALIBRATION ----- #

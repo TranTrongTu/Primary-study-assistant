@@ -41,6 +41,10 @@ const baseByKey = {
       "Dịch vụ AI đang bận hoặc tạm thời gián đoạn. Bé thử lại sau ít phút nhé.",
     isDeveloperFix: false,
   },
+  "503:AI_QUOTA": {
+    userMessage: "AI đã dùng hết lượt hôm nay. Bé quay lại sau nhé.",
+    isDeveloperFix: false,
+  },
 };
 
 const fallbackByStatus = {
