@@ -1,7 +1,5 @@
 import asyncio
 import base64
-import logging
-import time
 from abc import ABC, abstractmethod
 from types import FunctionType
 from typing import Any, Awaitable, Callable
@@ -10,25 +8,18 @@ import httpx
 import ollama
 from fastapi import UploadFile
 from google import genai
-from google.genai import Client, errors
+from google.genai import Client
 from pydantic import BaseModel
 
 from backend.src.core.config import settings
-from backend.src.core.llm_failures import (
-    Failure,
-    FailureKind,
-    backoff_delay,
-    classify,
-)
+from backend.src.core.llm_retry import call_with_retries
+from backend.src.core.openai_compatible import Endpoint, OpenAICompatibleClient
 from backend.src.exceptions.core import (
-    ExceptionAIQuota_503,
     ExceptionExternalService_503,
     ExceptionInternalError_500,
     ExceptionLLMError_502,
     ExceptionRequest_400,
 )
-
-logger = logging.getLogger(__name__)
 
 # ----- MODEL CONFIGURATIONS ----- #
 
@@ -78,50 +69,6 @@ CLOUDFLARE_HEADERS = {
 
 # ----- MODEL CALLS ----- #
 
-_FAILURE_EXCEPTIONS: dict[FailureKind, Callable[[], Exception]] = {
-    FailureKind.DAILY_QUOTA: lambda: ExceptionAIQuota_503(
-        "The AI service has reached its usage limit for today. Please come back later."
-    ),
-    FailureKind.RATE_LIMIT: lambda: ExceptionExternalService_503(
-        "The AI service is receiving too many requests. Please try again in a minute."
-    ),
-    FailureKind.OVERLOADED: lambda: ExceptionExternalService_503(
-        "The AI service is overloaded. Please try again in a few minutes."
-    ),
-    FailureKind.NETWORK: lambda: ExceptionExternalService_503(
-        "The AI service could not be reached. Please try again in a few minutes."
-    ),
-}
-
-
-def _log_call(
-    operation: str,
-    model: str,
-    attempt: int,
-    started: float,
-    outcome: str,
-    code: int | None = None,
-    response: Any = None,
-) -> None:
-    """
-    One line per request. Never the prompt, the answer or the provider's error text:
-    they hold what students wrote.
-    """
-    usage = getattr(response, "usage_metadata", None)
-    logger.log(
-        logging.INFO if outcome == "ok" else logging.WARNING,
-        "llm_call operation=%s model=%s attempt=%d outcome=%s code=%s "
-        "elapsed_ms=%d input_tokens=%s output_tokens=%s",
-        operation,
-        model,
-        attempt,
-        outcome,
-        code,
-        (time.monotonic() - started) * 1000,
-        getattr(usage, "prompt_token_count", None),
-        getattr(usage, "candidates_token_count", None),
-    )
-
 
 class API(ABC):
     @classmethod
@@ -161,6 +108,7 @@ class API(ABC):
         cls,
         prompt: str,
         response_schema: type[BaseModel] | None = None,
+        operation: str = "generate_content",
     ) -> str:
         """
         Generates an LLM response from a prompt.
@@ -169,10 +117,6 @@ class API(ABC):
 
 
 class GoogleAPI(API):
-    # Called before every request to Gemini. The evaluation uses it to count requests
-    # and to stop before a limit; whatever it raises reaches the caller unchanged.
-    before_request: Callable[[], None] | None = None
-
     @classmethod
     async def wrapper(  # type: ignore[override]
         cls,
@@ -180,82 +124,9 @@ class GoogleAPI(API):
         models: list[str],
         operation: str,
     ) -> Any:
-        """
-        Calls `func(model)` and handles the failures of the provider:
-        - rate limit or spent quota: try the other keys first;
-        - rate limit, overload, network error: wait (the time the provider asks for,
-          otherwise exponential backoff) and retry, within LLM_MAX_RETRY_WAIT_SECONDS;
-        - still failing: move on to the next model in `models`.
-        """
-        started = time.monotonic()
-        wait_left = settings.LLM_MAX_RETRY_WAIT_SECONDS
-        attempts = 0
-        failure: Failure | None = None
-
-        for model in models:
-            retries = 0
-            keys_tried = 1
-
-            while True:
-                if cls.before_request is not None:
-                    cls.before_request()
-
-                key_index = keys_manager.current_key_index
-                attempts += 1
-
-                try:
-                    response = await func(model)
-                except Exception as e:
-                    failure = classify(e)
-                    _log_call(
-                        operation,
-                        model,
-                        attempts,
-                        started,
-                        outcome=failure.kind.value if failure else type(e).__name__,
-                        code=getattr(e, "code", None),
-                    )
-                    if failure is None:
-                        if isinstance(e, errors.APIError):
-                            raise ExceptionInternalError_500(
-                                e.message if e.message else "Google API error"
-                            ) from e
-                        raise
-                else:
-                    _log_call(
-                        operation, model, attempts, started, "ok", response=response
-                    )
-                    return response
-
-                quota_related = failure.kind in (
-                    FailureKind.DAILY_QUOTA,
-                    FailureKind.RATE_LIMIT,
-                )
-                if quota_related and keys_tried < len(keys_manager.keys):
-                    keys_manager.rotate_from(key_index)
-                    keys_tried += 1
-                    continue
-
-                retries += 1
-                if (
-                    failure.kind is FailureKind.DAILY_QUOTA
-                    or retries >= settings.DEFAULT_N_API_CALL_RETRIES
-                ):
-                    break
-
-                delay = failure.retry_after or backoff_delay(retries)
-                if delay > wait_left:
-                    break
-                wait_left -= delay
-                await asyncio.sleep(delay)
-                keys_tried = 1
-
-            # Every model is behind the same host
-            if failure.kind is FailureKind.NETWORK:
-                break
-
-        assert failure is not None
-        raise _FAILURE_EXCEPTIONS[failure.kind]()
+        return await call_with_retries(
+            func, models, "google", operation, keys=keys_manager
+        )
 
     @classmethod
     async def embed(cls, content: str) -> list[float]:
@@ -336,6 +207,7 @@ class GoogleAPI(API):
         cls,
         prompt: str,
         response_schema: type[BaseModel] | None = None,
+        operation: str = "generate_content",
     ) -> str:
         async def call_api(model: str) -> Any:
             config = genai.types.GenerateContentConfig()
@@ -354,7 +226,7 @@ class GoogleAPI(API):
         if settings.ANSWER_MODEL_GOOGLE_FALLBACK:
             models.append(settings.ANSWER_MODEL_GOOGLE_FALLBACK)
 
-        response = await cls.wrapper(call_api, models, "generate_content")
+        response = await cls.wrapper(call_api, models, operation)
 
         # Validation
         if response.text is None:
@@ -485,6 +357,7 @@ class OllamaAPI(API):
         cls,
         prompt: str,
         response_schema: type[BaseModel] | None = None,
+        operation: str = "generate_content",
     ) -> str:
         async def call_api() -> str:
             if response_schema:
@@ -658,8 +531,54 @@ class CloudFlareAPI(API):
         cls,
         prompt: str,
         response_schema: type[BaseModel] | None = None,
+        operation: str = "generate_content",
     ) -> str:
         raise ExceptionInternalError_500("You weren't supposed to call this")
+
+
+def openai_compatible_client() -> OpenAICompatibleClient:
+    # Built per call, so a settings change (tests, evaluation) takes effect
+    return OpenAICompatibleClient(
+        Endpoint(
+            base_url=settings.OPENAI_COMPATIBLE_BASE_URL,
+            api_key=settings.OPENAI_COMPATIBLE_API_KEY,
+            model=settings.OPENAI_COMPATIBLE_MODEL,
+            structured_output=settings.OPENAI_COMPATIBLE_STRUCTURED_OUTPUT,
+            timeout=settings.OPENAI_COMPATIBLE_TIMEOUT_SECONDS,
+        )
+    )
+
+
+class OpenAICompatibleAPI(API):
+    @classmethod
+    async def embed(cls, content: str) -> list[float]:
+        return (await cls.mass_embed([content]))[0]
+
+    @classmethod
+    async def mass_embed(cls, contents: list[str]) -> list[list[float]]:
+        return await openai_compatible_client().embed(
+            contents,
+            settings.OPENAI_COMPATIBLE_EMBED_MODEL,
+            settings.DEFAULT_EMBED_DIMENSIONALITY_CLOUDFLARE,
+        )
+
+    @classmethod
+    async def caption_image(cls, file: UploadFile) -> str:
+        return await openai_compatible_client().describe_image(
+            "Extract all readable text from this image exactly as written.\nThen, describe the layout, charts, figures, subjects, and any data points in exhaustive detail.",
+            await file.read(),
+            file.content_type,
+            settings.OPENAI_COMPATIBLE_VISION_MODEL,
+        )
+
+    @classmethod
+    async def generate_content(
+        cls,
+        prompt: str,
+        response_schema: type[BaseModel] | None = None,
+        operation: str = "generate_content",
+    ) -> str:
+        return await openai_compatible_client().chat(prompt, response_schema, operation)
 
 
 class GlobalAPI:
@@ -667,8 +586,8 @@ class GlobalAPI:
         "GOOGLE": GoogleAPI,
         "OLLAMA": OllamaAPI,
         "CLOUDFLARE": CloudFlareAPI,
+        "OPENAI_COMPATIBLE": OpenAICompatibleAPI,
     }
-    mass_embed_supported = ["GOOGLE", "OLLAMA", "CLOUDFLARE"]
 
     @classmethod
     async def embed(cls, content: str) -> list[float]:
@@ -676,9 +595,6 @@ class GlobalAPI:
 
     @classmethod
     async def mass_embed(cls, contents: list[str]) -> list[list[float]]:
-        if settings.MODEL_IN_USE_GENERATE_CHAT not in cls.mass_embed_supported:
-            raise Exception("Current model does not support mass embedding.")
-
         return await cls.models[settings.MODEL_IN_USE_EMBED].mass_embed(contents)
 
     @classmethod
@@ -688,13 +604,13 @@ class GlobalAPI:
     @classmethod
     async def generate_chat(cls, prompt: str) -> str:
         return await cls.models[settings.MODEL_IN_USE_GENERATE_CHAT].generate_content(
-            prompt
+            prompt, operation="chat"
         )
 
     @classmethod
     async def rewrite_prompt(cls, prompt: str) -> str:
         return await cls.models[settings.MODEL_IN_USE_REWRITE_PROMPT].generate_content(
-            prompt
+            prompt, operation="rewrite_prompt"
         )
 
     @classmethod
@@ -706,6 +622,7 @@ class GlobalAPI:
         ].generate_content(
             prompt,
             response_schema=response_schema,
+            operation="generate_material",
         )
 
     @classmethod
@@ -713,6 +630,7 @@ class GlobalAPI:
         return await cls.models[settings.MODEL_IN_USE_GRADE_ANSWERS].generate_content(
             prompt,
             response_schema=response_schema,
+            operation="grade_answers",
         )
 
     @classmethod
@@ -724,10 +642,11 @@ class GlobalAPI:
         ].generate_content(
             prompt,
             response_schema=response_schema,
+            operation="document_analysis",
         )
 
     @classmethod
     async def generate_study_assessment(cls, prompt: str) -> str:
         return await cls.models[
             settings.MODEL_IN_USE_GENERATE_STUDY_ASSESSMENT
-        ].generate_content(prompt)
+        ].generate_content(prompt, operation="study_assessment")

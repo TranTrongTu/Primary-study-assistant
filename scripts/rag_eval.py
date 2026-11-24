@@ -272,7 +272,7 @@ async def run(use_cache: bool) -> dict:
 
     corpus = load_corpus()
     questions = load_questions()
-    model_name = f"{settings.MODEL_IN_USE_EMBED}:{settings.EMBED_MODEL_CLOUDFLARE}"
+    model_name = f"{settings.MODEL_IN_USE_EMBED}:{settings.embed_model}"
 
     chunks = chunk_corpus(corpus)
     for question in questions:
@@ -320,7 +320,7 @@ async def run(use_cache: bool) -> dict:
                     )
 
     return {
-        "embedding_model": settings.EMBED_MODEL_CLOUDFLARE,
+        "embedding_model": settings.embed_model,
         "chunk_size": settings.DEFAULT_CHUNK_SIZE,
         "chunk_overlap": settings.DEFAULT_CHUNK_OVERLAP,
         "documents": len(corpus),

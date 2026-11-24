@@ -1,13 +1,13 @@
 from pathlib import Path
 from typing import Literal
 
-from pydantic import PostgresDsn, field_validator
+from pydantic import PostgresDsn, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env"
 
 # Keys of GlobalAPI.models. A typo here used to surface only on the first AI request.
-ModelProvider = Literal["GOOGLE", "OLLAMA", "CLOUDFLARE"]
+ModelProvider = Literal["GOOGLE", "OLLAMA", "CLOUDFLARE", "OPENAI_COMPATIBLE"]
 
 
 class Settings(BaseSettings):
@@ -81,6 +81,20 @@ class Settings(BaseSettings):
     EMBED_MODEL_CLOUDFLARE: str = "@cf/baai/bge-m3"
     VISION_MODEL_CLOUDFLARE: str = "@cf/meta/llama-3.2-11b-vision-instruct"
 
+    # ** Any provider with an OpenAI-compatible API ** #
+    # Select it by setting a MODEL_IN_USE_* above to OPENAI_COMPATIBLE.
+    OPENAI_COMPATIBLE_BASE_URL: str = ""
+    OPENAI_COMPATIBLE_API_KEY: str = ""
+    OPENAI_COMPATIBLE_MODEL: str = ""
+    OPENAI_COMPATIBLE_EMBED_MODEL: str = ""
+    OPENAI_COMPATIBLE_VISION_MODEL: str = ""
+    # See StructuredOutput in core/openai_compatible.py. OpenAI and Anthropic need
+    # json_schema_strict.
+    OPENAI_COMPATIBLE_STRUCTURED_OUTPUT: Literal[
+        "json_schema_strict", "json_schema", "json_object"
+    ] = "json_schema"
+    OPENAI_COMPATIBLE_TIMEOUT_SECONDS: float = 60
+
     # === RAG === #
     DEFAULT_CHUNK_SIZE: int = 500
     DEFAULT_CHUNK_OVERLAP: int = 50
@@ -126,6 +140,48 @@ class Settings(BaseSettings):
     def normalize_provider(cls, value):
         # Tolerate stray spaces and lower case from hosting dashboards; reject unknown names.
         return value.strip().upper() if isinstance(value, str) else value
+
+    @model_validator(mode="after")
+    def check_openai_compatible(self):
+        # Fail at startup rather than on a student's first request
+        needed: set[str] = set()
+        for name in type(self).model_fields:
+            if not name.startswith("MODEL_IN_USE_"):
+                continue
+            if getattr(self, name) != "OPENAI_COMPATIBLE":
+                continue
+            needed.add("OPENAI_COMPATIBLE_BASE_URL")
+            if name == "MODEL_IN_USE_EMBED":
+                needed.add("OPENAI_COMPATIBLE_EMBED_MODEL")
+            elif name == "MODEL_IN_USE_CAPTION_IMAGE":
+                needed.add("OPENAI_COMPATIBLE_VISION_MODEL")
+            else:
+                needed.add("OPENAI_COMPATIBLE_MODEL")
+
+        missing = sorted(name for name in needed if not getattr(self, name))
+        if missing:
+            raise ValueError(f"OPENAI_COMPATIBLE is in use but {missing} is not set")
+        return self
+
+    def answer_model(self, provider: str) -> str:
+        """The model a provider answers with, as named in logs and results."""
+        return {
+            "GOOGLE": self.ANSWER_MODEL_GOOGLE,
+            "OLLAMA": self.ANSWER_MODEL_OLLAMA,
+            "CLOUDFLARE": "",
+            "OPENAI_COMPATIBLE": (
+                f"{self.OPENAI_COMPATIBLE_MODEL}@{self.OPENAI_COMPATIBLE_BASE_URL}"
+            ),
+        }[provider]
+
+    @property
+    def embed_model(self) -> str:
+        return {
+            "GOOGLE": self.EMBED_MODEL_GOOGLE,
+            "OLLAMA": self.EMBED_MODEL_OLLAMA,
+            "CLOUDFLARE": self.EMBED_MODEL_CLOUDFLARE,
+            "OPENAI_COMPATIBLE": self.OPENAI_COMPATIBLE_EMBED_MODEL,
+        }[self.MODEL_IN_USE_EMBED]
 
     @property
     def gemini_keys_list(self) -> list[str]:
