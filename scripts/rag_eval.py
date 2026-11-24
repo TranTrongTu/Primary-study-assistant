@@ -22,10 +22,17 @@ import asyncio
 import hashlib
 import json
 import uuid
+from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Awaitable, Callable, Sequence
+from typing import TYPE_CHECKING, AsyncIterator, Awaitable, Callable, Sequence
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
+
+    from backend.src.models_schema.interaction.interaction import Interaction
+    from backend.src.models_schema.user.user import User
 
 EVAL_DIR = Path(__file__).resolve().parent.parent / "evals" / "retrieval"
 CORPUS_DIR = EVAL_DIR / "corpus"
@@ -119,25 +126,135 @@ def summarise_by_category(
 
 
 async def embed_with_cache(
-    texts: list[str], embed: EmbedFunction, model_name: str, use_cache: bool = True
+    texts: list[str],
+    embed: EmbedFunction,
+    model_name: str,
+    use_cache: bool = True,
+    cache_file: Path | None = None,
 ) -> list[list[float]]:
     """Embeds `texts`, calling the API only for the ones not seen before."""
+    cache_file = cache_file or CACHE_FILE
 
     def key(text: str) -> str:
         return hashlib.sha256(f"{model_name}\n{text}".encode()).hexdigest()
 
     cache: dict[str, list[float]] = {}
-    if use_cache and CACHE_FILE.exists():
-        cache = json.loads(CACHE_FILE.read_text("utf-8"))
+    if use_cache and cache_file.exists():
+        cache = json.loads(cache_file.read_text("utf-8"))
 
     missing = [text for text in dict.fromkeys(texts) if key(text) not in cache]
     if missing:
         for text, vector in zip(missing, await embed(missing)):
             cache[key(text)] = vector
-        CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
-        CACHE_FILE.write_text(json.dumps(cache), encoding="utf-8")
+        cache_file.parent.mkdir(parents=True, exist_ok=True)
+        cache_file.write_text(json.dumps(cache), encoding="utf-8")
 
     return [cache[key(text)] for text in texts]
+
+
+# ----- SCRATCH DATABASE (shared with scripts/generation_eval.py) ----- #
+
+
+def chunk_corpus(corpus: dict[str, str]) -> list[tuple[str, int, str]]:
+    """(file name, chunk index, chunk text), split exactly like TextExtractor does."""
+    from backend.src.RAG.chunking.base import smart_splitter
+
+    return [
+        (name, index, chunk_text)
+        for name, contents in corpus.items()
+        for index, chunk_text in enumerate(smart_splitter.split_text(contents))
+    ]
+
+
+def text_to_embed(name: str, chunk_text: str) -> str:
+    """The text TextExtractor embeds for a chunk: the chunk plus its "Source:" line."""
+    from backend.src.models_schema.miscellaneous.enums import DocumentType
+
+    return f"Source: {DocumentType.TEXT.value} file {name}:\n{chunk_text}"
+
+
+@asynccontextmanager
+async def scratch_database(prefix: str) -> AsyncIterator["AsyncEngine"]:
+    """
+    A throwaway database built from the migrations (same schema and indexes as
+    production), dropped on exit. Points settings.POSTGRES_URL at it meanwhile.
+    """
+    from alembic import command
+    from sqlalchemy import text
+    from sqlalchemy.engine import make_url
+    from sqlalchemy.ext.asyncio import create_async_engine
+
+    from backend.src.core import database
+    from backend.src.core.config import settings
+
+    base_url = make_url(str(settings.POSTGRES_URL))
+    scratch_name = f"{prefix}_{uuid.uuid4().hex[:8]}"
+    admin = create_async_engine(base_url, isolation_level="AUTOCOMMIT")
+    async with admin.connect() as conn:
+        await conn.execute(text(f'CREATE DATABASE "{scratch_name}"'))
+
+    scratch_url = base_url.set(database=scratch_name)
+    settings.POSTGRES_URL = scratch_url.render_as_string(hide_password=False)  # type: ignore[assignment]
+    engine = create_async_engine(scratch_url)
+    try:
+        await asyncio.to_thread(command.upgrade, database._alembic_config(), "head")
+        yield engine
+    finally:
+        await engine.dispose()
+        async with admin.connect() as conn:
+            await conn.execute(
+                text(f'DROP DATABASE IF EXISTS "{scratch_name}" WITH (FORCE)')
+            )
+        await admin.dispose()
+
+
+async def seed_corpus(
+    session: "AsyncSession",
+    corpus: dict[str, str],
+    chunks: Sequence[tuple[str, int, str]],
+    chunk_vectors: Sequence[list[float]],
+) -> tuple["User", "Interaction"]:
+    """One user, one conversation holding every document of the corpus, as text files."""
+    from backend.src.models_schema.document.document import Document
+    from backend.src.models_schema.document.document_chunk import DocumentChunk
+    from backend.src.models_schema.interaction.interaction import Interaction
+    from backend.src.models_schema.miscellaneous.enums import DocumentType
+    from backend.src.models_schema.user.user import User
+
+    now = datetime.now(timezone.utc)
+    user = User(
+        username="rag-eval",
+        email="rag-eval@example.com",
+        description="",
+        hashed_password="unused",
+        created_at=now,
+    )
+    interaction = Interaction(name="RAG evaluation", user=user, created_at=now)
+    documents = {
+        name: Document(
+            name=name,
+            interaction=interaction,
+            page_starts_at=0,
+            type=DocumentType.TEXT,
+            subject_type=None,
+            text=contents,
+            created_at=now,
+        )
+        for name, contents in corpus.items()
+    }
+    session.add_all(
+        [
+            DocumentChunk(
+                content_original=chunk_text,
+                content_embedded=vector,
+                document_chunk_index=index,
+                document=documents[name],
+            )
+            for (name, index, chunk_text), vector in zip(chunks, chunk_vectors)
+        ]
+    )
+    await session.commit()
+    return user, interaction
 
 
 # ----- RUN ----- #
@@ -145,20 +262,10 @@ async def embed_with_cache(
 
 async def run(use_cache: bool) -> dict:
     # Imported here so the metric helpers above can be tested without a database
-    from alembic import command
-    from sqlalchemy import text
-    from sqlalchemy.engine import make_url
-    from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+    from sqlalchemy.ext.asyncio import async_sessionmaker
 
-    from backend.src.core import database
     from backend.src.core.ai_api import GlobalAPI
     from backend.src.core.config import settings
-    from backend.src.models_schema.document.document import Document
-    from backend.src.models_schema.document.document_chunk import DocumentChunk
-    from backend.src.models_schema.interaction.interaction import Interaction
-    from backend.src.models_schema.miscellaneous.enums import DocumentType
-    from backend.src.models_schema.user.user import User
-    from backend.src.RAG.chunking.base import smart_splitter
     from backend.src.RAG.retrieval.keyword_search import keyword_search
     from backend.src.RAG.retrieval.RRF import RRF
     from backend.src.RAG.retrieval.vector_search import vector_search
@@ -167,12 +274,7 @@ async def run(use_cache: bool) -> dict:
     questions = load_questions()
     model_name = f"{settings.MODEL_IN_USE_EMBED}:{settings.EMBED_MODEL_CLOUDFLARE}"
 
-    # Chunk exactly like TextExtractor does, including the "Source:" line it embeds
-    chunks: list[tuple[str, int, str]] = [
-        (name, index, chunk_text)
-        for name, contents in corpus.items()
-        for index, chunk_text in enumerate(smart_splitter.split_text(contents))
-    ]
+    chunks = chunk_corpus(corpus)
     for question in questions:
         if not any(is_relevant(chunk[2], question.evidence) for chunk in chunks):
             raise SystemExit(
@@ -181,10 +283,7 @@ async def run(use_cache: bool) -> dict:
             )
 
     chunk_vectors = await embed_with_cache(
-        [
-            f"Source: {DocumentType.TEXT.value} file {name}:\n{chunk_text}"
-            for name, _, chunk_text in chunks
-        ],
+        [text_to_embed(name, chunk_text) for name, _, chunk_text in chunks],
         GlobalAPI.mass_embed,
         model_name,
         use_cache,
@@ -196,55 +295,10 @@ async def run(use_cache: bool) -> dict:
         use_cache,
     )
 
-    # A scratch database built from the migrations: same schema and indexes as production
-    base_url = make_url(str(settings.POSTGRES_URL))
-    scratch_name = f"rag_eval_{uuid.uuid4().hex[:8]}"
-    admin = create_async_engine(base_url, isolation_level="AUTOCOMMIT")
-    async with admin.connect() as conn:
-        await conn.execute(text(f'CREATE DATABASE "{scratch_name}"'))
-
-    scratch_url = base_url.set(database=scratch_name)
-    settings.POSTGRES_URL = scratch_url.render_as_string(hide_password=False)  # type: ignore[assignment]
-    engine = create_async_engine(scratch_url)
-
     ranks: dict[str, list[int | None]] = {"vector": [], "keyword": [], "hybrid": []}
-    try:
-        await asyncio.to_thread(command.upgrade, database._alembic_config(), "head")
-
-        now = datetime.now(timezone.utc)
+    async with scratch_database("rag_eval") as engine:
         async with async_sessionmaker(engine, expire_on_commit=False)() as session:
-            user = User(
-                username="rag-eval",
-                email="rag-eval@example.com",
-                description="",
-                hashed_password="unused",
-                created_at=now,
-            )
-            interaction = Interaction(name="RAG evaluation", user=user, created_at=now)
-            documents = {
-                name: Document(
-                    name=name,
-                    interaction=interaction,
-                    page_starts_at=0,
-                    type=DocumentType.TEXT,
-                    subject_type=None,
-                    text=contents,
-                    created_at=now,
-                )
-                for name, contents in corpus.items()
-            }
-            session.add_all(
-                [
-                    DocumentChunk(
-                        content_original=chunk_text,
-                        content_embedded=vector,
-                        document_chunk_index=index,
-                        document=documents[name],
-                    )
-                    for (name, index, chunk_text), vector in zip(chunks, chunk_vectors)
-                ]
-            )
-            await session.commit()
+            _, interaction = await seed_corpus(session, corpus, chunks, chunk_vectors)
 
             # document_id=None: search every document of the conversation, the default in chat
             for question, vector in zip(questions, question_vectors):
@@ -264,13 +318,6 @@ async def run(use_cache: bool) -> dict:
                             question.evidence,
                         )
                     )
-    finally:
-        await engine.dispose()
-        async with admin.connect() as conn:
-            await conn.execute(
-                text(f'DROP DATABASE IF EXISTS "{scratch_name}" WITH (FORCE)')
-            )
-        await admin.dispose()
 
     return {
         "embedding_model": settings.EMBED_MODEL_CLOUDFLARE,

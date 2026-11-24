@@ -1,0 +1,1779 @@
+[
+  {
+    "id": "TV1_DH_01",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Bà ngoại của bé Na ở xã nào?",
+    "answerable": true,
+    "reference_answer": "Bà ngoại bé Na ở xã Long Hòa.",
+    "key_facts": [
+      "long hòa"
+    ],
+    "evidence": "về nhà bà ngoại ở xã Long Hòa chơi suốt hai tuần",
+    "notes": "Chi tiết địa danh"
+  },
+  {
+    "id": "TV1_DH_02",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "child_casual",
+    "question": "cô ơi chú gà trống tên gì vậy",
+    "answerable": true,
+    "reference_answer": "Chú gà trống tên là Cu Đỏ.",
+    "key_facts": [
+      "cu đỏ"
+    ],
+    "evidence": "Bà ngoại nuôi một chú gà trống tên là Cu Đỏ.",
+    "notes": "Tên nhân vật, câu hỏi kiểu trẻ em"
+  },
+  {
+    "id": "TV1_DH_03",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "no_diacritics",
+    "question": "Moi sang Cu Do gay luc may gio?",
+    "answerable": true,
+    "reference_answer": "Cu Đỏ gáy lúc năm giờ sáng.",
+    "key_facts": [
+      "năm giờ"
+    ],
+    "evidence": "Mỗi sáng, đúng năm giờ, Cu Đỏ đứng trên đống rơm và gáy ò ó o.",
+    "notes": "Chi tiết giờ giấc"
+  },
+  {
+    "id": "TV1_DH_04",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "no_diacritics",
+    "question": "Chiec xo nho cua Na co mau gi?",
+    "answerable": true,
+    "reference_answer": "Chiếc xô của Na có màu cam.",
+    "key_facts": [
+      "cam"
+    ],
+    "evidence": "một chiếc xô nhỏ màu cam để xách nước tưới rau",
+    "notes": "Chi tiết màu sắc, không dấu"
+  },
+  {
+    "id": "TV1_DH_05",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_doc_hieu.txt",
+    "category": "synthesis",
+    "style": "normal",
+    "question": "Khi trời mưa to, Na tìm thấy Cu Đỏ ở đâu và chú gà làm gì?",
+    "answerable": true,
+    "reference_answer": "Na thấy Cu Đỏ đứng sau bụi chuối, chú xòe cánh che mưa cho Mơ và bảy quả trứng.",
+    "key_facts": [
+      "sau bụi chuối",
+      "che mưa"
+    ],
+    "evidence": "Cuối cùng, Na thấy Cu Đỏ đứng sau bụi chuối. Chú xòe cánh ra che mưa cho Mơ và bảy quả trứng.",
+    "notes": "Kết hợp hai câu liền nhau"
+  },
+  {
+    "id": "TV1_DH_06",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Bé Na bao nhiêu tuổi?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói Na học lớp Một.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Tuổi của Na không được nêu"
+  },
+  {
+    "id": "TV1_DH_07",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "child_casual",
+    "question": "gà mái Mơ nở được mấy con gà con vậy cô",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói Mơ đẻ bảy quả trứng và ấp chúng.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Số gà con nở ra không được nêu"
+  },
+  {
+    "id": "TV1_DH_08",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_doc_hieu.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao mỗi sáng Cu Đỏ gáy lúc sáu giờ?",
+    "answerable": true,
+    "reference_answer": "Không đúng, Cu Đỏ gáy lúc năm giờ sáng chứ không phải sáu giờ.",
+    "key_facts": [
+      "năm giờ"
+    ],
+    "evidence": "Mỗi sáng, đúng năm giờ, Cu Đỏ đứng trên đống rơm và gáy ò ó o.",
+    "notes": "Giờ gáy bị nói sai (sáu giờ thay vì năm giờ)"
+  },
+  {
+    "id": "TV2_DH_01",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Chiếc ô của Tâm có màu gì?",
+    "answerable": true,
+    "reference_answer": "Chiếc ô của Tâm màu xanh lá cây.",
+    "key_facts": [
+      "xanh lá cây"
+    ],
+    "evidence": "Tâm có một chiếc ô màu xanh lá cây",
+    "notes": "Chi tiết màu sắc"
+  },
+  {
+    "id": "TV2_DH_02",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Ai đan sợi dây len màu vàng buộc trên cán ô của Tâm?",
+    "answerable": true,
+    "reference_answer": "Chị Hạnh đan sợi dây len đó tặng Tâm.",
+    "key_facts": [
+      "chị hạnh"
+    ],
+    "evidence": "trên cán ô buộc một sợi dây len màu vàng do chị Hạnh đan tặng",
+    "notes": "Chi tiết nhân vật"
+  },
+  {
+    "id": "TV2_DH_03",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "child_casual",
+    "question": "bạn quân nhà ở đâu vậy cô",
+    "answerable": true,
+    "reference_answer": "Nhà Quân ở xóm Cầu Ngói.",
+    "key_facts": [
+      "xóm cầu ngói"
+    ],
+    "evidence": "Nhà Quân ở xóm Cầu Ngói, cách trường gần hai ki-lô-mét.",
+    "notes": "Địa danh, câu hỏi kiểu trẻ em"
+  },
+  {
+    "id": "TV2_DH_04",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "no_diacritics",
+    "question": "Ba Sau tang hai ban moi nguoi mot qua gi?",
+    "answerable": true,
+    "reference_answer": "Bà Sáu tặng mỗi bạn một quả ổi chín vàng.",
+    "key_facts": [
+      "quả ổi"
+    ],
+    "evidence": "Bà Sáu cảm ơn và tặng hai bạn mỗi người một quả ổi chín vàng.",
+    "notes": "Đồ vật được tặng, không dấu"
+  },
+  {
+    "id": "TV2_DH_05",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_doc_hieu.txt",
+    "category": "synthesis",
+    "style": "normal",
+    "question": "Tâm đã giúp những ai trong buổi trưa mưa hôm đó?",
+    "answerable": true,
+    "reference_answer": "Tâm cho bạn Quân đi chung ô và che ô cho bà Sáu bán rau.",
+    "key_facts": [
+      "quân",
+      "che cho bà"
+    ],
+    "evidence": "Tâm đưa ô che cho bà trong lúc bà gói rau vào bao ni lông.",
+    "notes": "Kết hợp đoạn nói về Quân và đoạn nói về bà Sáu"
+  },
+  {
+    "id": "TV2_DH_06",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Cô giáo chủ nhiệm lớp 2B của Tâm tên là gì?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài không nhắc đến cô giáo của Tâm.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Tên cô giáo lớp 2B không được nêu (cô Thu chỉ có trong bài khác về lớp 3A)"
+  },
+  {
+    "id": "TV2_DH_07",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Chị Hạnh của Tâm năm nay mấy tuổi?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói chị Hạnh học lớp 8.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Tuổi chị Hạnh không được nêu, chỉ có lớp"
+  },
+  {
+    "id": "TV2_DH_08",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_doc_hieu.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao Tâm đưa chiếc ô màu đỏ cho Quân?",
+    "answerable": true,
+    "reference_answer": "Chiếc ô của Tâm màu xanh lá cây chứ không phải màu đỏ.",
+    "key_facts": [
+      "xanh lá cây"
+    ],
+    "evidence": "Tâm có một chiếc ô màu xanh lá cây",
+    "notes": "Màu ô bị nói sai"
+  },
+  {
+    "id": "TV3_DH_01",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "no_diacritics",
+    "question": "Khoa hoc lop may, truong nao?",
+    "answerable": true,
+    "reference_answer": "Khoa học lớp 3A, trường Tiểu học Hải Châu.",
+    "key_facts": [
+      "lớp 3a",
+      "hải châu"
+    ],
+    "evidence": "Khoa mười tuổi, học lớp 3A, trường Tiểu học Hải Châu.",
+    "notes": "Chi tiết lớp và trường"
+  },
+  {
+    "id": "TV3_DH_02",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Ông Bảy mua bao nhiêu chiếc thùng xốp và mua ở đâu?",
+    "answerable": true,
+    "reference_answer": "Ông Bảy mua mười hai chiếc thùng xốp cũ ở chợ Hàn.",
+    "key_facts": [
+      "mười hai",
+      "chợ hàn"
+    ],
+    "evidence": "ông Bảy mua mười hai chiếc thùng xốp cũ ở chợ Hàn",
+    "notes": "Số lượng và địa điểm"
+  },
+  {
+    "id": "TV3_DH_03",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "child_casual",
+    "question": "khoa tưới rau bằng cái gì z",
+    "answerable": true,
+    "reference_answer": "Khoa tưới rau bằng chiếc bình nhựa màu đỏ.",
+    "key_facts": [
+      "bình nhựa"
+    ],
+    "evidence": "tưới rau bằng chiếc bình nhựa màu đỏ",
+    "notes": "Đồ vật, câu hỏi kiểu trẻ em"
+  },
+  {
+    "id": "TV3_DH_04",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "no_diacritics",
+    "question": "Khoa ghi ngay thang va chieu cao cua cay vao dau?",
+    "answerable": true,
+    "reference_answer": "Khoa ghi vào một cuốn sổ bìa xanh.",
+    "key_facts": [
+      "sổ bìa xanh"
+    ],
+    "evidence": "vào một cuốn sổ bìa xanh",
+    "notes": "Đồ vật, không dấu"
+  },
+  {
+    "id": "TV3_DH_05",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_doc_hieu.txt",
+    "category": "synthesis",
+    "style": "normal",
+    "question": "Vì sao ông Bảy không dùng thuốc diệt sâu và mỗi tối Khoa làm gì?",
+    "answerable": true,
+    "reference_answer": "Vì ông nói rau sạch phải chăm bằng sự kiên nhẫn; mỗi tối Khoa bắt sâu bằng tay, được khoảng hai mươi con.",
+    "key_facts": [
+      "kiên nhẫn",
+      "bắt sâu"
+    ],
+    "evidence": "Ông Bảy không dùng thuốc mà dạy cháu bắt sâu bằng tay vào buổi tối, vì ông nói rau sạch phải được chăm bằng sự kiên nhẫn. Mỗi tối, Khoa bắt được khoảng hai mươi con sâu.",
+    "notes": "Kết hợp lí do và việc làm"
+  },
+  {
+    "id": "TV3_DH_06",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Khoa bắt đầu trồng rau vào năm nào?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói Khoa trồng rau từ đầu tháng ba.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Năm không được nêu, chỉ có tháng"
+  },
+  {
+    "id": "TV3_DH_07",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Mỗi thùng rau của Khoa thu hoạch được bao nhiêu ki-lô-gam?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói Khoa hái hai bó cải.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Khối lượng thu hoạch không được nêu"
+  },
+  {
+    "id": "TV3_DH_08",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_doc_hieu.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao mỗi sáng Khoa dậy lúc bảy giờ để tưới rau?",
+    "answerable": true,
+    "reference_answer": "Không đúng, Khoa dậy lúc sáu giờ để tưới rau.",
+    "key_facts": [
+      "sáu giờ"
+    ],
+    "evidence": "Mỗi sáng, Khoa dậy lúc sáu giờ để tưới rau",
+    "notes": "Giờ dậy bị nói sai"
+  },
+  {
+    "id": "TV4_DH_01",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Vy sống cùng ai và ở đâu?",
+    "answerable": true,
+    "reference_answer": "Vy sống cùng bà nội ở một làng chài nhỏ bên bờ sông Thu Bồn.",
+    "key_facts": [
+      "bà nội",
+      "sông thu bồn"
+    ],
+    "evidence": "Vy là cô bé mười một tuổi, sống cùng bà nội ở một làng chài nhỏ bên bờ sông Thu Bồn.",
+    "notes": "Chi tiết nhân vật và địa điểm"
+  },
+  {
+    "id": "TV4_DH_02",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "no_diacritics",
+    "question": "Vy gap bao nhieu chiec thuyen giay?",
+    "answerable": true,
+    "reference_answer": "Vy gấp mười chiếc thuyền giấy.",
+    "key_facts": [
+      "mười"
+    ],
+    "evidence": "gấp mười chiếc thuyền từ những tờ giấy màu",
+    "notes": "Số lượng"
+  },
+  {
+    "id": "TV4_DH_03",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "child_casual",
+    "question": "cô ơi vy viết gì trên mấy cái thuyền vậy",
+    "answerable": true,
+    "reference_answer": "Vy viết lời chúc: Chúc ba mẹ khỏe, làm việc bình an.",
+    "key_facts": [
+      "chúc ba mẹ khỏe"
+    ],
+    "evidence": "Chúc ba mẹ khỏe, làm việc bình an.",
+    "notes": "Nội dung lời chúc, câu hỏi kiểu trẻ em"
+  },
+  {
+    "id": "TV4_DH_04",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Khi chiếc thuyền mắc vào bụi lau, ai giúp Vy và giúp bằng cách nào?",
+    "answerable": true,
+    "reference_answer": "Bác Tư dùng cây sào dài khều chiếc thuyền ra.",
+    "key_facts": [
+      "bác tư",
+      "cây sào"
+    ],
+    "evidence": "Bác Tư là người chèo đò già ngồi gần đó thấy vậy, liền lấy cây sào dài khều chiếc thuyền ra.",
+    "notes": "Chi tiết sự kiện"
+  },
+  {
+    "id": "TV4_DH_05",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_doc_hieu.txt",
+    "category": "synthesis",
+    "style": "normal",
+    "question": "Ngày xưa bà nội thả thuyền lá để làm gì và bà ước điều gì?",
+    "answerable": true,
+    "reference_answer": "Bà thả thuyền lá để nhớ ông nội đi biển và ước ông trở về bình yên.",
+    "key_facts": [
+      "nhớ ông nội",
+      "ông trở về bình yên"
+    ],
+    "evidence": "bà cũng thả thuyền lá để nhớ ông nội đi biển. Bà bảo mỗi lần thả thuyền, bà đều ước ông trở về bình yên.",
+    "notes": "Kết hợp hai câu liền nhau"
+  },
+  {
+    "id": "TV4_DH_06",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Ba mẹ Vy làm công nhân ở thành phố nào?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói ba mẹ làm công nhân ở một thành phố xa nhà.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Tên thành phố không được nêu"
+  },
+  {
+    "id": "TV4_DH_07",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "child_casual",
+    "question": "bà nội của vy bao nhiêu tuổi vậy",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài không nêu tuổi của bà nội.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Tuổi bà nội không được nêu"
+  },
+  {
+    "id": "TV4_DH_08",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_doc_hieu.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao Vy sống cùng ông nội ở làng chài?",
+    "answerable": true,
+    "reference_answer": "Không đúng, Vy sống cùng bà nội, còn ông nội thì đi biển ngày xưa.",
+    "key_facts": [
+      "bà nội"
+    ],
+    "evidence": "Vy là cô bé mười một tuổi, sống cùng bà nội ở một làng chài nhỏ bên bờ sông Thu Bồn.",
+    "notes": "Người thân bị nói sai (ông nội thay vì bà nội)"
+  },
+  {
+    "id": "TV5_DH_01",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Ai sáng lập thư viện ở thôn Đồng Xanh và vào năm nào?",
+    "answerable": true,
+    "reference_answer": "Thầy Hòa sáng lập thư viện vào năm 2015.",
+    "key_facts": [
+      "thầy hòa",
+      "2015"
+    ],
+    "evidence": "Thư viện do thầy Hòa, một giáo viên đã nghỉ hưu ở tuổi sáu mươi hai, sáng lập vào năm 2015.",
+    "notes": "Nhân vật và năm"
+  },
+  {
+    "id": "TV5_DH_02",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Thư viện mở cửa vào những ngày nào và từ mấy giờ đến mấy giờ?",
+    "answerable": true,
+    "reference_answer": "Thư viện mở cửa các chiều thứ tư và thứ bảy, từ hai giờ đến năm giờ.",
+    "key_facts": [
+      "thứ tư",
+      "thứ bảy",
+      "hai giờ",
+      "năm giờ"
+    ],
+    "evidence": "Thư viện mở cửa vào các chiều thứ tư và thứ bảy, từ hai giờ đến năm giờ.",
+    "notes": "Lịch mở cửa"
+  },
+  {
+    "id": "TV5_DH_03",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "no_diacritics",
+    "question": "Cuon truyen Diep thich nhat viet ve loai gi?",
+    "answerable": true,
+    "reference_answer": "Cuốn truyện về loài hải âu.",
+    "key_facts": [
+      "hải âu"
+    ],
+    "evidence": "Em thích nhất cuốn truyện về loài hải âu có bìa màu xanh lam.",
+    "notes": "Chi tiết sách, không dấu"
+  },
+  {
+    "id": "TV5_DH_04",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_doc_hieu.txt",
+    "category": "fact_lookup",
+    "style": "child_casual",
+    "question": "buổi bán bánh gạo được bao nhiêu tiền z",
+    "answerable": true,
+    "reference_answer": "Họ bán được ba triệu đồng.",
+    "key_facts": [
+      "ba triệu"
+    ],
+    "evidence": "Họ bán được ba triệu đồng, nhờ đó mua được tấm tôn mới.",
+    "notes": "Số tiền, câu hỏi kiểu trẻ em"
+  },
+  {
+    "id": "TV5_DH_05",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_doc_hieu.txt",
+    "category": "synthesis",
+    "style": "normal",
+    "question": "Nhờ đâu thư viện mua được tấm tôn mới và bác Lâm đã giúp thêm gì?",
+    "answerable": true,
+    "reference_answer": "Nhờ bán được ba triệu đồng; bác Lâm không lấy tiền công và tặng thêm hai giá sách gỗ.",
+    "key_facts": [
+      "ba triệu",
+      "hai giá sách"
+    ],
+    "evidence": "Họ bán được ba triệu đồng, nhờ đó mua được tấm tôn mới. Bác thợ xây Lâm không lấy tiền công mà còn mang thêm hai giá sách gỗ tặng thư viện.",
+    "notes": "Kết hợp hai câu liền nhau"
+  },
+  {
+    "id": "TV5_DH_06",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Thầy Hòa dạy môn gì trước khi nghỉ hưu?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói thầy là giáo viên đã nghỉ hưu.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Môn dạy không được nêu"
+  },
+  {
+    "id": "TV5_DH_07",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_doc_hieu.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Em Diệp học lớp mấy?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói Diệp mười hai tuổi.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Lớp học của Diệp không được nêu (có tuổi)"
+  },
+  {
+    "id": "TV5_DH_08",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_doc_hieu.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao thầy Hòa sáng lập thư viện vào năm 2010?",
+    "answerable": true,
+    "reference_answer": "Không đúng, thầy Hòa sáng lập thư viện vào năm 2015.",
+    "key_facts": [
+      "2015"
+    ],
+    "evidence": "Thư viện do thầy Hòa, một giáo viên đã nghỉ hưu ở tuổi sáu mươi hai, sáng lập vào năm 2015.",
+    "notes": "Năm bị nói sai"
+  },
+  {
+    "id": "TV1_LT_01",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_ly_thuyet.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Mỗi tiếng trong tiếng Việt thường gồm những phần nào?",
+    "answerable": true,
+    "reference_answer": "Mỗi tiếng thường có ba phần là âm đầu, vần và thanh.",
+    "key_facts": [
+      "âm đầu",
+      "vần",
+      "thanh"
+    ],
+    "evidence": "Mỗi tiếng trong tiếng Việt thường có ba phần là âm đầu, vần và thanh.",
+    "notes": "Định nghĩa cấu tạo tiếng"
+  },
+  {
+    "id": "TV1_LT_02",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_ly_thuyet.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Tiếng Việt có mấy thanh? Kể tên các thanh đó.",
+    "answerable": true,
+    "reference_answer": "Có sáu thanh: ngang, huyền, sắc, hỏi, ngã, nặng.",
+    "key_facts": [
+      "sáu",
+      "ngang",
+      "nặng"
+    ],
+    "evidence": "Tiếng Việt có sáu thanh là thanh ngang, thanh huyền, thanh sắc, thanh hỏi, thanh ngã và thanh nặng.",
+    "notes": "Liệt kê sáu thanh"
+  },
+  {
+    "id": "TV1_LT_03",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_ly_thuyet.txt",
+    "category": "theory",
+    "style": "child_casual",
+    "question": "cô ơi viết hoa khi nào vậy",
+    "answerable": true,
+    "reference_answer": "Phải viết hoa chữ cái đầu câu và tên riêng của người.",
+    "key_facts": [
+      "đầu câu",
+      "tên riêng"
+    ],
+    "evidence": "Thứ nhất, chữ cái đầu câu phải viết hoa.",
+    "notes": "Quy tắc viết hoa, câu hỏi kiểu trẻ em"
+  },
+  {
+    "id": "TV1_LT_04",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_ly_thuyet.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Tiếng \"sông\" có âm đầu, vần và thanh nào?",
+    "answerable": true,
+    "reference_answer": "Tiếng \"sông\" có âm đầu s, vần ông và thanh ngang.",
+    "key_facts": [
+      "ông",
+      "thanh ngang"
+    ],
+    "evidence": "Ví dụ, tiếng \"mèo\" có âm đầu là m, vần là eo và thanh huyền.",
+    "notes": "Phân tích tiếng mới (sông), cần nhận ra thanh ngang không dấu"
+  },
+  {
+    "id": "TV1_LT_05",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_ly_thuyet.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Ghép âm đầu b với vần a rồi thêm thanh huyền thì được tiếng gì?",
+    "answerable": true,
+    "reference_answer": "Được tiếng \"bà\".",
+    "key_facts": [
+      "bà"
+    ],
+    "evidence": "Muốn đọc một tiếng, em ghép âm đầu với vần rồi đọc cùng thanh.",
+    "notes": "Ghép tiếng theo quy tắc"
+  },
+  {
+    "id": "TV1_LT_06",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_ly_thuyet.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Tiếng \"ăn\" có âm đầu không?",
+    "answerable": true,
+    "reference_answer": "Tiếng \"ăn\" không có âm đầu, chỉ có vần ăn và thanh ngang.",
+    "key_facts": [
+      "không có âm đầu"
+    ],
+    "evidence": "Có tiếng không có âm đầu, ví dụ tiếng \"ăn\" chỉ có vần ăn và thanh ngang.",
+    "notes": "Chi tiết ví dụ trong bài"
+  },
+  {
+    "id": "TV1_LT_07",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_ly_thuyet.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Tiếng Việt có bao nhiêu chữ cái?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói về âm đầu, vần và thanh.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Số chữ cái không được nêu trong bất kỳ tài liệu nào"
+  },
+  {
+    "id": "TV1_LT_08",
+    "subject": "tieng_viet",
+    "grade": 1,
+    "document": "tv_lop1_ly_thuyet.txt",
+    "category": "false_premise",
+    "style": "no_diacritics",
+    "question": "Vi sao tieng Viet chi co nam thanh?",
+    "answerable": true,
+    "reference_answer": "Không đúng, tiếng Việt có sáu thanh.",
+    "key_facts": [
+      "sáu"
+    ],
+    "evidence": "Tiếng Việt có sáu thanh là thanh ngang, thanh huyền, thanh sắc, thanh hỏi, thanh ngã và thanh nặng.",
+    "notes": "Số thanh bị nói sai (năm thay vì sáu)"
+  },
+  {
+    "id": "TV2_LT_01",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_ly_thuyet.txt",
+    "category": "theory",
+    "style": "no_diacritics",
+    "question": "Tu chi hoat dong la gi va tra loi cho cau hoi nao?",
+    "answerable": true,
+    "reference_answer": "Là từ nói về việc người hay con vật làm, trả lời cho câu hỏi \"làm gì?\".",
+    "key_facts": [
+      "làm gì"
+    ],
+    "evidence": "Từ chỉ hoạt động trả lời cho câu hỏi \"làm gì?\".",
+    "notes": "Định nghĩa từ chỉ hoạt động"
+  },
+  {
+    "id": "TV2_LT_02",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_ly_thuyet.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Từ chỉ đặc điểm là những từ nói về điều gì?",
+    "answerable": true,
+    "reference_answer": "Là những từ nói về màu sắc, hình dáng, tính nết, mùi vị của sự vật.",
+    "key_facts": [
+      "màu sắc",
+      "tính nết"
+    ],
+    "evidence": "Từ chỉ đặc điểm là những từ nói về màu sắc, hình dáng, tính nết, mùi vị của sự vật.",
+    "notes": "Định nghĩa từ chỉ đặc điểm"
+  },
+  {
+    "id": "TV2_LT_03",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_ly_thuyet.txt",
+    "category": "theory",
+    "style": "child_casual",
+    "question": "dấu chấm than dùng khi nào z cô",
+    "answerable": true,
+    "reference_answer": "Đặt ở cuối câu thể hiện cảm xúc hoặc lời đề nghị, mệnh lệnh.",
+    "key_facts": [
+      "cảm xúc"
+    ],
+    "evidence": "Dấu chấm than đặt ở cuối câu thể hiện cảm xúc hoặc lời đề nghị, mệnh lệnh",
+    "notes": "Công dụng dấu chấm than"
+  },
+  {
+    "id": "TV2_LT_04",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_ly_thuyet.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Tìm từ chỉ hoạt động trong câu: \"Bạn Hoa đang quét sân.\"",
+    "answerable": true,
+    "reference_answer": "Từ chỉ hoạt động là \"quét\".",
+    "key_facts": [
+      "quét"
+    ],
+    "evidence": "Từ chỉ hoạt động là những từ nói về việc con người hay con vật làm.",
+    "notes": "Áp dụng vào câu mới"
+  },
+  {
+    "id": "TV2_LT_05",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_ly_thuyet.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Trong câu \"Chiếc cặp này rất nặng.\", từ nào là từ chỉ đặc điểm?",
+    "answerable": true,
+    "reference_answer": "Từ \"nặng\" là từ chỉ đặc điểm.",
+    "key_facts": [
+      "nặng"
+    ],
+    "evidence": "Từ chỉ đặc điểm trả lời cho câu hỏi \"thế nào?\".",
+    "notes": "Áp dụng vào câu mới"
+  },
+  {
+    "id": "TV2_LT_06",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_ly_thuyet.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Trong câu \"Chú mèo nhảy lên bàn.\" những từ nào là từ chỉ sự vật?",
+    "answerable": true,
+    "reference_answer": "Các từ \"chú mèo\" và \"bàn\".",
+    "key_facts": [
+      "chú mèo",
+      "bàn"
+    ],
+    "evidence": "Trong câu \"Chú mèo nhảy lên bàn.\", từ \"nhảy\" là từ chỉ hoạt động, còn \"chú mèo\" và \"bàn\" là từ chỉ sự vật.",
+    "notes": "Ví dụ trong bài"
+  },
+  {
+    "id": "TV2_LT_07",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_ly_thuyet.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Câu cầu khiến là gì?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nhắc dấu chấm than dùng cho cảm xúc hoặc đề nghị, mệnh lệnh.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Khái niệm câu cầu khiến không được định nghĩa trong tài liệu nào"
+  },
+  {
+    "id": "TV2_LT_08",
+    "subject": "tieng_viet",
+    "grade": 2,
+    "document": "tv_lop2_ly_thuyet.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao từ \"chạy\" là từ chỉ đặc điểm?",
+    "answerable": true,
+    "reference_answer": "Không đúng, \"chạy\" là từ chỉ hoạt động.",
+    "key_facts": [
+      "hoạt động"
+    ],
+    "evidence": "Ví dụ: chạy, đọc, nhảy, tưới, hát.",
+    "notes": "Phân loại từ bị nói sai"
+  },
+  {
+    "id": "TV3_LT_01",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_ly_thuyet.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Hình ảnh so sánh thường nhận biết nhờ những từ nào?",
+    "answerable": true,
+    "reference_answer": "Nhờ các từ như, giống như, tựa như, là.",
+    "key_facts": [
+      "như",
+      "giống như",
+      "tựa như"
+    ],
+    "evidence": "Ta thường nhận biết so sánh nhờ các từ như, giống như, tựa như, là.",
+    "notes": "Dấu hiệu nhận biết so sánh"
+  },
+  {
+    "id": "TV3_LT_02",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_ly_thuyet.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Ý chính của đoạn văn là gì?",
+    "answerable": true,
+    "reference_answer": "Là ý bao quát nhất, các câu còn lại đều làm rõ ý đó.",
+    "key_facts": [
+      "bao quát nhất"
+    ],
+    "evidence": "Ý chính của đoạn văn là ý bao quát nhất, các câu còn lại đều làm rõ ý đó.",
+    "notes": "Định nghĩa ý chính"
+  },
+  {
+    "id": "TV3_LT_03",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_ly_thuyet.txt",
+    "category": "theory",
+    "style": "no_diacritics",
+    "question": "Cau don gian thuong co may bo phan?",
+    "answerable": true,
+    "reference_answer": "Câu đơn giản thường có hai bộ phận.",
+    "key_facts": [
+      "hai bộ phận"
+    ],
+    "evidence": "Câu đơn giản thường có hai bộ phận.",
+    "notes": "Số bộ phận của câu, không dấu"
+  },
+  {
+    "id": "TV3_LT_04",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_ly_thuyet.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Hãy chia câu \"Chú chó nhỏ đang chạy trong vườn.\" thành hai bộ phận.",
+    "answerable": true,
+    "reference_answer": "Chú chó nhỏ // đang chạy trong vườn.",
+    "key_facts": [
+      "chú chó nhỏ",
+      "đang chạy trong vườn"
+    ],
+    "evidence": "Ví dụ: \"Bạn Lan // đang tưới hoa.\" Bộ phận thứ nhất là \"Bạn Lan\", bộ phận thứ hai là \"đang tưới hoa\".",
+    "notes": "Áp dụng tách bộ phận câu"
+  },
+  {
+    "id": "TV3_LT_05",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_ly_thuyet.txt",
+    "category": "apply",
+    "style": "child_casual",
+    "question": "câu nào có so sánh: (a) Mẹ đang nấu cơm. (b) Dòng sông uốn lượn như một dải lụa.",
+    "answerable": true,
+    "reference_answer": "Câu (b) có so sánh vì dùng từ \"như\" để so sánh dòng sông với dải lụa.",
+    "key_facts": [
+      "dòng sông uốn lượn như một dải lụa"
+    ],
+    "evidence": "Ta thường nhận biết so sánh nhờ các từ như, giống như, tựa như, là.",
+    "notes": "Nhận biết so sánh trong câu mới"
+  },
+  {
+    "id": "TV3_LT_06",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_ly_thuyet.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Trong ví dụ của bài, mắt em bé được so sánh với gì?",
+    "answerable": true,
+    "reference_answer": "Với hạt nhãn.",
+    "key_facts": [
+      "hạt nhãn"
+    ],
+    "evidence": "Đôi mắt em bé tròn như hạt nhãn.",
+    "notes": "Ví dụ trong bài"
+  },
+  {
+    "id": "TV3_LT_07",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_ly_thuyet.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "So sánh trong tiếng Việt có mấy kiểu?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nêu cách nhận biết so sánh qua các từ như, giống như.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Số kiểu so sánh không được nêu"
+  },
+  {
+    "id": "TV3_LT_08",
+    "subject": "tieng_viet",
+    "grade": 3,
+    "document": "tv_lop3_ly_thuyet.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao nói mặt trời giống như quả bóng xanh?",
+    "answerable": true,
+    "reference_answer": "Trong bài, mặt trời được so sánh với quả bóng lửa, không phải quả bóng xanh.",
+    "key_facts": [
+      "quả bóng lửa"
+    ],
+    "evidence": "Mặt trời giống như quả bóng lửa.",
+    "notes": "Ví dụ bị nói sai"
+  },
+  {
+    "id": "TV4_LT_01",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_ly_thuyet.txt",
+    "category": "theory",
+    "style": "no_diacritics",
+    "question": "Danh tu la gi?",
+    "answerable": true,
+    "reference_answer": "Danh từ là những từ chỉ người, vật, hiện tượng, khái niệm hoặc đơn vị.",
+    "key_facts": [
+      "người",
+      "vật",
+      "hiện tượng"
+    ],
+    "evidence": "Danh từ là những từ chỉ người, vật, hiện tượng, khái niệm hoặc đơn vị.",
+    "notes": "Định nghĩa danh từ"
+  },
+  {
+    "id": "TV4_LT_02",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_ly_thuyet.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Nhân hóa là gì?",
+    "answerable": true,
+    "reference_answer": "Là biện pháp dùng từ ngữ vốn gọi hoặc tả người để gọi hoặc tả vật, cây cối, con vật.",
+    "key_facts": [
+      "gọi hoặc tả người"
+    ],
+    "evidence": "Nhân hóa là biện pháp dùng từ ngữ vốn gọi hoặc tả người để gọi hoặc tả vật, cây cối, con vật.",
+    "notes": "Định nghĩa nhân hóa"
+  },
+  {
+    "id": "TV4_LT_03",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_ly_thuyet.txt",
+    "category": "theory",
+    "style": "child_casual",
+    "question": "cô ơi câu hỏi tại sao thì trả lời có từ gì",
+    "answerable": true,
+    "reference_answer": "Câu trả lời hay có từ \"vì\", \"bởi\", \"nên\".",
+    "key_facts": [
+      "vì",
+      "bởi",
+      "nên"
+    ],
+    "evidence": "Câu hỏi nguyên nhân thường bắt đầu bằng \"Vì sao?\" hoặc \"Tại sao?\" và câu trả lời hay có từ \"vì\", \"bởi\", \"nên\".",
+    "notes": "Nhận biết câu nguyên nhân, kiểu trẻ em"
+  },
+  {
+    "id": "TV4_LT_04",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_ly_thuyet.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Từ \"ngoan\" trong câu \"Em bé rất ngoan.\" là danh từ, động từ hay tính từ?",
+    "answerable": true,
+    "reference_answer": "Là tính từ vì chỉ đặc điểm, tính chất.",
+    "key_facts": [
+      "tính từ"
+    ],
+    "evidence": "Tính từ là những từ chỉ đặc điểm hoặc tính chất của sự vật, hoạt động, trạng thái.",
+    "notes": "Xác định từ loại trong câu mới"
+  },
+  {
+    "id": "TV4_LT_05",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_ly_thuyet.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Câu \"Ông mặt trời thức dậy sau rặng núi.\" có dùng nhân hóa không? Vì sao?",
+    "answerable": true,
+    "reference_answer": "Có, vì gọi mặt trời là \"ông\" và tả mặt trời \"thức dậy\" như người.",
+    "key_facts": [
+      "nhân hóa",
+      "ông mặt trời"
+    ],
+    "evidence": "Nhân hóa là biện pháp dùng từ ngữ vốn gọi hoặc tả người để gọi hoặc tả vật, cây cối, con vật.",
+    "notes": "Nhận biết nhân hóa trong câu mới"
+  },
+  {
+    "id": "TV4_LT_06",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_ly_thuyet.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Trong câu \"Cô bé đọc truyện rất say mê.\" từ nào là tính từ?",
+    "answerable": true,
+    "reference_answer": "Từ \"say mê\" là tính từ.",
+    "key_facts": [
+      "say mê"
+    ],
+    "evidence": "Trong câu này, \"cô bé\" và \"truyện\" là danh từ, \"đọc\" là động từ, \"say mê\" là tính từ.",
+    "notes": "Ví dụ trong bài"
+  },
+  {
+    "id": "TV4_LT_07",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_ly_thuyet.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Danh từ riêng và danh từ chung khác nhau như thế nào?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ định nghĩa danh từ nói chung, không phân biệt danh từ riêng và chung.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Danh từ riêng/chung không được nêu"
+  },
+  {
+    "id": "TV4_LT_08",
+    "subject": "tieng_viet",
+    "grade": 4,
+    "document": "tv_lop4_ly_thuyet.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao từ \"nhớ\" trong câu \"Em nhớ bà\" là danh từ?",
+    "answerable": true,
+    "reference_answer": "Không đúng, trong câu này \"nhớ\" là động từ.",
+    "key_facts": [
+      "động từ"
+    ],
+    "evidence": "\"nhớ\" là động từ trong câu \"Em nhớ bà\"",
+    "notes": "Từ loại bị nói sai"
+  },
+  {
+    "id": "TV5_LT_01",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_ly_thuyet.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Từ đồng nghĩa là gì?",
+    "answerable": true,
+    "reference_answer": "Là những từ có nghĩa giống nhau hoặc gần giống nhau.",
+    "key_facts": [
+      "giống nhau",
+      "gần giống nhau"
+    ],
+    "evidence": "Từ đồng nghĩa là những từ có nghĩa giống nhau hoặc gần giống nhau.",
+    "notes": "Định nghĩa từ đồng nghĩa"
+  },
+  {
+    "id": "TV5_LT_02",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_ly_thuyet.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Nghĩa gốc và nghĩa chuyển của từ khác nhau như thế nào?",
+    "answerable": true,
+    "reference_answer": "Nghĩa gốc là nghĩa đầu tiên, chỉ sự vật hoặc hành động cụ thể; nghĩa chuyển suy ra từ nghĩa gốc nhờ nét tương đồng.",
+    "key_facts": [
+      "nghĩa đầu tiên",
+      "nét tương đồng"
+    ],
+    "evidence": "Nghĩa gốc là nghĩa đầu tiên, thường chỉ sự vật, hành động cụ thể.",
+    "notes": "Phân biệt nghĩa gốc và nghĩa chuyển"
+  },
+  {
+    "id": "TV5_LT_03",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_ly_thuyet.txt",
+    "category": "theory",
+    "style": "no_diacritics",
+    "question": "Cap quan he tu vi... nen... bieu thi quan he gi?",
+    "answerable": true,
+    "reference_answer": "Biểu thị quan hệ nguyên nhân - kết quả.",
+    "key_facts": [
+      "nguyên nhân",
+      "kết quả"
+    ],
+    "evidence": "Cặp \"vì... nên...\" biểu thị quan hệ nguyên nhân",
+    "notes": "Cặp quan hệ từ, không dấu"
+  },
+  {
+    "id": "TV5_LT_04",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_ly_thuyet.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Điền cặp quan hệ từ thích hợp: \"... trời mưa rất to ... bạn Lan vẫn đến lớp đúng giờ.\"",
+    "answerable": true,
+    "reference_answer": "Điền \"Tuy... nhưng...\" vì hai vế có quan hệ tương phản.",
+    "key_facts": [
+      "tuy",
+      "nhưng"
+    ],
+    "evidence": "Cặp \"tuy... nhưng...\" biểu thị quan hệ tương phản",
+    "notes": "Áp dụng chọn cặp quan hệ từ"
+  },
+  {
+    "id": "TV5_LT_05",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_ly_thuyet.txt",
+    "category": "apply",
+    "style": "child_casual",
+    "question": "từ chân trong chân ghế là nghĩa gốc hay nghĩa chuyển z cô",
+    "answerable": true,
+    "reference_answer": "Là nghĩa chuyển, vì chỉ phần dưới cùng của một vật.",
+    "key_facts": [
+      "nghĩa chuyển"
+    ],
+    "evidence": "Nghĩa chuyển là phần dưới cùng của một vật, như \"chân bàn\", \"chân núi\".",
+    "notes": "Áp dụng nghĩa chuyển với ví dụ mới"
+  },
+  {
+    "id": "TV5_LT_06",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_ly_thuyet.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Bài lấy từ nào làm ví dụ về từ nhiều nghĩa?",
+    "answerable": true,
+    "reference_answer": "Từ \"chân\".",
+    "key_facts": [
+      "chân"
+    ],
+    "evidence": "Ví dụ từ \"chân\": nghĩa gốc là bộ phận dưới cùng của cơ thể người dùng để đi lại, như trong \"đau chân\".",
+    "notes": "Ví dụ trong bài"
+  },
+  {
+    "id": "TV5_LT_07",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_ly_thuyet.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Từ \"mắt\" có những nghĩa chuyển nào?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ lấy từ \"chân\" làm ví dụ về từ nhiều nghĩa.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Nghĩa chuyển của từ \"mắt\" không được nêu"
+  },
+  {
+    "id": "TV5_LT_08",
+    "subject": "tieng_viet",
+    "grade": 5,
+    "document": "tv_lop5_ly_thuyet.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao từ \"chén\" lại mang sắc thái lịch sự hơn từ \"xơi\"?",
+    "answerable": true,
+    "reference_answer": "Không đúng, \"xơi\" mới mang sắc thái lịch sự, còn \"chén\" thân mật, suồng sã.",
+    "key_facts": [
+      "xơi",
+      "lịch sự"
+    ],
+    "evidence": "\"xơi\" mang sắc thái lịch sự, còn \"chén\" mang sắc thái thân mật, suồng sã",
+    "notes": "Sắc thái bị nói ngược"
+  },
+  {
+    "id": "TOAN3_01",
+    "subject": "toan",
+    "grade": 3,
+    "document": "toan_lop3_nhan_chia.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Cô Hạnh có tất cả bao nhiêu chiếc bút?",
+    "answerable": true,
+    "reference_answer": "Cô Hạnh có 48 chiếc bút (6 × 8 = 48).",
+    "key_facts": [
+      "48"
+    ],
+    "evidence": "Số chiếc bút là 6 × 8 = 48 (chiếc).",
+    "notes": "Bài toán nhân"
+  },
+  {
+    "id": "TOAN3_02",
+    "subject": "toan",
+    "grade": 3,
+    "document": "toan_lop3_nhan_chia.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Có 84 quả cam xếp đều vào 4 rổ thì mỗi rổ có bao nhiêu quả?",
+    "answerable": true,
+    "reference_answer": "Mỗi rổ có 21 quả cam (84 : 4 = 21).",
+    "key_facts": [
+      "21"
+    ],
+    "evidence": "Mỗi rổ có 84 : 4 = 21 (quả).",
+    "notes": "Bài toán chia"
+  },
+  {
+    "id": "TOAN3_03",
+    "subject": "toan",
+    "grade": 3,
+    "document": "toan_lop3_nhan_chia.txt",
+    "category": "fact_lookup",
+    "style": "child_casual",
+    "question": "buổi sáng bác tâm bán được bao nhiêu kí gạo z",
+    "answerable": true,
+    "reference_answer": "Bác Tâm bán được 35 ki-lô-gam gạo.",
+    "key_facts": [
+      "35"
+    ],
+    "evidence": "Buổi sáng bác bán được 35 ki-lô-gam gạo.",
+    "notes": "Số liệu trong đề"
+  },
+  {
+    "id": "TOAN3_04",
+    "subject": "toan",
+    "grade": 3,
+    "document": "toan_lop3_nhan_chia.txt",
+    "category": "synthesis",
+    "style": "normal",
+    "question": "Lúc đầu cửa hàng bác Tâm có bao nhiêu ki-lô-gam gạo và sau khi bán thì còn lại bao nhiêu?",
+    "answerable": true,
+    "reference_answer": "Lúc đầu có 92 kg (23 × 4), sau khi bán còn 57 kg (92 − 35).",
+    "key_facts": [
+      "92",
+      "57"
+    ],
+    "evidence": "Số gạo lúc đầu là 23 × 4 = 92 (kg). Số gạo còn lại là 92 − 35 = 57 (kg).",
+    "notes": "Bài toán hai bước, kết hợp hai câu lời giải"
+  },
+  {
+    "id": "TOAN3_05",
+    "subject": "toan",
+    "grade": 3,
+    "document": "toan_lop3_nhan_chia.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Số dư trong phép chia có dư so với số chia thì như thế nào?",
+    "answerable": true,
+    "reference_answer": "Số dư luôn nhỏ hơn số chia.",
+    "key_facts": [
+      "nhỏ hơn số chia"
+    ],
+    "evidence": "Số dư luôn nhỏ hơn số chia.",
+    "notes": "Quy tắc số dư"
+  },
+  {
+    "id": "TOAN3_06",
+    "subject": "toan",
+    "grade": 3,
+    "document": "toan_lop3_nhan_chia.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Tính 27 × 3.",
+    "answerable": true,
+    "reference_answer": "27 × 3 = 81.",
+    "key_facts": [
+      "81"
+    ],
+    "evidence": "Nhân số có hai chữ số với số có một chữ số: em nhân từng chữ số từ phải sang trái và nhớ khi cần.",
+    "notes": "Nhân có nhớ (7×3=21 nhớ 2; 2×3=6, 6+2=8)"
+  },
+  {
+    "id": "TOAN3_07",
+    "subject": "toan",
+    "grade": 3,
+    "document": "toan_lop3_nhan_chia.txt",
+    "category": "apply",
+    "style": "no_diacritics",
+    "question": "Chia 47 cho 6 duoc thuong va so du la bao nhieu?",
+    "answerable": true,
+    "reference_answer": "47 : 6 = 7 dư 5 (vì 7 × 6 = 42, 47 − 42 = 5).",
+    "key_facts": [
+      "7",
+      "dư 5"
+    ],
+    "evidence": "Phép chia có dư: khi số bị chia không chia hết cho số chia thì còn lại một phần gọi là số dư.",
+    "notes": "Phép chia có dư mới"
+  },
+  {
+    "id": "TOAN3_08",
+    "subject": "toan",
+    "grade": 3,
+    "document": "toan_lop3_nhan_chia.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Bác Tâm bán gạo với giá bao nhiêu tiền một ki-lô-gam?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói bác bán được 35 ki-lô-gam gạo.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Giá tiền không được nêu"
+  },
+  {
+    "id": "TOAN5_01",
+    "subject": "toan",
+    "grade": 5,
+    "document": "toan_lop5_so_thap_phan.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Trong số 12,45, chữ số 4 nằm ở hàng nào?",
+    "answerable": true,
+    "reference_answer": "Chữ số 4 ở hàng phần mười.",
+    "key_facts": [
+      "phần mười"
+    ],
+    "evidence": "Trong số 12,45, chữ số 4 ở hàng phần mười và chữ số 5 ở hàng phần trăm.",
+    "notes": "Hàng của số thập phân"
+  },
+  {
+    "id": "TOAN5_02",
+    "subject": "toan",
+    "grade": 5,
+    "document": "toan_lop5_so_thap_phan.txt",
+    "category": "fact_lookup",
+    "style": "child_casual",
+    "question": "bạn mai đổ vào bình tất cả bao nhiêu lít nước z",
+    "answerable": true,
+    "reference_answer": "Trong bình có 2 lít nước (1,25 + 0,75 = 2).",
+    "key_facts": [
+      "2 lít"
+    ],
+    "evidence": "Đáp số: 2 lít.",
+    "notes": "Bài toán cộng số thập phân"
+  },
+  {
+    "id": "TOAN5_03",
+    "subject": "toan",
+    "grade": 5,
+    "document": "toan_lop5_so_thap_phan.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Muốn so sánh hai số thập phân thì làm thế nào?",
+    "answerable": true,
+    "reference_answer": "Trước hết so sánh phần nguyên; nếu bằng nhau thì so sánh lần lượt phần mười, phần trăm, phần nghìn.",
+    "key_facts": [
+      "phần nguyên"
+    ],
+    "evidence": "trước hết so sánh phần nguyên, số nào có phần nguyên lớn hơn thì số đó lớn hơn.",
+    "notes": "Quy tắc so sánh"
+  },
+  {
+    "id": "TOAN5_04",
+    "subject": "toan",
+    "grade": 5,
+    "document": "toan_lop5_so_thap_phan.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "So sánh 0,9 và 0,89.",
+    "answerable": true,
+    "reference_answer": "0,9 > 0,89 vì cùng phần nguyên 0, ở hàng phần mười có 9 > 8.",
+    "key_facts": [
+      "0,9",
+      "lớn hơn"
+    ],
+    "evidence": "Nếu phần nguyên bằng nhau thì so sánh lần lượt phần mười, phần trăm, phần nghìn cho đến khi tìm được cặp chữ số khác nhau.",
+    "notes": "So sánh số mới (0,9 = 0,90)"
+  },
+  {
+    "id": "TOAN5_05",
+    "subject": "toan",
+    "grade": 5,
+    "document": "toan_lop5_so_thap_phan.txt",
+    "category": "synthesis",
+    "style": "normal",
+    "question": "Hai sợi dây xanh và đỏ dài tổng cộng bao nhiêu mét, và sợi nào dài hơn?",
+    "answerable": true,
+    "reference_answer": "Tổng là 6,25 m; sợi dây xanh (3,45 m) dài hơn sợi dây đỏ (2,8 m).",
+    "key_facts": [
+      "6,25",
+      "dây xanh"
+    ],
+    "evidence": "Sợi dây xanh dài 3,45 mét, sợi dây đỏ dài 2,8 mét. Hỏi cả hai sợi dây dài bao nhiêu mét?",
+    "notes": "Kết hợp phép cộng và so sánh"
+  },
+  {
+    "id": "TOAN5_06",
+    "subject": "toan",
+    "grade": 5,
+    "document": "toan_lop5_so_thap_phan.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Làm tròn số 6,25 đến hàng phần mười được bao nhiêu?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài không dạy làm tròn số thập phân.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Làm tròn số thập phân không có trong tài liệu"
+  },
+  {
+    "id": "TOAN5_07",
+    "subject": "toan",
+    "grade": 5,
+    "document": "toan_lop5_so_thap_phan.txt",
+    "category": "unanswerable",
+    "style": "no_diacritics",
+    "question": "Muon nhan hai so thap phan voi nhau thi lam the nao?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ có đọc, so sánh và cộng số thập phân.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Phép nhân số thập phân không có trong tài liệu"
+  },
+  {
+    "id": "TOAN5_08",
+    "subject": "toan",
+    "grade": 5,
+    "document": "toan_lop5_so_thap_phan.txt",
+    "category": "false_premise",
+    "style": "normal",
+    "question": "Vì sao 1,38 mét lớn hơn 1,4 mét nên bạn Nam cao hơn bạn Bình?",
+    "answerable": true,
+    "reference_answer": "Không đúng, 1,38 < 1,4 nên bạn Bình mới cao hơn bạn Nam.",
+    "key_facts": [
+      "bạn bình"
+    ],
+    "evidence": "Ở hàng phần mười có 3 < 4 nên 1,38 < 1,4. Vậy bạn Bình cao hơn.",
+    "notes": "Kết quả so sánh bị nói ngược"
+  },
+  {
+    "id": "TA3_01",
+    "subject": "tieng_anh",
+    "grade": 3,
+    "document": "ta_lop3_gia_dinh_mau_sac.txt",
+    "category": "fact_lookup",
+    "style": "no_diacritics",
+    "question": "Cau \"The sky is blue.\" nghia la gi?",
+    "answerable": true,
+    "reference_answer": "Bầu trời màu xanh dương.",
+    "key_facts": [
+      "bầu trời",
+      "xanh dương"
+    ],
+    "evidence": "The sky is blue. (Bầu trời màu xanh dương.)",
+    "notes": "Dịch câu ví dụ"
+  },
+  {
+    "id": "TA3_02",
+    "subject": "tieng_anh",
+    "grade": 3,
+    "document": "ta_lop3_gia_dinh_mau_sac.txt",
+    "category": "fact_lookup",
+    "style": "child_casual",
+    "question": "orange là màu gì z cô",
+    "answerable": true,
+    "reference_answer": "Orange là màu cam.",
+    "key_facts": [
+      "cam"
+    ],
+    "evidence": "orange: màu cam.",
+    "notes": "Từ vựng màu sắc"
+  },
+  {
+    "id": "TA3_03",
+    "subject": "tieng_anh",
+    "grade": 3,
+    "document": "ta_lop3_gia_dinh_mau_sac.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Hỏi và trả lời về màu sắc bằng tiếng Anh như thế nào?",
+    "answerable": true,
+    "reference_answer": "Hỏi \"What colour is it?\" và trả lời, ví dụ \"It's red.\"",
+    "key_facts": [
+      "what colour is it",
+      "it's red"
+    ],
+    "evidence": "Hỏi về màu sắc: What colour is it? (Nó màu gì?) Trả lời: It's red. (Nó màu đỏ.)",
+    "notes": "Mẫu câu hỏi màu"
+  },
+  {
+    "id": "TA3_04",
+    "subject": "tieng_anh",
+    "grade": 3,
+    "document": "ta_lop3_gia_dinh_mau_sac.txt",
+    "category": "apply",
+    "style": "normal",
+    "question": "Điền He hay She: \"___ is my grandfather.\"",
+    "answerable": true,
+    "reference_answer": "Điền \"He\": He is my grandfather (vì ông là nam giới).",
+    "key_facts": [
+      "he is my grandfather"
+    ],
+    "evidence": "Với nam giới ta dùng \"He is my ...\", với nữ giới ta dùng \"She is my ...\".",
+    "notes": "Chọn đại từ theo giới tính"
+  },
+  {
+    "id": "TA3_05",
+    "subject": "tieng_anh",
+    "grade": 3,
+    "document": "ta_lop3_gia_dinh_mau_sac.txt",
+    "category": "apply",
+    "style": "no_diacritics",
+    "question": "Qua dau tay mau do. Dien tu: The strawberry is ___ .",
+    "answerable": true,
+    "reference_answer": "Điền \"red\": The strawberry is red.",
+    "key_facts": [
+      "red"
+    ],
+    "evidence": "red: màu đỏ.",
+    "notes": "Chọn từ màu đúng"
+  },
+  {
+    "id": "TA3_06",
+    "subject": "tieng_anh",
+    "grade": 3,
+    "document": "ta_lop3_gia_dinh_mau_sac.txt",
+    "category": "synthesis",
+    "style": "normal",
+    "question": "Màu sắc đứng ở vị trí nào khi dùng trước danh từ và khi dùng với động từ is?",
+    "answerable": true,
+    "reference_answer": "Đứng trước danh từ (a blue book) và đứng sau động từ is (The book is blue).",
+    "key_facts": [
+      "trước danh từ",
+      "đứng sau"
+    ],
+    "evidence": "còn khi dùng với động từ \"is\" thì màu đứng sau, ví dụ \"The book is blue.\"",
+    "notes": "Kết hợp hai quy tắc trong cùng một câu dài"
+  },
+  {
+    "id": "TA3_07",
+    "subject": "tieng_anh",
+    "grade": 3,
+    "document": "ta_lop3_gia_dinh_mau_sac.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Từ \"uncle\" trong tiếng Anh nghĩa là gì?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ có father, mother, brother, sister, grandfather, grandmother.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Từ uncle không có trong tài liệu"
+  },
+  {
+    "id": "TA5_01",
+    "subject": "tieng_anh",
+    "grade": 5,
+    "document": "ta_lop5_hoat_dong_hang_ngay.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Với chủ ngữ she thì động từ have đổi thành gì?",
+    "answerable": true,
+    "reference_answer": "Đổi thành \"has\", ví dụ: She has breakfast at seven.",
+    "key_facts": [
+      "has"
+    ],
+    "evidence": "Riêng động từ have đổi thành has: She has breakfast at seven.",
+    "notes": "Động từ bất quy tắc"
+  },
+  {
+    "id": "TA5_02",
+    "subject": "tieng_anh",
+    "grade": 5,
+    "document": "ta_lop5_hoat_dong_hang_ngay.txt",
+    "category": "fact_lookup",
+    "style": "normal",
+    "question": "Giờ 7:45 nói bằng tiếng Anh như thế nào?",
+    "answerable": true,
+    "reference_answer": "It's quarter to eight.",
+    "key_facts": [
+      "quarter to eight"
+    ],
+    "evidence": "ví dụ 7:45 là \"It's quarter to eight\".",
+    "notes": "Nói giờ"
+  },
+  {
+    "id": "TA5_03",
+    "subject": "tieng_anh",
+    "grade": 5,
+    "document": "ta_lop5_hoat_dong_hang_ngay.txt",
+    "category": "fact_lookup",
+    "style": "no_diacritics",
+    "question": "Trang tu sometimes co nghia la gi?",
+    "answerable": true,
+    "reference_answer": "Sometimes nghĩa là thỉnh thoảng.",
+    "key_facts": [
+      "thỉnh thoảng"
+    ],
+    "evidence": "sometimes (thỉnh thoảng)",
+    "notes": "Từ vựng trạng từ tần suất, không dấu"
+  },
+  {
+    "id": "TA5_04",
+    "subject": "tieng_anh",
+    "grade": 5,
+    "document": "ta_lop5_hoat_dong_hang_ngay.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Khi nào ta dùng thì hiện tại đơn?",
+    "answerable": true,
+    "reference_answer": "Dùng để nói về thói quen hoặc việc lặp đi lặp lại.",
+    "key_facts": [
+      "thói quen",
+      "lặp đi lặp lại"
+    ],
+    "evidence": "Ta dùng thì hiện tại đơn để nói về thói quen hoặc việc lặp đi lặp lại.",
+    "notes": "Công dụng thì hiện tại đơn"
+  },
+  {
+    "id": "TA5_05",
+    "subject": "tieng_anh",
+    "grade": 5,
+    "document": "ta_lop5_hoat_dong_hang_ngay.txt",
+    "category": "theory",
+    "style": "normal",
+    "question": "Với chủ ngữ he, she, it, câu phủ định dùng trợ động từ nào và động từ chính ở dạng nào?",
+    "answerable": true,
+    "reference_answer": "Dùng does, và động từ chính trở về dạng nguyên mẫu.",
+    "key_facts": [
+      "does",
+      "nguyên mẫu"
+    ],
+    "evidence": "Với he, she, it ta dùng does, và khi đó động từ chính trở về dạng nguyên mẫu.",
+    "notes": "Quy tắc phủ định/câu hỏi"
+  },
+  {
+    "id": "TA5_06",
+    "subject": "tieng_anh",
+    "grade": 5,
+    "document": "ta_lop5_hoat_dong_hang_ngay.txt",
+    "category": "apply",
+    "style": "child_casual",
+    "question": "cô ơi chia động từ giúp em: Tom (watch) TV in the evening.",
+    "answerable": true,
+    "reference_answer": "Tom watches TV in the evening (watch tận cùng ch nên thêm es).",
+    "key_facts": [
+      "watches"
+    ],
+    "evidence": "Những động từ tận cùng bằng o, ch, sh, s, x thì thêm es: go thành goes, brush thành brushes, do thành does.",
+    "notes": "Chia động từ mới (watch)"
+  },
+  {
+    "id": "TA5_07",
+    "subject": "tieng_anh",
+    "grade": 5,
+    "document": "ta_lop5_hoat_dong_hang_ngay.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Trạng từ \"rarely\" nghĩa là gì?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ có always, usually, sometimes, never.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Từ rarely không có trong tài liệu"
+  },
+  {
+    "id": "TA5_08",
+    "subject": "tieng_anh",
+    "grade": 5,
+    "document": "ta_lop5_hoat_dong_hang_ngay.txt",
+    "category": "unanswerable",
+    "style": "normal",
+    "question": "Nam đi ngủ lúc mấy giờ?",
+    "answerable": false,
+    "reference_answer": "Tài liệu không có thông tin này. Bài chỉ nói Nam thức dậy lúc sáu giờ.",
+    "key_facts": [],
+    "evidence": null,
+    "notes": "Giờ đi ngủ của Nam không được nêu"
+  }
+]

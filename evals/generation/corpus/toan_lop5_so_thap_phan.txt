@@ -1,0 +1,17 @@
+Bài học: Số thập phân
+
+Số thập phân gồm hai phần ngăn cách nhau bởi dấu phẩy: phần nguyên ở bên trái và phần thập phân ở bên phải. Ví dụ số 12,45 có phần nguyên là 12 và phần thập phân là 45. Các hàng của phần thập phân lần lượt là hàng phần mười, hàng phần trăm, hàng phần nghìn. Trong số 12,45, chữ số 4 ở hàng phần mười và chữ số 5 ở hàng phần trăm.
+
+Cách đọc số thập phân: đọc phần nguyên, đọc từ "phẩy", rồi đọc phần thập phân. Số 12,45 đọc là "mười hai phẩy bốn mươi lăm". Số 0,7 đọc là "không phẩy bảy".
+
+Tính chất: nếu viết thêm chữ số 0 vào tận cùng bên phải phần thập phân thì giá trị của số không đổi. Vì vậy 8,3 = 8,30 = 8,300.
+
+So sánh hai số thập phân: trước hết so sánh phần nguyên, số nào có phần nguyên lớn hơn thì số đó lớn hơn. Nếu phần nguyên bằng nhau thì so sánh lần lượt phần mười, phần trăm, phần nghìn cho đến khi tìm được cặp chữ số khác nhau. Ví dụ: 7,35 < 7,4 vì phần nguyên bằng nhau (cùng là 7), ở hàng phần mười có 3 < 4. Ví dụ khác: 15,6 > 15,08 vì ở hàng phần mười có 6 > 0.
+
+Cộng hai số thập phân: viết các số sao cho các dấu phẩy thẳng cột, cộng như cộng các số tự nhiên rồi đặt dấu phẩy ở tổng thẳng cột với các dấu phẩy. Nếu cần, thêm chữ số 0 vào bên phải để hai số có cùng số chữ số ở phần thập phân. Ví dụ: 12,75 + 8,6 = 12,75 + 8,60 = 21,35.
+
+Bài toán 1. Sợi dây xanh dài 3,45 mét, sợi dây đỏ dài 2,8 mét. Hỏi cả hai sợi dây dài bao nhiêu mét? Lời giải: 3,45 + 2,8 = 3,45 + 2,80 = 6,25 (m). Đáp số: 6,25 mét.
+
+Bài toán 2. Bạn Mai đổ vào bình 1,25 lít nước, sau đó đổ thêm 0,75 lít nữa. Hỏi trong bình có bao nhiêu lít nước? Lời giải: 1,25 + 0,75 = 2,00 = 2 (lít). Đáp số: 2 lít.
+
+Bài toán 3. Bạn Nam cao 1,38 mét, bạn Bình cao 1,4 mét. Bạn nào cao hơn? Lời giải: Phần nguyên cùng là 1. Ở hàng phần mười có 3 < 4 nên 1,38 < 1,4. Vậy bạn Bình cao hơn.
