@@ -67,6 +67,9 @@ class Settings(BaseSettings):
     EMBED_MODEL_GOOGLE: str = "gemini-embedding-2"
     VISION_MODEL_GOOGLE: str = "gemini-3.1-flash-lite"
     ANSWER_MODEL_GOOGLE: str = "gemini-3.1-flash-lite"
+    # Used for text generation when ANSWER_MODEL_GOOGLE is overloaded or out of quota.
+    # Empty = no fallback.
+    ANSWER_MODEL_GOOGLE_FALLBACK: str = ""
 
     # ** Ollama ** #
     OLLAMA_HOST: str = "http://localhost:11434"
@@ -86,7 +89,11 @@ class Settings(BaseSettings):
     DEFAULT_N_CHUNKS_RETRIEVED: int = 5
     DEFAULT_N_PAST_CONVERSATIONS: int = 3
     DEFAULT_N_CHUNKS_WINDOW: int = 1
+    # Attempts per model for a failure worth retrying
     DEFAULT_N_API_CALL_RETRIES: int = 3
+    # Most seconds one AI call may spend waiting between attempts. A student is waiting
+    # for the answer, so a long wait the provider asks for is turned into an error.
+    LLM_MAX_RETRY_WAIT_SECONDS: float = 20
     # Upper bound on LLM calls a single request may run at the same time
     # (protects provider rate limits when many days need an assessment at once).
     MAX_CONCURRENT_LLM_CALLS: int = 3

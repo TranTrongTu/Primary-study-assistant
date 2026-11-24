@@ -1,10 +1,13 @@
 name: CI
 
+# Branches are checked through their pull request. Running on every push as well gave each
+# commit a second, cancelled run of the required checks, which blocked the merge.
 on:
   push:
+    branches: [main]
   pull_request:
 
-# One run per branch: a push and its pull request share a group, so they do not run twice.
+# A new commit on a pull request cancels the run of the previous one.
 # Runs on main are never cancelled, so a deploy-relevant result is always completed.
 concurrency:
   group: ci-${{ github.head_ref || github.ref_name }}

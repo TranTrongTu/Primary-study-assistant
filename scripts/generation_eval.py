@@ -26,7 +26,12 @@ A judge can be wrong, so `--review-sample` exports answers for a human to label 
 `--agreement` reports how often the judge agrees with the human.
 
 Answers and verdicts are cached in evals/generation/.cache (not committed): a re-run only
-calls the APIs for questions whose inputs changed or that failed last time.
+calls the APIs for questions whose inputs changed or that failed last time. The run stops
+calling Gemini when the daily quota is spent, when `--max-calls` is reached or when several
+questions in a row fail, and still scores what is cached. So a full run can be done in
+parts, over several days:
+
+    python -m scripts.generation_eval --max-calls 100
 """
 
 import argparse
@@ -344,6 +349,41 @@ def _save(path: Path, data: dict[str, Any]) -> None:
 
 # ----- RUN ----- #
 
+# Failing this many times in a row means the service is down, not that a question is bad
+MAX_CONSECUTIVE_FAILURES = 3
+
+
+class CallBudgetExceeded(Exception):
+    pass
+
+
+class NotRun(Exception):
+    """The question needs Gemini, but the run has stopped calling it."""
+
+
+class CallBudget:
+    """Counts the requests sent to Gemini and refuses the one over the limit."""
+
+    def __init__(self, limit: int | None):
+        self.limit = limit
+        self.used = 0
+
+    def spend(self) -> None:
+        if self.limit is not None and self.used >= self.limit:
+            raise CallBudgetExceeded(f"--max-calls {self.limit} reached")
+        self.used += 1
+
+
+def stop_reason(error: Exception, consecutive_failures: int) -> str | None:
+    """Why the run should stop calling Gemini after this error, or None to go on."""
+    if isinstance(error, CallBudgetExceeded):
+        return str(error)
+    if getattr(error, "exception_type", None) == "AI_QUOTA":
+        return "the daily Gemini quota is spent"
+    if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+        return f"{consecutive_failures} questions in a row failed"
+    return None
+
 
 async def run(
     questions: Sequence[Question],
@@ -351,7 +391,9 @@ async def run(
     judge_model: str,
     delay: float,
     use_cache: bool,
-) -> list[dict[str, Any]]:
+    max_calls: int | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """The scored rows, and how the run went (requests sent, why it stopped early)."""
     # Imported here so the helpers above can be tested without API keys or a database
     from google import genai
     from sqlalchemy import delete
@@ -368,6 +410,15 @@ async def run(
         PROMPT_REWRITE_BASE_PROMPT,
     )
     from backend.src.services import llm_response as chat_service
+
+    # Nobody is waiting for these answers: wait out a busy service. The fallback model is
+    # off, because mixing two models would make the numbers meaningless.
+    settings.DEFAULT_N_API_CALL_RETRIES = 5
+    settings.LLM_MAX_RETRY_WAIT_SECONDS = 180
+    settings.ANSWER_MODEL_GOOGLE_FALLBACK = ""
+
+    budget = CallBudget(max_calls)
+    GoogleAPI.before_request = budget.spend
 
     # Record what the chat service retrieves and rewrites, without changing what it does
     captured: dict[str, Any] = {}
@@ -392,9 +443,9 @@ async def run(
     chat_service.chunks_formatter = recording("context", chat_service.chunks_formatter)
 
     async def judge(prompt: str) -> dict[str, Any]:
-        async def call_api() -> str:
-            response = await keys_manager.client.aio.models.generate_content(
-                model=judge_model,
+        async def call_api(model: str) -> Any:
+            return await keys_manager.client.aio.models.generate_content(
+                model=model,
                 contents=prompt,
                 config=genai.types.GenerateContentConfig(
                     response_mime_type="application/json",
@@ -402,11 +453,9 @@ async def run(
                     temperature=0,
                 ),
             )
-            return response.text or ""
 
-        return JudgeVerdict.model_validate_json(
-            await GoogleAPI.wrapper(call_api)
-        ).model_dump()
+        response = await GoogleAPI.wrapper(call_api, [judge_model], "judge")
+        return JudgeVerdict.model_validate_json(response.text or "").model_dump()
 
     pipeline_version = _hash(
         settings.ANSWER_MODEL_GOOGLE,
@@ -431,6 +480,8 @@ async def run(
     )
 
     rows = []
+    stopped: str | None = None
+    consecutive_failures = 0
     async with scratch_database("generation_eval") as engine:
         async with async_sessionmaker(engine, expire_on_commit=False)() as session:
             user, interaction = await seed_corpus(
@@ -446,6 +497,8 @@ async def run(
                         pipeline_version, question.question, question.grade
                     )
                     if answer_key not in answers:
+                        if stopped:
+                            raise NotRun(stopped)
                         called_api = True
                         captured.clear()
                         # The grade is what a real profile would tell the assistant
@@ -482,22 +535,32 @@ async def run(
                     )
                     verdict_key = _hash(judge_model, prompt)
                     if verdict_key not in verdicts:
+                        if stopped:
+                            raise NotRun(stopped)
                         called_api = True
                         verdicts[verdict_key] = await judge(prompt)
                         _save(VERDICTS_CACHE, verdicts)
                     record["verdict"] = verdicts[verdict_key]
+                    if called_api:
+                        consecutive_failures = 0
+                except NotRun as error:
+                    record["error"] = f"not run: {error}"
                 except (
                     Exception
                 ) as error:  # one bad question must not lose the whole run
                     await session.rollback()
                     record["error"] = f"{type(error).__name__}: {error}"
                     print(f"    failed: {record['error']}", flush=True)
+                    consecutive_failures += 1
+                    stopped = stop_reason(error, consecutive_failures)
+                    if stopped:
+                        print(f"Stopped calling Gemini: {stopped}", flush=True)
 
                 rows.append(score_row(question, record))
-                if called_api and delay:
+                if called_api and delay and not stopped:
                     await asyncio.sleep(delay)  # stay under the free-tier rate limit
 
-    return rows
+    return rows, {"gemini_requests": budget.used, "stopped_early": stopped}
 
 
 # ----- REPORT ----- #
@@ -716,6 +779,11 @@ def main() -> None:
         default=3.0,
         help="seconds to wait after each API-calling question",
     )
+    parser.add_argument(
+        "--max-calls",
+        type=int,
+        help="send at most N requests to Gemini, then only score what is cached",
+    )
     parser.add_argument("--no-cache", action="store_true", help="call every API again")
     parser.add_argument("--no-write", action="store_true", help="print only")
     parser.add_argument(
@@ -766,14 +834,28 @@ def main() -> None:
         questions = questions[: args.limit]
 
     judge_model = args.judge_model or settings.ANSWER_MODEL_GOOGLE
-    rows = asyncio.run(
-        run(questions, corpus, judge_model, args.delay, not args.no_cache)
+    rows, run_info = asyncio.run(
+        run(
+            questions,
+            corpus,
+            judge_model,
+            args.delay,
+            not args.no_cache,
+            args.max_calls,
+        )
     )
     results = build_results(rows, corpus, judge_model)
     report = render_markdown(results)
     print(report)
+    print(f"Requests sent to Gemini: {run_info['gemini_requests']}")
+    if run_info["stopped_early"]:
+        print(
+            f"INCOMPLETE: stopped early ({run_info['stopped_early']}). "
+            "Run again to continue from the cache."
+        )
 
-    if not args.no_write:
+    # A subset must not overwrite the results of the full data set
+    if not args.no_write and not args.ids and not args.limit:
         RESULTS_JSON.write_text(
             json.dumps(results, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )

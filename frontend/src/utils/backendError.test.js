@@ -38,6 +38,14 @@ describe('parseBackendError', () => {
     expect(parseBackendError(httpError(418, { message: 'Trà đang pha' })).message).toBe('Trà đang pha')
   })
 
+  it('tells a spent AI quota apart from a busy AI service', () => {
+    const quota = parseBackendError(httpError(503, { exception_type: 'AI_QUOTA' }))
+    const busy = parseBackendError(httpError(503, { exception_type: 'EXTERNAL_SERVICE' }))
+
+    expect(quota.message).toMatch(/hết lượt/)
+    expect(busy.message).toMatch(/quá tải/)
+  })
+
   it('keeps the original error for logging', () => {
     const error = httpError(503)
 

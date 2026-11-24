@@ -38,7 +38,9 @@ export const parseBackendError = (error, fallbackMsg = "Có lỗi xảy ra, vui 
             type = "error";
             break;
         case 503:
-            uiMessage = "Hệ thống AI đang quá tải. Bé đợi một chút rồi thử lại nha!";
+            uiMessage = exceptionType === "AI_QUOTA"
+                ? "Cú Mèo (AI) đã dùng hết lượt hôm nay. Bé quay lại sau nhé!"
+                : "Hệ thống AI đang quá tải. Bé đợi một chút rồi thử lại nha!";
             type = "error";
             break;
         default:
