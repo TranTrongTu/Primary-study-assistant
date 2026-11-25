@@ -237,3 +237,52 @@ def test_the_committed_data_set_is_well_formed():
     assert ge.check_dataset(corpus, questions) == []
     categories = {q.category for q in questions}
     assert {"unanswerable", "false_premise"} <= categories
+
+
+# ----- JUDGE ENDPOINT ----- #
+
+
+@pytest.fixture
+def no_judge_environment(monkeypatch):
+    for name in ge.JudgeSettings.model_fields:
+        monkeypatch.delenv(name, raising=False)
+
+
+def test_without_configuration_the_judge_is_gemini(no_judge_environment):
+    assert ge.judge_endpoint(ge.JudgeSettings(_env_file=None)) is None
+
+
+def test_the_judge_can_be_any_endpoint_and_is_named_with_its_host(no_judge_environment):
+    judge = ge.JudgeSettings(
+        _env_file=None,
+        JUDGE_BASE_URL="https://provider.test/v1",
+        JUDGE_API_KEY="secret-key",
+        JUDGE_MODEL="big",
+        JUDGE_STRUCTURED_OUTPUT="json_object",
+    )
+
+    endpoint = ge.judge_endpoint(judge)
+    assert endpoint.label == "big@provider.test"
+    assert endpoint.structured_output == "json_object"
+    assert ge.judge_endpoint(judge, "bigger").model == "bigger"
+
+
+def test_the_judge_temperature_can_be_left_out(no_judge_environment):
+    assert ge.JudgeSettings(_env_file=None).JUDGE_TEMPERATURE == 0
+    omit = ge.JudgeSettings(_env_file=None, JUDGE_TEMPERATURE="omit")
+    assert omit.JUDGE_TEMPERATURE == "omit"
+    assert (
+        ge.JudgeSettings(_env_file=None, JUDGE_TEMPERATURE="0.5").JUDGE_TEMPERATURE
+        == 0.5
+    )
+
+
+def test_the_judge_settings_example_file_is_valid(no_judge_environment):
+    example = ge.EVAL_DIR.parent / ".env.example"
+
+    assert ge.judge_endpoint(ge.JudgeSettings(_env_file=example)) is None
+
+
+def test_a_judge_without_a_model_is_refused(no_judge_environment):
+    with pytest.raises(ValueError, match="JUDGE_MODEL"):
+        ge.JudgeSettings(_env_file=None, JUDGE_BASE_URL="https://provider.test/v1")

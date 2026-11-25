@@ -32,6 +32,8 @@ questions in a row fail, and still scores what is cached. So a full run can be d
 parts, over several days:
 
     python -m scripts.generation_eval --max-calls 100
+
+The judge can be a model of another provider: see evals/.env.example.
 """
 
 import argparse
@@ -48,7 +50,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal, Sequence
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from scripts.rag_eval import (
     chunk_corpus,
@@ -347,6 +350,48 @@ def _save(path: Path, data: dict[str, Any]) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
 
+# ----- JUDGE ----- #
+
+
+class JudgeSettings(BaseSettings):
+    """A judge on its own endpoint. In its own file, so the app never holds its key."""
+
+    JUDGE_BASE_URL: str = ""
+    JUDGE_API_KEY: str = ""
+    JUDGE_MODEL: str = ""
+    JUDGE_STRUCTURED_OUTPUT: Literal[
+        "json_schema_strict", "json_schema", "json_object"
+    ] = "json_schema"
+    # Some models refuse any temperature but their own
+    JUDGE_TEMPERATURE: float | Literal["omit"] = 0
+
+    @model_validator(mode="after")
+    def check_model(self):
+        if self.JUDGE_BASE_URL and not self.JUDGE_MODEL:
+            raise ValueError("JUDGE_BASE_URL is set but JUDGE_MODEL is not")
+        return self
+
+    model_config = SettingsConfigDict(
+        env_file=EVAL_DIR.parent / ".env",
+        env_file_encoding="utf-8",
+        str_strip_whitespace=True,
+    )
+
+
+def judge_endpoint(judge: JudgeSettings, model: str | None = None):
+    """The judge's own endpoint, or None to judge with Gemini and the app's key."""
+    from backend.src.core.openai_compatible import Endpoint
+
+    if not judge.JUDGE_BASE_URL:
+        return None
+    return Endpoint(
+        base_url=judge.JUDGE_BASE_URL,
+        api_key=judge.JUDGE_API_KEY,
+        model=model or judge.JUDGE_MODEL,
+        structured_output=judge.JUDGE_STRUCTURED_OUTPUT,
+    )
+
+
 # ----- RUN ----- #
 
 # Failing this many times in a row means the service is down, not that a question is bad
@@ -358,11 +403,11 @@ class CallBudgetExceeded(Exception):
 
 
 class NotRun(Exception):
-    """The question needs Gemini, but the run has stopped calling it."""
+    """The question needs an AI model, but the run has stopped calling them."""
 
 
 class CallBudget:
-    """Counts the requests sent to Gemini and refuses the one over the limit."""
+    """Counts the requests sent to AI models and refuses the one over the limit."""
 
     def __init__(self, limit: int | None):
         self.limit = limit
@@ -375,11 +420,11 @@ class CallBudget:
 
 
 def stop_reason(error: Exception, consecutive_failures: int) -> str | None:
-    """Why the run should stop calling Gemini after this error, or None to go on."""
+    """Why the run should stop calling AI models after this error, or None to go on."""
     if isinstance(error, CallBudgetExceeded):
         return str(error)
     if getattr(error, "exception_type", None) == "AI_QUOTA":
-        return "the daily Gemini quota is spent"
+        return "an AI quota is spent"
     if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
         return f"{consecutive_failures} questions in a row failed"
     return None
@@ -392,6 +437,8 @@ async def run(
     delay: float,
     use_cache: bool,
     max_calls: int | None = None,
+    endpoint: Any = None,
+    judge_temperature: float | None = 0,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """The scored rows, and how the run went (requests sent, why it stopped early)."""
     # Imported here so the helpers above can be tested without API keys or a database
@@ -399,8 +446,10 @@ async def run(
     from sqlalchemy import delete
     from sqlalchemy.ext.asyncio import async_sessionmaker
 
+    from backend.src.core import llm_retry
     from backend.src.core.ai_api import GlobalAPI, GoogleAPI, keys_manager
     from backend.src.core.config import settings
+    from backend.src.core.openai_compatible import OpenAICompatibleClient
     from backend.src.models_schema.llm_response.llm_response import (
         LLMResponse,
         LLMResponseInput,
@@ -418,7 +467,7 @@ async def run(
     settings.ANSWER_MODEL_GOOGLE_FALLBACK = ""
 
     budget = CallBudget(max_calls)
-    GoogleAPI.before_request = budget.spend
+    llm_retry.before_request = budget.spend
 
     # Record what the chat service retrieves and rewrites, without changing what it does
     captured: dict[str, Any] = {}
@@ -443,6 +492,15 @@ async def run(
     chat_service.chunks_formatter = recording("context", chat_service.chunks_formatter)
 
     async def judge(prompt: str) -> dict[str, Any]:
+        if endpoint is not None:
+            text = await OpenAICompatibleClient(endpoint).chat(
+                prompt,
+                JudgeVerdict,
+                operation="judge",
+                temperature=judge_temperature,
+            )
+            return JudgeVerdict.model_validate_json(text).model_dump()
+
         async def call_api(model: str) -> Any:
             return await keys_manager.client.aio.models.generate_content(
                 model=model,
@@ -457,15 +515,19 @@ async def run(
         response = await GoogleAPI.wrapper(call_api, [judge_model], "judge")
         return JudgeVerdict.model_validate_json(response.text or "").model_dump()
 
+    answer_model = settings.answer_model(settings.MODEL_IN_USE_GENERATE_CHAT)
+    rewrite_model = settings.answer_model(settings.MODEL_IN_USE_REWRITE_PROMPT)
     pipeline_version = _hash(
-        settings.ANSWER_MODEL_GOOGLE,
-        settings.EMBED_MODEL_CLOUDFLARE,
+        answer_model,
+        settings.embed_model,
         settings.DEFAULT_CHUNK_SIZE,
         settings.DEFAULT_CHUNK_OVERLAP,
         settings.DEFAULT_N_CHUNKS_RETRIEVED,
         ANSWER_GENERATION_BASE_PROMPT,
         PROMPT_REWRITE_BASE_PROMPT,
         corpus,
+        # Only when it differs, so the answers cached before this existed stay valid
+        *([rewrite_model] if rewrite_model != answer_model else []),
     )
     answers = _load(ANSWERS_CACHE) if use_cache else {}
     verdicts = _load(VERDICTS_CACHE) if use_cache else {}
@@ -474,7 +536,7 @@ async def run(
     chunk_vectors = await embed_with_cache(
         [text_to_embed(name, chunk_text) for name, _, chunk_text in chunks],
         GlobalAPI.mass_embed,
-        f"{settings.MODEL_IN_USE_EMBED}:{settings.EMBED_MODEL_CLOUDFLARE}",
+        f"{settings.MODEL_IN_USE_EMBED}:{settings.embed_model}",
         use_cache,
         cache_file=EMBEDDINGS_CACHE,
     )
@@ -554,13 +616,13 @@ async def run(
                     consecutive_failures += 1
                     stopped = stop_reason(error, consecutive_failures)
                     if stopped:
-                        print(f"Stopped calling Gemini: {stopped}", flush=True)
+                        print(f"Stopped calling AI models: {stopped}", flush=True)
 
                 rows.append(score_row(question, record))
                 if called_api and delay and not stopped:
                     await asyncio.sleep(delay)  # stay under the free-tier rate limit
 
-    return rows, {"gemini_requests": budget.used, "stopped_early": stopped}
+    return rows, {"requests": budget.used, "stopped_early": stopped}
 
 
 # ----- REPORT ----- #
@@ -671,7 +733,7 @@ def build_results(
         if row.get("failure_reason"):
             reasons[row["failure_reason"]] = reasons.get(row["failure_reason"], 0) + 1
     return {
-        "answer_model": settings.ANSWER_MODEL_GOOGLE,
+        "answer_model": settings.answer_model(settings.MODEL_IN_USE_GENERATE_CHAT),
         "judge_model": judge_model,
         "documents": len(corpus),
         "summary": summarise(rows),
@@ -771,7 +833,7 @@ def main() -> None:
     parser.add_argument("--ids", nargs="+", help="only these question ids")
     parser.add_argument(
         "--judge-model",
-        help="Gemini model for the judge (default: the answer model; a stronger one is better)",
+        help="model for the judge (default: JUDGE_MODEL of evals/.env, else the answer model)",
     )
     parser.add_argument(
         "--delay",
@@ -782,7 +844,7 @@ def main() -> None:
     parser.add_argument(
         "--max-calls",
         type=int,
-        help="send at most N requests to Gemini, then only score what is cached",
+        help="send at most N requests to AI models, then only score what is cached",
     )
     parser.add_argument("--no-cache", action="store_true", help="call every API again")
     parser.add_argument("--no-write", action="store_true", help="print only")
@@ -833,7 +895,12 @@ def main() -> None:
     if args.limit:
         questions = questions[: args.limit]
 
-    judge_model = args.judge_model or settings.ANSWER_MODEL_GOOGLE
+    judge_settings = JudgeSettings()
+    endpoint = judge_endpoint(judge_settings, args.judge_model)
+    temperature = judge_settings.JUDGE_TEMPERATURE
+    judge_model = (
+        endpoint.label if endpoint else args.judge_model or settings.ANSWER_MODEL_GOOGLE
+    )
     rows, run_info = asyncio.run(
         run(
             questions,
@@ -842,12 +909,14 @@ def main() -> None:
             args.delay,
             not args.no_cache,
             args.max_calls,
+            endpoint,
+            None if temperature == "omit" else temperature,
         )
     )
     results = build_results(rows, corpus, judge_model)
     report = render_markdown(results)
     print(report)
-    print(f"Requests sent to Gemini: {run_info['gemini_requests']}")
+    print(f"Requests sent to AI models: {run_info['requests']}")
     if run_info["stopped_early"]:
         print(
             f"INCOMPLETE: stopped early ({run_info['stopped_early']}). "

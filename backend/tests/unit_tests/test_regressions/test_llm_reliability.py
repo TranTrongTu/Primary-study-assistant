@@ -12,7 +12,7 @@ import pytest
 from google import genai
 from google.genai import errors
 
-from backend.src.core import ai_api
+from backend.src.core import ai_api, llm_retry
 from backend.src.core.ai_api import GeminiKeysManager, GoogleAPI
 from backend.src.core.config import settings
 from backend.src.core.llm_failures import FailureKind, backoff_delay, classify
@@ -65,7 +65,7 @@ BUSY = errors.ServerError(503, {"error": {"code": 503, "message": "high demand"}
 
 @pytest.fixture
 def sleeps():
-    with patch.object(ai_api.asyncio, "sleep", AsyncMock()) as sleep:
+    with patch.object(llm_retry.asyncio, "sleep", AsyncMock()) as sleep:
         yield lambda: [call.args[0] for call in sleep.await_args_list]
 
 
@@ -92,7 +92,7 @@ async def call(*outcomes, models=("main",)):
 
 
 def test_a_spent_daily_quota_and_a_rate_limit_are_told_apart():
-    assert classify(DAILY).kind is FailureKind.DAILY_QUOTA
+    assert classify(DAILY).kind is FailureKind.QUOTA
     assert classify(PER_MINUTE).kind is FailureKind.RATE_LIMIT
     assert classify(PER_MINUTE).retry_after == 7
 
@@ -254,7 +254,7 @@ async def test_a_network_failure_does_not_try_the_fallback(sleeps):
 
 
 async def test_each_request_is_logged_without_its_content(caplog, sleeps):
-    caplog.set_level(logging.INFO, logger=ai_api.__name__)
+    caplog.set_level(logging.INFO, logger=llm_retry.__name__)
     await call(BUSY, OK)
 
     lines = [r.getMessage() for r in caplog.records if "llm_call" in r.getMessage()]
@@ -276,7 +276,7 @@ async def test_the_hook_runs_before_every_request_and_can_stop_it(monkeypatch, s
         if len(seen) == 2:
             raise Stop
 
-    monkeypatch.setattr(GoogleAPI, "before_request", hook)
+    monkeypatch.setattr(llm_retry, "before_request", hook)
     error, func = await call(BUSY, OK)
 
     assert isinstance(error, Stop)
