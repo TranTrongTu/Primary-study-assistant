@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Annotated
 from pydantic import BeforeValidator, model_validator
 from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
 
+from backend.src.core.config import settings
 from backend.src.exceptions.core import ExceptionRequestValidation_400
 from backend.src.models_schema.miscellaneous.enums import (
     StudyActivityFormat,
@@ -37,7 +38,7 @@ class StudyActivityBase(SQLModel):
 
 
 class StudyActivityInput(StudyActivityBase):
-    prompt: str
+    prompt: Annotated[str, Field(min_length=1, max_length=settings.MAX_PROMPT_CHARS)]
     activity_type: StudyActivityType | None = None
     document_id: int | None = None
 

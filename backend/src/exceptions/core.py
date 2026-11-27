@@ -23,6 +23,9 @@ class ExceptionType(str, Enum):
     TAKEN_INFO = "TAKEN_INFO"
     SUBMITTED_EXERCISE = "SUBMITTED_EXERCISE"
 
+    # 429
+    RATE_LIMITED = "RATE_LIMITED"
+
     # 500
     INTERNAL_ERROR = "INTERNAL_ERROR"
 
@@ -100,6 +103,11 @@ class Responses:
     RESPONSE_502_BAD_GATEWAY = {
         "model": ExceptionResponse,
         "description": "External LLM failed to fulfill a task.",
+    }
+
+    RESPONSE_429_TOO_MANY_REQUESTS = {
+        "model": ExceptionResponse,
+        "description": "Too many requests. The Retry-After header says when to try again.",
     }
 
     RESPONSE_503_SERVICE_UNAVAILABLE = {
@@ -200,6 +208,19 @@ class ExceptionLLMError_502(ExceptionCustom):
             status_code=502,
             exception_type=ExceptionType.LLM_ERROR,
             message=custom_message,
+        )
+
+
+# === 429 === #
+
+
+class ExceptionTooManyRequests_429(ExceptionCustom):
+    def __init__(self, custom_message: str, retry_after: float):
+        super().__init__(
+            status_code=429,
+            exception_type=ExceptionType.RATE_LIMITED,
+            message=custom_message,
+            headers={"Retry-After": str(int(retry_after + 0.999))},
         )
 
 

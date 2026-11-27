@@ -112,6 +112,16 @@ class Settings(BaseSettings):
     # (protects provider rate limits when many days need an assessment at once).
     MAX_CONCURRENT_LLM_CALLS: int = 3
 
+    # === Abuse limits === #
+    # Counted in memory by core/rate_limit.py; see there for what each one protects.
+    RATE_LIMIT_LOGIN_FAILURES: int = 5  # per email, per 15 minutes
+    RATE_LIMIT_REGISTRATIONS_PER_HOUR: int = 20  # all new accounts together
+    RATE_LIMIT_AI_REQUESTS_PER_10_MINUTES: int = 20  # per user
+    RATE_LIMIT_AI_REQUESTS_PER_DAY: int = 150  # per user
+    MAX_UPLOAD_BYTES: int = 10 * 1024 * 1024
+    MAX_PDF_PAGES: int = 30
+    MAX_PROMPT_CHARS: int = 2000
+
     # === Application Related === #
 
     # ** Study Activity ** #

@@ -2,13 +2,15 @@ from typing import Annotated
 
 from fastapi import APIRouter, Query, UploadFile, status
 
+from backend.src.core import rate_limit
 from backend.src.core.dependencies import (
     DatetimeDep,
     InteractionDep,
     SessionDep,
     UserDep,
 )
-from backend.src.exceptions.core import Responses
+from backend.src.core.config import settings
+from backend.src.exceptions.core import ExceptionRequestValidation_400, Responses
 from backend.src.models_schema.document.document import (
     DocumentInput,
     DocumentOutput,
@@ -25,12 +27,14 @@ router = APIRouter()
 
 @router.post(
     "/{interaction_id}/upload",
+    dependencies=[rate_limit.AILimit],
     response_model=tuple[DocumentOutput, DocumentAnalysisOutput | None],
     responses={
         401: Responses.RESPONSE_401_UNAUTHORIZED,
         404: Responses.RESPONSE_404_NOT_FOUND,
         502: Responses.RESPONSE_502_BAD_GATEWAY,
         503: Responses.RESPONSE_503_SERVICE_UNAVAILABLE,
+        429: Responses.RESPONSE_429_TOO_MANY_REQUESTS,
     },
 )
 async def save_document(
@@ -43,7 +47,13 @@ async def save_document(
 ):
     """
     Embeds and saves a user-uploaded document_service to the database. Documents belong to an interaction.
+    Files over MAX_UPLOAD_BYTES are refused before any AI call.
     """
+    if file.size is not None and file.size > settings.MAX_UPLOAD_BYTES:
+        raise ExceptionRequestValidation_400(
+            f"The file is too large. The limit is "
+            f"{settings.MAX_UPLOAD_BYTES // (1024 * 1024)} MB."
+        )
     document_output, document_analysis = await document_service.save_document(
         user=user,
         session=session,

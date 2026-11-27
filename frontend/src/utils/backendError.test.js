@@ -38,6 +38,13 @@ describe('parseBackendError', () => {
     expect(parseBackendError(httpError(418, { message: 'Trà đang pha' })).message).toBe('Trà đang pha')
   })
 
+  it('asks the student to slow down when the backend limits requests', () => {
+    const tooFast = parseBackendError(httpError(429, { exception_type: 'RATE_LIMITED' }))
+
+    expect(tooFast.message).toBe('Bé hỏi nhanh quá rồi! Nghỉ vài phút rồi hỏi tiếp nhé.')
+    expect(tooFast.type).toBe('warning')
+  })
+
   it('tells a spent AI quota apart from a busy AI service', () => {
     const quota = parseBackendError(httpError(503, { exception_type: 'AI_QUOTA' }))
     const busy = parseBackendError(httpError(503, { exception_type: 'EXTERNAL_SERVICE' }))

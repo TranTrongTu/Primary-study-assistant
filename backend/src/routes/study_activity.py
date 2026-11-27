@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from backend.src.core import rate_limit
 from backend.src.core.dependencies import (
     DatetimeDep,
     InteractionDep,
@@ -32,12 +33,14 @@ router = APIRouter()
 
 @router.post(
     "/{interaction_id}/create",
+    dependencies=[rate_limit.AILimit],
     response_model=StudyActivityOutputComplete,
     responses={
         401: Responses.RESPONSE_401_UNAUTHORIZED,
         404: Responses.RESPONSE_404_NOT_FOUND,
         502: Responses.RESPONSE_502_BAD_GATEWAY,
         503: Responses.RESPONSE_503_SERVICE_UNAVAILABLE,
+        429: Responses.RESPONSE_429_TOO_MANY_REQUESTS,
     },
 )
 async def create_study_activity(
@@ -249,6 +252,7 @@ async def answer_exercise_item(
 
 @router.patch(
     "/{study_activity_id}/submit",
+    dependencies=[rate_limit.AILimit],
     response_model=StudyActivityOutputComplete,
     responses={
         401: Responses.RESPONSE_401_UNAUTHORIZED,
@@ -256,6 +260,7 @@ async def answer_exercise_item(
         409: Responses.RESPONSE_409_CONFLICT,
         502: Responses.RESPONSE_502_BAD_GATEWAY,
         503: Responses.RESPONSE_503_SERVICE_UNAVAILABLE,
+        429: Responses.RESPONSE_429_TOO_MANY_REQUESTS,
     },
 )
 async def submit_exercise_activity(

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, status
 
+from backend.src.core import rate_limit
 from backend.src.core.dependencies import DatetimeDep, SessionDep, UserDep
 from backend.src.exceptions.core import Responses
 from backend.src.models_schema.user.user import (
@@ -18,8 +19,10 @@ router = APIRouter()
 @router.post(
     "/register",
     response_model=UserOutput,
+    dependencies=[rate_limit.RegistrationLimit],
     responses={
         409: Responses.RESPONSE_409_CONFLICT,
+        429: Responses.RESPONSE_429_TOO_MANY_REQUESTS,
     },
 )
 async def register_user(
