@@ -3,6 +3,7 @@ import logging
 from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import DBAPIError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from backend.src.core.config import settings
@@ -72,6 +73,26 @@ async def validation_exceptions_handler(request: Request, exc: RequestValidation
         message=f"Request validation error. Details: {exc.errors()}",
     )
 
+    return JSONResponse(
+        status_code=400,
+        content=exception_response.model_dump(),
+        headers=get_cors_headers(request),
+    )
+
+
+# Text Postgres cannot store: a NUL character (\x00) or one outside UTF-8. The input is
+# at fault, not the server.
+_UNSTORABLE_TEXT_SQLSTATES = ("22021", "22P05")
+
+
+async def database_exceptions_handler(request: Request, exc: DBAPIError):
+    if getattr(exc.orig, "sqlstate", None) not in _UNSTORABLE_TEXT_SQLSTATES:
+        return await generic_exceptions_handler(request, exc)
+
+    exception_response = ExceptionResponse(
+        exception_type=ExceptionType.REQUEST_VALIDATION,
+        message="The text contains a character that cannot be saved. Please remove it.",
+    )
     return JSONResponse(
         status_code=400,
         content=exception_response.model_dump(),
