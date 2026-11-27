@@ -5,6 +5,8 @@ from pypdf import PdfReader
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.src.core.ai_api import GlobalAPI
+from backend.src.core.config import settings
+from backend.src.exceptions.core import ExceptionRequestValidation_400
 from backend.src.models_schema.document.document import Document
 from backend.src.models_schema.document.document_analysis import (
     DocumentAnalysis,
@@ -54,6 +56,13 @@ class PdfExtractor(DocumentExtractor):
             Processes the PDF, returning prepared chunks, chunks' metadata and raw text
             """
             reader = PdfReader(file.file)
+
+            # Every page is embedded and analysed: a long book would spend the AI quota
+            if len(reader.pages) > settings.MAX_PDF_PAGES:
+                raise ExceptionRequestValidation_400(
+                    f"The PDF has {len(reader.pages)} pages. The limit is "
+                    f"{settings.MAX_PDF_PAGES}: please upload the lessons you need."
+                )
 
             # Staging data
             prepared_chunks: list[str] = []

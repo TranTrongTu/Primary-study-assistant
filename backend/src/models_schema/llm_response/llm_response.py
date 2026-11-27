@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING, Annotated
 
 from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
 
+from backend.src.core.config import settings
+
 if TYPE_CHECKING:
     from backend.src.models_schema.interaction.interaction import Interaction
 
@@ -17,6 +19,7 @@ class LLMResponseBase(SQLModel):
 
 
 class LLMResponseInput(LLMResponseBase):
+    prompt: Annotated[str, Field(min_length=1, max_length=settings.MAX_PROMPT_CHARS)]
     document_id: int | None = None
 
 

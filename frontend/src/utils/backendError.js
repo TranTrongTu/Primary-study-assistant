@@ -29,6 +29,10 @@ export const parseBackendError = (error, fallbackMsg = "Có lỗi xảy ra, vui 
             }
             type = "warning";
             break;
+        case 429:
+            uiMessage = "Bé hỏi nhanh quá rồi! Nghỉ vài phút rồi hỏi tiếp nhé.";
+            type = "warning";
+            break;
         case 500:
             uiMessage = "Hệ thống đang gặp sự cố (Lỗi 500). Vui lòng báo cáo quản trị viên.";
             type = "error";

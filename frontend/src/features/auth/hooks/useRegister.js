@@ -41,7 +41,9 @@ export const useRegister = () => {
     } catch (err) {
       let errorMsg = "";
 
-      if (err.response && err.response.status === 409) {
+      if (err.response && err.response.status === 429) {
+        errorMsg = "Đang có quá nhiều tài khoản mới. Bé thử lại sau một lúc nhé!";
+      } else if (err.response && err.response.status === 409) {
         errorMsg = "Email này đã được sử dụng. Bé thử một email khác nhé!";
       } else if (err.response && err.response.status === 422) {
         errorMsg = "Thông tin đăng ký chưa hợp lệ (Ví dụ: Email sai định dạng)!";

@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Query
 
+from backend.src.core import rate_limit
 from backend.src.core.dependencies import (
     DatetimeDep,
     InteractionDep,
@@ -23,10 +24,12 @@ router = APIRouter()
 
 @router.post(
     "/{interaction_id}/chat",
+    dependencies=[rate_limit.AILimit],
     response_model=LLMResponseOutput,
     responses={
         401: Responses.RESPONSE_401_UNAUTHORIZED,
         503: Responses.RESPONSE_503_SERVICE_UNAVAILABLE,
+        429: Responses.RESPONSE_429_TOO_MANY_REQUESTS,
     },
 )
 async def create_llm_response(

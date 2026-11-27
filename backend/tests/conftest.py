@@ -131,3 +131,15 @@ pytest_plugins = [
     "backend.tests.fixtures.documents",
     "backend.tests.fixtures.llm_responses",
 ]
+
+
+@pytest.fixture(autouse=True)
+def fresh_rate_limits():
+    """The limits count in memory across requests: every test starts from zero."""
+    from backend.src.core.rate_limit import ALL_LIMITERS
+
+    for limiter in ALL_LIMITERS:
+        limiter.clear()
+    yield
+    for limiter in ALL_LIMITERS:
+        limiter.clear()

@@ -56,7 +56,9 @@ export const useLogin = () => {
     } catch (err) {
       let errorMsg = "";
 
-      if (err.response && err.response.status === 401) {
+      if (err.response && err.response.status === 429) {
+        errorMsg = "Bé nhập sai nhiều lần quá. Đợi vài phút rồi thử lại nhé!";
+      } else if (err.response && err.response.status === 401) {
         errorMsg = "Tài khoản hoặc mật khẩu chưa đúng. Bé kiểm tra lại nhé!";
       } else if (err.response && err.response.status === 422) {
         errorMsg = "Thông tin nhập vào chưa hợp lệ!";
