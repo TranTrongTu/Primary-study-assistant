@@ -257,7 +257,10 @@ class OllamaAPI(API):
                         break
                     continue
                 else:
-                    raise ExceptionInternalError_500(f"Ollama Config error: {str(e)}")
+                    # Not the provider's text: it would reach the student
+                    raise ExceptionInternalError_500(
+                        f"The AI provider rejected the request ({e.status_code})."
+                    )
 
             except httpx.RequestError:
                 # Network, connection issues
@@ -408,8 +411,9 @@ class CloudFlareAPI(API):
 
                     continue
                 else:
+                    # Not the provider's text: it would reach the student
                     raise ExceptionInternalError_500(
-                        f"Cloudflare API error: {e.response.status_code} - {e.response.text}"
+                        f"The AI provider rejected the request ({e.response.status_code})."
                     )
 
             except httpx.RequestError:

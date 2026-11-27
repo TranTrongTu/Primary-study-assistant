@@ -122,3 +122,34 @@ async def test_change_password(
     validate_response_contents(
         response, {"exception_type": ExceptionType.AUTHENTICATION.value}
     )
+
+
+# ----- PASSWORD LENGTH ----- #
+
+
+async def test_register_refuses_a_short_password(client: AsyncClient):
+    response = await client.post(
+        "/api/user/register",
+        json={"username": "short", "email": "short@gmail.com", "password": "1234567"},
+    )
+
+    validate_status_code(response, 400)
+    validate_response_contents(
+        response, {"exception_type": ExceptionType.REQUEST_VALIDATION.value}
+    )
+
+
+async def test_change_password_refuses_a_short_new_password(
+    client: AsyncClient,
+    register_user_test: User,
+    login_user_test: None,
+):
+    response = await client.patch(
+        "/api/user/change-password",
+        json={"old_password": "test-password", "new_password": "short"},
+    )
+
+    validate_status_code(response, 400)
+    validate_response_contents(
+        response, {"exception_type": ExceptionType.REQUEST_VALIDATION.value}
+    )

@@ -3,6 +3,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/authApi";
 
+// Same rule as the backend (MIN_PASSWORD_LENGTH in models_schema/user/user.py)
+export const MIN_PASSWORD_LENGTH = 8;
+
 export const useRegister = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -22,6 +25,12 @@ export const useRegister = () => {
   const handleSubmit = async (e, callbacks = {}) => {
     e.preventDefault();
     setError("");
+
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setError("Mật khẩu cần ít nhất 8 ký tự.");
+      if (callbacks.onError) callbacks.onError("Mật khẩu cần ít nhất 8 ký tự.");
+      return;
+    }
     setIsLoading(true);
 
     const { onSuccess, onError } = callbacks;

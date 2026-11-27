@@ -337,7 +337,7 @@ async def create_study_activity(
                     raise
                 else:
                     raise ExceptionLLMError_502(
-                        f"Incorrect content format. Details: {e}"
+                        "The AI service returned an answer in the wrong format. Please try again."
                     )
             continue
 

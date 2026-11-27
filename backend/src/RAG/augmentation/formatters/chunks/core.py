@@ -18,7 +18,7 @@ FORMATTERS: dict[DocumentType, type[ContentFormatter]] = {
 
 
 def stitched_content_formatter(
-    index: int, head_chunk: DocumentChunk, page_end: int, stitched_content: str
+    head_chunk: DocumentChunk, page_end: int, stitched_content: str
 ) -> str:
     """
     Converts a content block (a stitched block of chunks) into text depending on its document type.
@@ -27,18 +27,21 @@ def stitched_content_formatter(
 
     formatter_class = FORMATTERS[document.type]
 
-    return formatter_class.format(index, head_chunk, page_end, stitched_content)
+    return formatter_class.format(head_chunk, page_end, stitched_content)
 
 
 def chunks_formatter(chunks: Iterable[DocumentChunk]) -> str:
     """
     Converts document chunks into text (through stitching and formatting).
+
+    The excerpts are not numbered: the model repeated the numbers to students, who
+    never see this list ("theo Context 3").
     """
     stitched_contents = chunks_stitcher(chunks)
 
     formatted_chunks = "\n\n".join(
-        stitched_content_formatter(i, *content_block)
-        for i, content_block in enumerate(stitched_contents, start=1)
+        stitched_content_formatter(*content_block)
+        for content_block in stitched_contents
     )
 
     return formatted_chunks

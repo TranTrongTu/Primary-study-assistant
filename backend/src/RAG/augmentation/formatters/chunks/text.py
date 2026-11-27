@@ -8,10 +8,10 @@ from backend.src.RAG.augmentation.formatters.chunks.base import (
 class TextFormatter(ContentFormatter):
     @classmethod
     def format(
-        cls, index: int, head_chunk: DocumentChunk, page_end: int, stitched_content: str
+        cls, head_chunk: DocumentChunk, page_end: int, stitched_content: str
     ) -> str:
         document = head_chunk.document
-        return f"""Context {index}:
+        return f"""[Excerpt]
 Source:
 - Document name: {document.name}
 - Type: {DocumentType.TEXT.value}

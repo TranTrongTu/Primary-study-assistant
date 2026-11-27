@@ -8,9 +8,9 @@ from backend.src.RAG.augmentation.formatters.chunks.base import (
 class ImageFormatter(ContentFormatter):
     @classmethod
     def format(
-        cls, index: int, head_chunk: DocumentChunk, page_end: int, stitched_content: str
+        cls, head_chunk: DocumentChunk, page_end: int, stitched_content: str
     ) -> str:
-        return f"""Context {index}:
+        return f"""[Excerpt]
 Source:
 - Document name: {head_chunk.document.name}
 - Type: {DocumentType.IMAGE.value}
