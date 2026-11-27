@@ -8,11 +8,11 @@ from backend.src.RAG.augmentation.formatters.chunks.base import (
 class PDFFormatter(ContentFormatter):
     @classmethod
     def format(
-        cls, index: int, head_chunk: DocumentChunk, page_end: int, stitched_content: str
+        cls, head_chunk: DocumentChunk, page_end: int, stitched_content: str
     ) -> str:
         assert head_chunk.document_page_num is not None
 
-        return f"""Context {index}:
+        return f"""[Excerpt]
 Source: 
 - Document name: {head_chunk.document.name}
 - Type: {DocumentType.PDF.value}

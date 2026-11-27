@@ -8,6 +8,7 @@ from fastapi.middleware.cors import (
 )
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
+from sqlalchemy.exc import DBAPIError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from backend.src.core.config import settings
@@ -17,6 +18,7 @@ from backend.src.core.origins import origins
 from backend.src.exceptions.core import ExceptionCustom, Responses
 from backend.src.exceptions.handlers import (
     custom_exceptions_handler,
+    database_exceptions_handler,
     generic_exceptions_handler,
     starlette_exceptions_handlers,
     validation_exceptions_handler,
@@ -83,6 +85,7 @@ app.add_middleware(
 app.add_exception_handler(RequestValidationError, validation_exceptions_handler)  # type: ignore
 app.add_exception_handler(StarletteHTTPException, starlette_exceptions_handlers)  # type: ignore
 app.add_exception_handler(ExceptionCustom, custom_exceptions_handler)  # type: ignore
+app.add_exception_handler(DBAPIError, database_exceptions_handler)  # type: ignore
 app.add_exception_handler(Exception, generic_exceptions_handler)
 
 # ----- Health check ----- #

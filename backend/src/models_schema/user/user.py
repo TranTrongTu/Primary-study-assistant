@@ -11,6 +11,9 @@ if TYPE_CHECKING:
     from backend.src.models_schema.study_progress.assessment import StudyAssessment
     from backend.src.models_schema.user.check_in import CheckIn
 
+# Applies to new accounts and new passwords only: existing passwords still log in
+MIN_PASSWORD_LENGTH = 8
+
 # ----- BASE ----- #
 
 
@@ -24,7 +27,7 @@ class UserBase(SQLModel):
 
 
 class UserInput(UserBase):
-    password: Annotated[str, Field(min_length=1)]
+    password: Annotated[str, Field(min_length=MIN_PASSWORD_LENGTH)]
     description: str = ""
 
 
@@ -54,7 +57,7 @@ class UserUpdate(UserBase):
 
 class UserPasswordChange(SQLModel):
     old_password: str
-    new_password: str
+    new_password: Annotated[str, Field(min_length=MIN_PASSWORD_LENGTH)]
 
 
 # ----- TABLE MODEL ----- #

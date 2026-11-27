@@ -119,11 +119,11 @@ def analysis_task_generator(
                     session, analysis, document, subject_type_overwrite
                 )
                 return document_analysis
-            except ValidationError as e:
+            except ValidationError:
                 i_retry += 1
                 if i_retry >= settings.DEFAULT_N_GENERATION_RETRIES:
                     raise ExceptionLLMError_502(
-                        f"Incorrect content format. Details: {e}"
+                        "The AI service returned an answer in the wrong format. Please try again."
                     )
 
     analysis_task = perform_analysis()

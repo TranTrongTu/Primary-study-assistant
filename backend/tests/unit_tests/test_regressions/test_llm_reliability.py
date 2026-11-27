@@ -192,6 +192,15 @@ async def test_a_bad_request_is_raised_without_retrying(sleeps):
     assert func.await_count == 1
 
 
+async def test_a_rejected_request_does_not_pass_on_the_provider_text(sleeps):
+    secret = "API key not valid: models/gemini-secret-model for project 1234"
+    error, _ = await call(errors.ClientError(400, {"error": {"message": secret}}))
+
+    assert isinstance(error, ExceptionInternalError_500)
+    assert "gemini-secret-model" not in error.message
+    assert error.message == "The AI provider rejected the request (400)."
+
+
 # ----- KEYS ----- #
 
 

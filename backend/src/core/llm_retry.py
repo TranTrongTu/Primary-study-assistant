@@ -148,13 +148,10 @@ def _not_retryable(error: Exception) -> Exception | None:
     What to raise for a request the provider rejected (wrong key, wrong model). None
     when the error did not come from the provider and should be raised unchanged.
     """
-    if isinstance(error, errors.APIError):
-        return ExceptionInternalError_500(
-            error.message if error.message else "Google API error"
-        )
-    if status_code(error) is None:
+    if not isinstance(error, errors.APIError) and status_code(error) is None:
         return None
-    # The provider's text may quote the request, so it stays out of the response
+    # The provider's text names our models and keys, or quotes the request, so it
+    # reaches neither the response nor the log; the status code is logged by the caller
     return ExceptionInternalError_500(
         f"The AI provider rejected the request ({status_code(error)})."
     )

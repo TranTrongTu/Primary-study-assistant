@@ -7,6 +7,6 @@ class ContentFormatter(ABC):
     @classmethod
     @abstractmethod
     def format(
-        cls, index: int, head_chunk: DocumentChunk, page_end: int, stitched_content: str
+        cls, head_chunk: DocumentChunk, page_end: int, stitched_content: str
     ) -> str:
         pass

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "../../auth/hooks/useCurrentUser";
+import { MIN_PASSWORD_LENGTH } from "../../auth/hooks/useRegister";
 import { changePassword, updateProfile } from "../api/profileApi";
 
 const initialProfileForm = {
@@ -117,6 +118,11 @@ export const useProfileSettings = () => {
       setPasswordError(
         "Bé hãy nhập đủ mật khẩu cũ, mật khẩu mới và xác nhận mật khẩu.",
       );
+      return;
+    }
+
+    if (passwordForm.newPassword.length < MIN_PASSWORD_LENGTH) {
+      setPasswordError("Mật khẩu cần ít nhất 8 ký tự.");
       return;
     }
 
